@@ -37,9 +37,9 @@ Future<void> main() async {
   // Run App
   runApp(
     EasyLocalization(
-      supportedLocales: const [Locale('ar'), Locale('en')],
+      supportedLocales: const [Locale('en')],
       path: 'assets/translations',
-      startLocale: const Locale('ar'),
+      startLocale: const Locale('en'),
       child: ChatChat(
         appRoute: AppRoute(),
       ),
@@ -52,13 +52,14 @@ late String? initialRoute;
 Future<void> initApp() async {
   // Compare Versions
   PackageInfo packageInfo = await PackageInfo.fromPlatform();
-  DocumentSnapshot newestVersionDetails = await FirebaseFirestore.instance
+  /*DocumentSnapshot newestVersionDetails = await FirebaseFirestore.instance
       .collection('version')
       .doc('newest')
       .get();
   Version newestVersion = Version.parse(newestVersionDetails['version']);
   Version currentVersion = Version.parse(packageInfo.version);
-  int compareResult = newestVersion.compareTo(currentVersion);
+  int compareResult = newestVersion.compareTo(currentVersion);*/
+  int compareResult = 0;
 
   // handle initial route
   FirebaseAuth.instance.authStateChanges().listen(
