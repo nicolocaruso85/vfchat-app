@@ -51,7 +51,7 @@ class DefaultFirebaseOptions {
 
   static const FirebaseOptions android = FirebaseOptions(
     apiKey: 'AIzaSyBMoE7PD2BDqv3caQCGsSN7yGoyOrKncnA',
-    appId: '1:294296268566:android:d31472aefee3f9b3392a37',
+    appId: '1:294296268566:android:7df89690a47f2498392a37',
     messagingSenderId: '294296268566',
     projectId: 'vfchat-cba48',
     storageBucket: 'vfchat-cba48.firebasestorage.app',
@@ -59,10 +59,11 @@ class DefaultFirebaseOptions {
 
   static const FirebaseOptions ios = FirebaseOptions(
     apiKey: 'AIzaSyCU2p4MlRCsLwSfAhjQBQ7Na4vhX3AvvjI',
-    appId: '1:294296268566:ios:ec00d6ba5254a6d8392a37',
+    appId: '1:294296268566:ios:388a58c4c4e41dce392a37',
     messagingSenderId: '294296268566',
     projectId: 'vfchat-cba48',
     storageBucket: 'vfchat-cba48.firebasestorage.app',
-    iosBundleId: 'com.chatchat.app',
+    iosBundleId: 'com.vfchat.vfchat',
   );
+
 }

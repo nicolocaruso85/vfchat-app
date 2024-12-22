@@ -39,7 +39,7 @@ class NotificationService extends ChangeNotifier {
 
     Dio dio = DioFactory.getDio();
     await dio.request(
-      'https://fcm.googleapis.com/v1/projects/chatappmoaz/messages:send',
+      'https://fcm.googleapis.com/v1/projects/vfchat-cba48/messages:send',
       options: Options(
         method: 'POST',
         headers: headers,

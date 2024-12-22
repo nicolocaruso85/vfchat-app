@@ -37,9 +37,9 @@ Future<void> main() async {
   // Run App
   runApp(
     EasyLocalization(
-      supportedLocales: const [Locale('en')],
+      supportedLocales: const [Locale('it')],
       path: 'assets/translations',
-      startLocale: const Locale('en'),
+      startLocale: const Locale('it'),
       child: ChatChat(
         appRoute: AppRoute(),
       ),

@@ -7,7 +7,7 @@
 	<key>CFBundleDevelopmentRegion</key>
 	<string>$(DEVELOPMENT_LANGUAGE)</string>
 	<key>CFBundleDisplayName</key>
-	<string>Chat Chat</string>
+	<string>Chat aziendale</string>
 	<key>CFBundleExecutable</key>
 	<string>$(EXECUTABLE_NAME)</string>
 	<key>CFBundleIdentifier</key>
@@ -36,7 +36,7 @@
 			<string>com.vfchat.vfchat</string>
 			<key>CFBundleURLSchemes</key>
 			<array>
-				<string>Chat Chat</string>
+				<string>app</string>
 			</array>
 		</dict>
 	</array>

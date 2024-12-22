@@ -1,4 +1,4 @@
-package com.chatchat.app
+package com.vfchat.vfchat
 
 import io.flutter.embedding.android.FlutterFragmentActivity
 

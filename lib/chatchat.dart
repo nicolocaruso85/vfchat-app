@@ -26,7 +26,7 @@ class _ChatChatState extends State<ChatChat> {
       minTextAdapt: true,
       splitScreenMode: true,
       child: MaterialApp(
-        title: 'Chat Chat',
+        title: 'Chat aziendale',
         localizationsDelegates: context.localizationDelegates,
         supportedLocales: context.supportedLocales,
         locale: context.locale,

@@ -26,7 +26,7 @@ class CustomMessageBar extends StatelessWidget {
         horizontal: 10.w,
         vertical: 7.h,
       ),
-      paddingTextAndSendButton: context.locale.toString() == 'en'
+      paddingTextAndSendButton: context.locale.toString() == 'it'
           ? EdgeInsets.only(left: 4.w)
           : EdgeInsets.only(right: 4.w),
       onSend: (message) async {
