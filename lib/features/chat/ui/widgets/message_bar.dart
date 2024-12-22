@@ -26,18 +26,14 @@ class CustomMessageBar extends StatelessWidget {
         horizontal: 10.w,
         vertical: 7.h,
       ),
-      paddingTextAndSendButton: context.locale.toString() == 'it'
-          ? EdgeInsets.only(left: 4.w)
-          : EdgeInsets.only(right: 4.w),
+      paddingTextAndSendButton: EdgeInsets.only(left: 4.w),
       onSend: (message) async {
         await onSend(message);
       },
       sendButtonColor: ColorsManager.greenPrimary,
       actions: [
         Padding(
-          padding: context.locale.toString() == 'ar'
-              ? EdgeInsets.only(left: 4.w)
-              : EdgeInsets.only(right: 4.w),
+          padding: EdgeInsets.only(right: 4.w),
           child: Container(
             decoration: const BoxDecoration(
               color: Color(0xff00a884),

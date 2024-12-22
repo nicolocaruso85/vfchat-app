@@ -67,7 +67,7 @@ class _ChatScreenState extends State<ChatScreen> {
           ),
         ),
         child: Padding(
-          padding: EdgeInsets.symmetric(horizontal: 8.w),
+          padding: EdgeInsets.only(left: 8.w, right: 8.w, bottom: 22),
           child: Column(
             children: [
               Expanded(
@@ -243,7 +243,7 @@ class _ChatScreenState extends State<ChatScreen> {
         );
       },
       id: data['timestamp'].toDate().toString(),
-      isArabicApp: context.locale.toString() == 'ar' ? true : false,
+      isArabicApp: false,
       tail: isNewSender,
       isSender: data['senderID'] == _auth.currentUser!.uid ? true : false,
       color: data['senderID'] == _auth.currentUser!.uid
@@ -260,20 +260,12 @@ class _ChatScreenState extends State<ChatScreen> {
 
   Align _buildLinkPreviewer(Map<String, dynamic> data, String message) {
     bool isNewSender = data['senderID'] == _auth.currentUser!.uid
-        ? context.locale.languageCode == 'ar'
-            ? false
-            : true
-        : context.locale.languageCode == 'ar'
-            ? true
-            : false;
+        ? true
+        : false;
     return Align(
       alignment: data['senderID'] == _auth.currentUser!.uid
-          ? context.locale.languageCode == 'ar'
-              ? Alignment.centerLeft
-              : Alignment.centerRight
-          : context.locale.languageCode == 'ar'
-              ? Alignment.centerRight
-              : Alignment.centerLeft,
+          ? Alignment.centerRight
+          : Alignment.centerLeft,
       child: Container(
         margin: isNewSender
             ? const EdgeInsets.fromLTRB(7, 7, 17, 7)
@@ -303,7 +295,7 @@ class _ChatScreenState extends State<ChatScreen> {
               Padding(
                 padding: EdgeInsets.symmetric(horizontal: 8.0.w, vertical: 5.h),
                 child: Text(
-                  DateFormat("h:mm a").format(
+                  DateFormat("H:mm").format(
                     data['timestamp'].toDate(),
                   ),
                   textAlign: TextAlign.right,
@@ -400,17 +392,13 @@ class _ChatScreenState extends State<ChatScreen> {
           ? const Color.fromARGB(255, 0, 107, 84)
           : const Color(0xff273443),
       textAlign: isArabic(message) ? TextAlign.right : TextAlign.left,
-      sendTime: DateFormat("h:mm a").format(
+      sendTime: DateFormat("H:mm").format(
         data['timestamp'].toDate(),
       ),
       tail: isNewSender,
       isSender: data['senderID'] == _auth.currentUser!.uid
-          ? context.locale.languageCode == 'ar'
-              ? false
-              : true
-          : context.locale.languageCode == 'ar'
-              ? true
-              : false,
+          ? true
+          : false,
     );
   }
 

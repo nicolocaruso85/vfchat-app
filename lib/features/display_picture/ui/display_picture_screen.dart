@@ -44,9 +44,7 @@ class _DisplayPictureScreenState extends State<DisplayPictureScreen> {
       appBar: AppBar(
         title: Text(context.tr('displayPicture')),
       ),
-      floatingActionButtonLocation: context.locale.toString() == 'ar'
-          ? FloatingActionButtonLocation.startFloat
-          : FloatingActionButtonLocation.endFloat,
+      floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
       floatingActionButton: SpeedDial(
         animatedIcon: AnimatedIcons.menu_close,
         animatedIconTheme: IconThemeData(size: 22.0.sp, color: Colors.white),

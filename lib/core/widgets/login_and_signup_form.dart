@@ -111,9 +111,7 @@ class _EmailAndPasswordState extends State<EmailAndPassword> {
         context.pushNamed(Routes.forgetScreen);
       },
       child: Align(
-        alignment: context.locale.toString() == 'ar'
-            ? Alignment.centerLeft
-            : Alignment.centerRight,
+        alignment: Alignment.centerRight,
         child: Text(
           context.tr('forgetPassword'),
           style: TextStyles.font15Green500Weight,
