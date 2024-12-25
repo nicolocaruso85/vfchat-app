@@ -16,20 +16,60 @@ class BubbleSpecialThree extends StatelessWidget {
   final bool tail;
   final Color color;
   final TextAlign textAlign;
+  final bool sent;
+  final bool delivered;
+  final bool seen;
+  final TextStyle textStyle;
+  final BoxConstraints? constraints;
 
   const BubbleSpecialThree({
     Key? key,
     this.isSender = true,
+    this.constraints,
     required this.text,
     required this.sendTime,
     this.color = Colors.white70,
     this.tail = true,
     this.textAlign = TextAlign.left,
+    this.sent = false,
+    this.delivered = false,
+    this.seen = false,
+    this.textStyle = const TextStyle(
+      color: Colors.black87,
+      fontSize: 16,
+    ),
   }) : super(key: key);
 
   ///chat bubble builder method
   @override
   Widget build(BuildContext context) {
+    bool stateTick = false;
+    Icon? stateIcon;
+    if (sent) {
+      stateTick = true;
+      stateIcon = const Icon(
+        Icons.done,
+        size: 18,
+        color: Color(0xFF97AD8E),
+      );
+    }
+    if (delivered) {
+      stateTick = true;
+      stateIcon = const Icon(
+        Icons.done_all,
+        size: 18,
+        color: Color(0xFF97AD8E),
+      );
+    }
+    if (seen) {
+      stateTick = true;
+      stateIcon = const Icon(
+        Icons.done_all,
+        size: 18,
+        color: Color(0xFF92DEDA),
+      );
+    }
+
     return Align(
       alignment: isSender ? Alignment.topRight : Alignment.topLeft,
       child: Padding(
@@ -41,11 +81,14 @@ class BubbleSpecialThree extends StatelessWidget {
             tail: tail,
           ),
           child: Container(
-            constraints: BoxConstraints(
-              maxWidth: MediaQuery.of(context).size.width * .7,
+            constraints: constraints ??
+              BoxConstraints(
+                maxWidth: MediaQuery.of(context).size.width * .7,
             ),
             margin: isSender
-                ? const EdgeInsets.fromLTRB(7, 7, 17, 7)
+                ? stateTick
+                    ? const EdgeInsets.fromLTRB(7, 7, 14, 7)
+                    : const EdgeInsets.fromLTRB(7, 7, 17, 7)
                 : const EdgeInsets.fromLTRB(17, 7, 7, 7),
             child: Stack(
               children: <Widget>[
@@ -65,17 +108,31 @@ class BubbleSpecialThree extends StatelessWidget {
                       const SizedBox(
                         height: 3,
                       ),
-                      Text(
-                        sendTime,
-                        textAlign: TextAlign.right,
-                        style: const TextStyle(
-                          color: Colors.white,
-                          fontSize: 10,
+                      Padding(
+                        padding: stateTick
+                          ? const EdgeInsets.only(right: 20)
+                          : const EdgeInsets.only(right: 4),
+                        child: Text(
+                          sendTime,
+                          textAlign: TextAlign.right,
+                          style: const TextStyle(
+                            color: Colors.white,
+                            fontSize: 10,
+                          ),
                         ),
                       ),
                     ],
                   ),
                 ),
+                stateIcon != null && stateTick
+                    ? Positioned(
+                        bottom: 0,
+                        right: 0,
+                        child: stateIcon,
+                      )
+                    : const SizedBox(
+                        width: 1,
+                      ),
               ],
             ),
           ),

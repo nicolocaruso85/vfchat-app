@@ -40,6 +40,7 @@ class DatabaseMethods {
       senderName: currentUserName!,
       message: message,
       receiverID: receiverID,
+      isViewed: false,
       timestamp: timestamp,
     );
     // construct chat room id from current user id and recvier id (Sorted to ensure uniqueness)
@@ -63,5 +64,14 @@ class DatabaseMethods {
         .collection('users')
         .doc(_auth.currentUser!.uid)
         .update(data);
+  }
+
+  static Future<void> setMessageAsViewed(chatRoomID, messageId) async {
+    await _fireStore
+        .collection('chats')
+        .doc(chatRoomID)
+        .collection('messages')
+        .doc(messageId)
+        .update({'isViewed': true});
   }
 }

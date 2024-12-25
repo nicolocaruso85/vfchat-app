@@ -346,6 +346,10 @@ class _ChatScreenState extends State<ChatScreen> {
         DatabaseMethods.getMessages(
             widget.receivedUserID, _auth.currentUser!.uid);
 
+    List<String> sortedIDs = [widget.receivedUserID, _auth.currentUser!.uid];
+    sortedIDs.sort();
+    String chatRoomID = sortedIDs.join('_');
+
     return StreamBuilder(
       stream: allMessages,
       builder: (context, snapshot) {
@@ -371,6 +375,10 @@ class _ChatScreenState extends State<ChatScreen> {
             bool isNewDay = nextMessage == null ||
                 !_isSameDay(currentMessage['timestamp'].toDate(),
                     nextMessage['timestamp'].toDate());
+
+            if (currentMessage['receiverID'] == _auth.currentUser!.uid) {
+              _setMessageAsViewed(chatRoomID, currentMessage.id);
+            }
 
             return _buildMessageItem(
               currentMessage,
@@ -399,6 +407,7 @@ class _ChatScreenState extends State<ChatScreen> {
       isSender: data['senderID'] == _auth.currentUser!.uid
           ? true
           : false,
+      seen: (data['senderID'] == _auth.currentUser!.uid) && data['isViewed'],
     );
   }
 
@@ -443,6 +452,10 @@ class _ChatScreenState extends State<ChatScreen> {
     )) {
       throw Exception('Could not launch $url');
     }
+  }
+
+  void _setMessageAsViewed(chatRoomID, messageId) {
+    DatabaseMethods.setMessageAsViewed(chatRoomID, messageId);
   }
 
   void _showLoadingDialog() {

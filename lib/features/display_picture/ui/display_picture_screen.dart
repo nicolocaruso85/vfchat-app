@@ -64,11 +64,11 @@ class _DisplayPictureScreenState extends State<DisplayPictureScreen> {
               context.pop();
               ScaffoldMessenger.of(context).showSnackBar(
                 const SnackBar(
-                  content: Text('Image Saved'),
+                  content: Text('Immagine Salvata'),
                 ),
               );
             },
-            label: 'Save',
+            label: 'Salva',
             labelStyle: TextStyle(
               fontWeight: FontWeight.w500,
               color: Colors.white,
@@ -94,7 +94,7 @@ class _DisplayPictureScreenState extends State<DisplayPictureScreen> {
                 await _chatService.sendPushMessage(
                   widget.receivedMToken!,
                   widget.token!,
-                  '📷 Photo',
+                  '📷 Foto',
                   _auth.currentUser!.displayName!,
                   _auth.currentUser!.uid,
                   _auth.currentUser!.photoURL,
@@ -103,11 +103,11 @@ class _DisplayPictureScreenState extends State<DisplayPictureScreen> {
                 context.pop();
                 ScaffoldMessenger.of(context).showSnackBar(
                   const SnackBar(
-                    content: Text('Image Sent'),
+                    content: Text('Immagine inviata'),
                   ),
                 );
               },
-              label: 'Send',
+              label: 'Invia',
               labelStyle: TextStyle(
                 fontWeight: FontWeight.w500,
                 color: Colors.white,

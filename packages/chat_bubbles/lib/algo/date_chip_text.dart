@@ -17,10 +17,10 @@ class DateChipText {
   String getText() {
     final now = DateTime.now();
     if (_formatter.format(now) == _formatter.format(date)) {
-      return 'Today';
+      return 'Oggi';
     } else if (_formatter.format(DateTime(now.year, now.month, now.day - 1)) ==
         _formatter.format(date)) {
-      return 'Yesterday';
+      return 'Ieri';
     } else {
       return '${DateFormat('d').format(date)} ${DateFormat('MMMM').format(date)} ${DateFormat('y').format(date)}';
     }

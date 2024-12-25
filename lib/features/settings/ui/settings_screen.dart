@@ -38,6 +38,20 @@ class _SettingsScreenState extends State<SettingsScreen> {
           children: [
             ListTile(
               title: Text(
+                context.tr('userProfile'),
+                style: TextStyles.font24White600Weight.copyWith(
+                  fontSize: 18.sp,
+                ),
+              ),
+              onTap: () => showCupertinoModalBottomSheet(
+                expand: false,
+                context: context,
+                backgroundColor: Colors.transparent,
+                builder: (context) => const ModalFit(),
+              ),
+            ),
+            ListTile(
+              title: Text(
                 context.tr('changeLanguage'),
                 style: TextStyles.font24White600Weight.copyWith(
                   fontSize: 18.sp,
