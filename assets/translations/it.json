@@ -64,5 +64,6 @@
     "camera": "Fotocamera",
     "offline": "Offline",
     "online": "Online",
-    "userProfile": "Profilo @:user"
+    "userProfile": "Profilo @:user",
+    "manageUsers": "Gestione Utenti"
 }

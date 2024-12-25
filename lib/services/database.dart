@@ -15,6 +15,13 @@ class DatabaseMethods {
         .set(data, options);
   }
 
+  static Future<DocumentSnapshot> getCurrentUserDetails() async {
+    return await _fireStore
+        .collection('users')
+        .doc(_auth.currentUser!.uid)
+        .get();
+  }
+
   // Get Messages from firestore
   static Stream<QuerySnapshot> getMessages(String userID, String otherUserID) {
     List<String> sortedIDs = [userID, otherUserID];

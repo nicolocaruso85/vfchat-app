@@ -12,6 +12,7 @@ import '../features/newgroup/ui/new_group_screen.dart';
 import '../features/settings/ui/settings_screen.dart';
 import '../features/signup/ui/sign_up_sceen.dart';
 import '../features/update/ui/update.dart';
+import '../features/manage_users/ui/manage_users.dart';
 import 'routes.dart';
 
 class AppRoute {
@@ -70,6 +71,11 @@ class AppRoute {
       case Routes.settingsScreen:
         return MaterialPageRoute(
           builder: (context) => const SettingsScreen(),
+        );
+
+      case Routes.manageUsersScreen:
+        return MaterialPageRoute(
+          builder: (context) => const ManageUsersScreen(),
         );
 
       case Routes.newGroupScreen:

@@ -1,5 +1,6 @@
 import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:easy_localization/easy_localization.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -8,7 +9,9 @@ import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../../core/widgets/modal_fit.dart';
+import '../../../services/database.dart';
 import '../../../themes/styles.dart';
+import '../../../router/routes.dart';
 
 const bool keyAuthScreenDefaultValue = false;
 
@@ -25,6 +28,8 @@ class _SettingsScreenState extends State<SettingsScreen> {
   bool _isAuthScreenEnabled = false;
   final LocalAuthentication auth = LocalAuthentication();
   late List<BiometricType> availableBiometric;
+
+  DocumentSnapshot? currentUserDetails;
 
   @override
   Widget build(BuildContext context) {
@@ -50,6 +55,18 @@ class _SettingsScreenState extends State<SettingsScreen> {
                 builder: (context) => const ModalFit(),
               ),
             ),
+            if (currentUserDetails != null && currentUserDetails?['isAdmin'])
+              ListTile(
+                title: Text(
+                  context.tr('manageUsers'),
+                  style: TextStyles.font24White600Weight.copyWith(
+                    fontSize: 18.sp,
+                  ),
+                ),
+                onTap: () {
+                  Navigator.pushNamed(context, Routes.manageUsersScreen);
+                },
+              ),
             ListTile(
               title: Text(
                 context.tr('changeLanguage'),
@@ -114,6 +131,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
       });
     });
     _loadAuthScreenPreference();
+    _loadCurrentUserDetails();
   }
 
   Future<void> _loadAuthScreenPreference() async {
@@ -126,5 +144,13 @@ class _SettingsScreenState extends State<SettingsScreen> {
   Future<void> _setAuthScreenPreference(bool value) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     await prefs.setBool(keyAuthScreenEnabled, value);
+  }
+
+  Future<void> _loadCurrentUserDetails() async {
+    DocumentSnapshot userDetails = await DatabaseMethods.getCurrentUserDetails();
+
+    setState(() {
+      currentUserDetails = userDetails;
+    });
   }
 }
