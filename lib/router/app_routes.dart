@@ -13,6 +13,7 @@ import '../features/settings/ui/settings_screen.dart';
 import '../features/signup/ui/sign_up_sceen.dart';
 import '../features/update/ui/update.dart';
 import '../features/manage_users/ui/manage_users.dart';
+import '../features/edit_user/ui/edit_user.dart';
 import 'routes.dart';
 
 class AppRoute {
@@ -77,6 +78,16 @@ class AppRoute {
         return MaterialPageRoute(
           builder: (context) => const ManageUsersScreen(),
         );
+
+      case Routes.editUserScreen:
+        final arguments = routeSettings.arguments;
+        if (arguments is Map<String, dynamic>) {
+          return MaterialPageRoute(
+            builder: (_) => EditUserScreen(
+              uid: arguments['uid'],
+            ),
+          );
+        }
 
       case Routes.newGroupScreen:
         return MaterialPageRoute(

@@ -6,8 +6,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
-import '../../../services/database.dart';
 import '../../../themes/styles.dart';
+import '../../../router/routes.dart';
 
 class ManageUsersScreen extends StatefulWidget {
   const ManageUsersScreen({super.key});
@@ -96,7 +96,7 @@ class _ManageUsersScreenState extends State<ManageUsersScreen> {
                     ),
                     horizontalTitleGap: 15.w,
                     onTap: () {
-                      //context.pushNamed(Routes.chatScreen, arguments: data);
+                      Navigator.pushNamed(context, Routes.editUserScreen, arguments: data);
                     },
                   );
                 } else {

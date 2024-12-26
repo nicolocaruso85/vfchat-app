@@ -65,5 +65,8 @@
     "offline": "Offline",
     "online": "Online",
     "userProfile": "Profilo @:user",
-    "manageUsers": "Gestione Utenti"
+    "manageUsers": "Gestione Utenti",
+    "edit": "Modifica",
+    "editUser": "@:edit @:user",
+    "search": "Cerca"
 }

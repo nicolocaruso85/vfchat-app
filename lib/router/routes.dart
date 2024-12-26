@@ -11,4 +11,5 @@ class Routes {
   static const displayPictureScreen = '/displayPictureScreen';
   static const updateScreen = '/updateScreen';
   static const manageUsersScreen = '/manageUsersScreen';
+  static const editUserScreen = '/editUserScreen';
 }
