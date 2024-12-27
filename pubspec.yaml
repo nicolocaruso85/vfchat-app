@@ -49,6 +49,8 @@ dependencies:
   selectable_search_list: ^0.0.2
   shared_preferences: ^2.3.4
   url_launcher: ^6.3.1
+  zego_uikit_prebuilt_call: ^4.16.19
+  zego_uikit_signaling_plugin: ^2.8.8
 
 dev_dependencies:
   flutter_lints: ^3.0.2
