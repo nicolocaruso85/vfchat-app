@@ -47,9 +47,11 @@
     "resetPassword": "@:reset @:password",
     "checkYourEmail": "Link to @:resetPassword send to your @:email, please check inbox messages.",
     "newGroup": "Nuovo gruppo",
+    "newGroupCreated": "@:newGroup creato",
     "chats": "Conversazioni",
     "updates": "Aggiornamenti",
     "calls": "Chiamate",
+    "groups": "Gruppi",
     "doNotHaveAccount": "Non sei ancora registrato?",
     "createAccountDesc": "@:signUp ora e scopri cosa la nostra app ha da offrire. Siamo entusiasti di darti il benvenuto nella nostra community!",
     "somethingWentWrong": "Qualcosa è andato storto",
@@ -68,5 +70,7 @@
     "manageUsers": "Gestione Utenti",
     "edit": "Modifica",
     "editUser": "@:edit @:user",
-    "search": "Cerca"
+    "search": "Cerca",
+    "create": "Crea",
+    "users": "Utenti"
 }

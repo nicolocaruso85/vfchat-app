@@ -29,6 +29,12 @@ class DatabaseMethods {
         .get();
   }
 
+  static Stream<QuerySnapshot<Map<String, dynamic>>> getUsers() {
+    return _fireStore
+        .collection('users')
+        .snapshots();
+  }
+
   // Get Messages from firestore
   static Stream<QuerySnapshot> getMessages(String userID, String otherUserID) {
     List<String> sortedIDs = [userID, otherUserID];

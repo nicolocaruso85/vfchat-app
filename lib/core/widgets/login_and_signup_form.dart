@@ -223,7 +223,7 @@ class _EmailAndPasswordState extends State<EmailAndPassword> {
           hint: context.tr('name'),
           validator: (value) {
             if (value == null || value.isEmpty || value.startsWith(' ')) {
-              return context.tr('pleaseEnterValid', args: ['Name']);
+              return context.tr('pleaseEnterValid', args: ['Nome']);
             }
           },
           controller: nameController,

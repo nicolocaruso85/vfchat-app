@@ -12,7 +12,7 @@ import '../../../services/database.dart';
 import '../../../themes/colors.dart';
 import '../../tabs/calls_tab.dart';
 import '../../tabs/chat_tab.dart';
-import '../../tabs/updates_tab.dart';
+import '../../tabs/groups_tab.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -48,7 +48,7 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
             unselectedLabelColor: const Color(0xffffffff).withOpacity(0.5),
             tabs: [
               Tab(text: context.tr('chats')),
-              Tab(text: context.tr('updates')),
+              Tab(text: context.tr('groups')),
               Tab(text: context.tr('calls')),
             ],
           ),
@@ -82,7 +82,7 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
         body: const TabBarView(
           children: [
             ChatsTab(),
-            UpdatesTab(),
+            GroupsTab(),
             CallsTab(),
           ],
         ),
@@ -202,7 +202,7 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
     if (message.data['type'] == 'chat') {
       context.pushNamed(Routes.chatScreen, arguments: message.data);
     } else if (message.data['type'] == 'update') {
-      context.pushReplacementNamed(Routes.updateScreen);
+      context.pushReplacementNamed(Routes.groupScreen);
     } else {
       context.pushReplacementNamed(Routes.homeScreen);
     }
