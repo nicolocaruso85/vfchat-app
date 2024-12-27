@@ -22,6 +22,8 @@ class BuildGroupsListView extends StatelessWidget {
         var doc = snapshot.data!.docs[index];
         Map<String, dynamic> data = doc.data() as Map<String, dynamic>;
 
+        data['id'] = doc.id;
+
         return ListTile(
           leading: data['groupPic'] != null && data['groupPic'] != ''
               ? Hero(
@@ -75,7 +77,7 @@ class BuildGroupsListView extends StatelessWidget {
           ),
           horizontalTitleGap: 15.w,
           onTap: () {
-            context.pushNamed(Routes.chatScreen, arguments: data);
+            context.pushNamed(Routes.groupScreen, arguments: data);
           },
         );
       },

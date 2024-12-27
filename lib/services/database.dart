@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
 import '../features/chat/data/model/message.dart';
+import '../features/group/data/model/message.dart';
 
 class DatabaseMethods {
   static final _auth = FirebaseAuth.instance;
@@ -35,6 +36,15 @@ class DatabaseMethods {
         .snapshots();
   }
 
+  static Stream<QuerySnapshot> getGroupMessages(String groupID) {
+    return _fireStore
+        .collection('groups')
+        .doc(groupID)
+        .collection('messages')
+        .orderBy('timestamp', descending: true)
+        .snapshots();
+  }
+
   // Get Messages from firestore
   static Stream<QuerySnapshot> getMessages(String userID, String otherUserID) {
     List<String> sortedIDs = [userID, otherUserID];
@@ -46,6 +56,27 @@ class DatabaseMethods {
         .collection('messages')
         .orderBy('timestamp', descending: true)
         .snapshots();
+  }
+
+  static Future<void> sendGroupMessage(String message, String groupID) async {
+    final currentUserID = _auth.currentUser!.uid;
+    final currentUserName = _auth.currentUser!.displayName;
+    final timestamp = Timestamp.now();
+    // create a new message
+    GroupMessage newMessage = GroupMessage(
+      senderID: currentUserID,
+      senderName: currentUserName!,
+      message: message,
+      timestamp: timestamp,
+    );
+
+    await _fireStore
+        .collection('groups')
+        .doc(groupID)
+        .collection('messages')
+        .add(
+          newMessage.toMap(),
+        );
   }
 
   // SEND MESSAGE

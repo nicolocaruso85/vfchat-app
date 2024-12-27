@@ -1151,6 +1151,10 @@ PODS:
   - AppAuth/Core (1.7.6)
   - AppAuth/ExternalUserAgent (1.7.6):
     - AppAuth/Core
+  - audio_session (0.0.1):
+    - Flutter
+  - audioplayers_darwin (0.0.1):
+    - Flutter
   - BoringSSL-GRPC (0.0.36):
     - BoringSSL-GRPC/Implementation (= 0.0.36)
     - BoringSSL-GRPC/Interface (= 0.0.36)
@@ -1164,6 +1168,43 @@ PODS:
   - connectivity_plus (0.0.1):
     - Flutter
     - FlutterMacOS
+  - CryptoSwift (1.8.4)
+  - device_info_plus (0.0.1):
+    - Flutter
+  - DKImagePickerController/Core (4.3.9):
+    - DKImagePickerController/ImageDataManager
+    - DKImagePickerController/Resource
+  - DKImagePickerController/ImageDataManager (4.3.9)
+  - DKImagePickerController/PhotoGallery (4.3.9):
+    - DKImagePickerController/Core
+    - DKPhotoGallery
+  - DKImagePickerController/Resource (4.3.9)
+  - DKPhotoGallery (0.0.19):
+    - DKPhotoGallery/Core (= 0.0.19)
+    - DKPhotoGallery/Model (= 0.0.19)
+    - DKPhotoGallery/Preview (= 0.0.19)
+    - DKPhotoGallery/Resource (= 0.0.19)
+    - SDWebImage
+    - SwiftyGif
+  - DKPhotoGallery/Core (0.0.19):
+    - DKPhotoGallery/Model
+    - DKPhotoGallery/Preview
+    - SDWebImage
+    - SwiftyGif
+  - DKPhotoGallery/Model (0.0.19):
+    - SDWebImage
+    - SwiftyGif
+  - DKPhotoGallery/Preview (0.0.19):
+    - DKPhotoGallery/Model
+    - DKPhotoGallery/Resource
+    - SDWebImage
+    - SwiftyGif
+  - DKPhotoGallery/Resource (0.0.19):
+    - SDWebImage
+    - SwiftyGif
+  - file_picker (0.0.1):
+    - DKImagePickerController/PhotoGallery
+    - Flutter
   - Firebase/Auth (11.4.0):
     - Firebase/CoreOnly
     - FirebaseAuth (~> 11.4.0)
@@ -1255,9 +1296,19 @@ PODS:
     - GoogleUtilities/Environment (~> 8.0)
     - GTMSessionFetcher/Core (< 5.0, >= 3.4)
   - Flutter (1.0.0)
+  - flutter_callkit_incoming_yoer (0.0.1):
+    - CryptoSwift
+    - Flutter
   - flutter_local_notifications (0.0.1):
     - Flutter
+  - flutter_logs (0.0.1):
+    - Flutter
+    - ZIPFoundation
   - flutter_native_splash (2.4.3):
+    - Flutter
+  - flutter_ringtone_player (0.0.1):
+    - Flutter
+  - flutter_volume_controller (0.0.1):
     - Flutter
   - gallery_saver (0.0.1):
     - Flutter
@@ -1398,15 +1449,20 @@ PODS:
     - GTMSessionFetcher/Core
   - image_picker_ios (0.0.1):
     - Flutter
+  - just_audio (0.0.1):
+    - Flutter
   - leveldb-library (1.22.6)
   - local_auth_darwin (0.0.1):
     - Flutter
     - FlutterMacOS
+  - Masonry (1.1.0)
   - nanopb (3.30910.0):
     - nanopb/decode (= 3.30910.0)
     - nanopb/encode (= 3.30910.0)
   - nanopb/decode (3.30910.0)
   - nanopb/encode (3.30910.0)
+  - native_device_orientation (0.0.1):
+    - Flutter
   - network_info_plus (0.0.1):
     - Flutter
   - package_info_plus (0.4.5):
@@ -1414,56 +1470,109 @@ PODS:
   - path_provider_foundation (0.0.1):
     - Flutter
     - FlutterMacOS
+  - permission_handler_apple (9.3.0):
+    - Flutter
   - PromisesObjC (2.4.0)
   - RecaptchaInterop (100.0.0)
   - restart_app (0.0.1):
     - Flutter
   - rive_common (0.0.1):
     - Flutter
+  - SDWebImage (5.20.0):
+    - SDWebImage/Core (= 5.20.0)
+  - SDWebImage/Core (5.20.0)
   - shared_preferences_foundation (0.0.1):
     - Flutter
     - FlutterMacOS
   - sqflite_darwin (0.0.4):
     - Flutter
     - FlutterMacOS
+  - SwiftyGif (5.4.5)
   - url_launcher_ios (0.0.1):
+    - Flutter
+  - vibration (1.7.5):
     - Flutter
   - video_player_avfoundation (0.0.1):
     - Flutter
     - FlutterMacOS
   - wakelock_plus (0.0.1):
     - Flutter
+  - zego_callkit (1.0.0):
+    - Flutter
+  - zego_express_engine (3.18.1):
+    - Flutter
+  - zego_uikit (0.0.1):
+    - Flutter
+    - Masonry
+    - zego_express_engine
+    - ZegoUIKitReport (= 0.2.10)
+  - zego_uikit_prebuilt_call (0.0.1):
+    - Flutter
+  - zego_uikit_signaling_plugin (0.0.1):
+    - Flutter
+  - zego_zim (2.17.1):
+    - Flutter
+    - ZIM (= 2.17.1)
+  - zego_zpns (2.6.0):
+    - Flutter
+    - ZPNs (= 2.6.0)
+  - ZegoUIKitReport (0.2.10)
+  - ZIM (2.17.1)
+  - ZIPFoundation (0.9.19)
+  - ZPNs (2.6.0)
 
 DEPENDENCIES:
+  - audio_session (from `.symlinks/plugins/audio_session/ios`)
+  - audioplayers_darwin (from `.symlinks/plugins/audioplayers_darwin/ios`)
   - cloud_firestore (from `.symlinks/plugins/cloud_firestore/ios`)
   - connectivity_plus (from `.symlinks/plugins/connectivity_plus/darwin`)
+  - device_info_plus (from `.symlinks/plugins/device_info_plus/ios`)
+  - file_picker (from `.symlinks/plugins/file_picker/ios`)
   - firebase_auth (from `.symlinks/plugins/firebase_auth/ios`)
   - firebase_core (from `.symlinks/plugins/firebase_core/ios`)
   - firebase_messaging (from `.symlinks/plugins/firebase_messaging/ios`)
   - firebase_storage (from `.symlinks/plugins/firebase_storage/ios`)
   - Flutter (from `Flutter`)
+  - flutter_callkit_incoming_yoer (from `.symlinks/plugins/flutter_callkit_incoming_yoer/ios`)
   - flutter_local_notifications (from `.symlinks/plugins/flutter_local_notifications/ios`)
+  - flutter_logs (from `.symlinks/plugins/flutter_logs/ios`)
   - flutter_native_splash (from `.symlinks/plugins/flutter_native_splash/ios`)
+  - flutter_ringtone_player (from `.symlinks/plugins/flutter_ringtone_player/ios`)
+  - flutter_volume_controller (from `.symlinks/plugins/flutter_volume_controller/ios`)
   - gallery_saver (from `.symlinks/plugins/gallery_saver/ios`)
   - google_sign_in_ios (from `.symlinks/plugins/google_sign_in_ios/darwin`)
   - image_picker_ios (from `.symlinks/plugins/image_picker_ios/ios`)
+  - just_audio (from `.symlinks/plugins/just_audio/ios`)
   - local_auth_darwin (from `.symlinks/plugins/local_auth_darwin/darwin`)
+  - native_device_orientation (from `.symlinks/plugins/native_device_orientation/ios`)
   - network_info_plus (from `.symlinks/plugins/network_info_plus/ios`)
   - package_info_plus (from `.symlinks/plugins/package_info_plus/ios`)
   - path_provider_foundation (from `.symlinks/plugins/path_provider_foundation/darwin`)
+  - permission_handler_apple (from `.symlinks/plugins/permission_handler_apple/ios`)
   - restart_app (from `.symlinks/plugins/restart_app/ios`)
   - rive_common (from `.symlinks/plugins/rive_common/ios`)
   - shared_preferences_foundation (from `.symlinks/plugins/shared_preferences_foundation/darwin`)
   - sqflite_darwin (from `.symlinks/plugins/sqflite_darwin/darwin`)
   - url_launcher_ios (from `.symlinks/plugins/url_launcher_ios/ios`)
+  - vibration (from `.symlinks/plugins/vibration/ios`)
   - video_player_avfoundation (from `.symlinks/plugins/video_player_avfoundation/darwin`)
   - wakelock_plus (from `.symlinks/plugins/wakelock_plus/ios`)
+  - zego_callkit (from `.symlinks/plugins/zego_callkit/ios`)
+  - zego_express_engine (from `.symlinks/plugins/zego_express_engine/ios`)
+  - zego_uikit (from `.symlinks/plugins/zego_uikit/ios`)
+  - zego_uikit_prebuilt_call (from `.symlinks/plugins/zego_uikit_prebuilt_call/ios`)
+  - zego_uikit_signaling_plugin (from `.symlinks/plugins/zego_uikit_signaling_plugin/ios`)
+  - zego_zim (from `.symlinks/plugins/zego_zim/ios`)
+  - zego_zpns (from `.symlinks/plugins/zego_zpns/ios`)
 
 SPEC REPOS:
   trunk:
     - abseil
     - AppAuth
     - BoringSSL-GRPC
+    - CryptoSwift
+    - DKImagePickerController
+    - DKPhotoGallery
     - Firebase
     - FirebaseAppCheckInterop
     - FirebaseAuth
@@ -1485,15 +1594,30 @@ SPEC REPOS:
     - GTMAppAuth
     - GTMSessionFetcher
     - leveldb-library
+    - Masonry
     - nanopb
     - PromisesObjC
     - RecaptchaInterop
+    - SDWebImage
+    - SwiftyGif
+    - ZegoUIKitReport
+    - ZIM
+    - ZIPFoundation
+    - ZPNs
 
 EXTERNAL SOURCES:
+  audio_session:
+    :path: ".symlinks/plugins/audio_session/ios"
+  audioplayers_darwin:
+    :path: ".symlinks/plugins/audioplayers_darwin/ios"
   cloud_firestore:
     :path: ".symlinks/plugins/cloud_firestore/ios"
   connectivity_plus:
     :path: ".symlinks/plugins/connectivity_plus/darwin"
+  device_info_plus:
+    :path: ".symlinks/plugins/device_info_plus/ios"
+  file_picker:
+    :path: ".symlinks/plugins/file_picker/ios"
   firebase_auth:
     :path: ".symlinks/plugins/firebase_auth/ios"
   firebase_core:
@@ -1504,24 +1628,38 @@ EXTERNAL SOURCES:
     :path: ".symlinks/plugins/firebase_storage/ios"
   Flutter:
     :path: Flutter
+  flutter_callkit_incoming_yoer:
+    :path: ".symlinks/plugins/flutter_callkit_incoming_yoer/ios"
   flutter_local_notifications:
     :path: ".symlinks/plugins/flutter_local_notifications/ios"
+  flutter_logs:
+    :path: ".symlinks/plugins/flutter_logs/ios"
   flutter_native_splash:
     :path: ".symlinks/plugins/flutter_native_splash/ios"
+  flutter_ringtone_player:
+    :path: ".symlinks/plugins/flutter_ringtone_player/ios"
+  flutter_volume_controller:
+    :path: ".symlinks/plugins/flutter_volume_controller/ios"
   gallery_saver:
     :path: ".symlinks/plugins/gallery_saver/ios"
   google_sign_in_ios:
     :path: ".symlinks/plugins/google_sign_in_ios/darwin"
   image_picker_ios:
     :path: ".symlinks/plugins/image_picker_ios/ios"
+  just_audio:
+    :path: ".symlinks/plugins/just_audio/ios"
   local_auth_darwin:
     :path: ".symlinks/plugins/local_auth_darwin/darwin"
+  native_device_orientation:
+    :path: ".symlinks/plugins/native_device_orientation/ios"
   network_info_plus:
     :path: ".symlinks/plugins/network_info_plus/ios"
   package_info_plus:
     :path: ".symlinks/plugins/package_info_plus/ios"
   path_provider_foundation:
     :path: ".symlinks/plugins/path_provider_foundation/darwin"
+  permission_handler_apple:
+    :path: ".symlinks/plugins/permission_handler_apple/ios"
   restart_app:
     :path: ".symlinks/plugins/restart_app/ios"
   rive_common:
@@ -1532,17 +1670,40 @@ EXTERNAL SOURCES:
     :path: ".symlinks/plugins/sqflite_darwin/darwin"
   url_launcher_ios:
     :path: ".symlinks/plugins/url_launcher_ios/ios"
+  vibration:
+    :path: ".symlinks/plugins/vibration/ios"
   video_player_avfoundation:
     :path: ".symlinks/plugins/video_player_avfoundation/darwin"
   wakelock_plus:
     :path: ".symlinks/plugins/wakelock_plus/ios"
+  zego_callkit:
+    :path: ".symlinks/plugins/zego_callkit/ios"
+  zego_express_engine:
+    :path: ".symlinks/plugins/zego_express_engine/ios"
+  zego_uikit:
+    :path: ".symlinks/plugins/zego_uikit/ios"
+  zego_uikit_prebuilt_call:
+    :path: ".symlinks/plugins/zego_uikit_prebuilt_call/ios"
+  zego_uikit_signaling_plugin:
+    :path: ".symlinks/plugins/zego_uikit_signaling_plugin/ios"
+  zego_zim:
+    :path: ".symlinks/plugins/zego_zim/ios"
+  zego_zpns:
+    :path: ".symlinks/plugins/zego_zpns/ios"
 
 SPEC CHECKSUMS:
   abseil: d121da9ef7e2ff4cab7666e76c5a3e0915ae08c3
   AppAuth: d4f13a8fe0baf391b2108511793e4b479691fb73
+  audio_session: 088d2483ebd1dc43f51d253d4a1c517d9a2e7207
+  audioplayers_darwin: 877d9a4d06331c5c374595e46e16453ac7eafa40
   BoringSSL-GRPC: ca6a8e5d04812fce8ffd6437810c2d46f925eaeb
   cloud_firestore: 56bca083ecf07f16188ace1d5b57123bcb1b3465
   connectivity_plus: 4c41c08fc6d7c91f63bc7aec70ffe3730b04f563
+  CryptoSwift: e64e11850ede528a02a0f3e768cec8e9d92ecb90
+  device_info_plus: bf2e3232933866d73fe290f2942f2156cdd10342
+  DKImagePickerController: 946cec48c7873164274ecc4624d19e3da4c1ef3c
+  DKPhotoGallery: b3834fecb755ee09a593d7c9e389d8b5d6deed60
+  file_picker: 09aa5ec1ab24135ccd7a1621c46c84134bfd6655
   Firebase: cf1b19f21410b029b6786a54e9764a0cacad3c99
   firebase_auth: c4bdd9d7b338ac004008cb5024a643584e0ec03f
   firebase_core: b62a5080210edad3f2934314a8b2c6f5124e8e10
@@ -1561,8 +1722,12 @@ SPEC CHECKSUMS:
   FirebaseSharedSwift: 302ac5967857ad7e7388b15382d705b8c8d892aa
   FirebaseStorage: 1bf8f80ac3bb02c72844b7350e95e10be7113ef0
   Flutter: e0871f40cf51350855a761d2e70bf5af5b9b5de7
+  flutter_callkit_incoming_yoer: a5936b9f065762a7b422594028d3a20901c88996
   flutter_local_notifications: df98d66e515e1ca797af436137b4459b160ad8c9
+  flutter_logs: 5d0dca26963e0f30b11a995a764744ef77d5d428
   flutter_native_splash: e8a1e01082d97a8099d973f919f57904c925008a
+  flutter_ringtone_player: 15eba85187230b87b2512f0e1b92225618bc03e7
+  flutter_volume_controller: e4d5832f08008180f76e30faf671ffd5a425e529
   gallery_saver: 9fc173c9f4fcc48af53b2a9ebea1b643255be542
   google_sign_in_ios: 07375bfbf2620bc93a602c0e27160d6afc6ead38
   GoogleDataTransport: aae35b7ea0c09004c3797d53c8c41f66f219d6a7
@@ -1573,21 +1738,39 @@ SPEC CHECKSUMS:
   GTMAppAuth: f69bd07d68cd3b766125f7e072c45d7340dea0de
   GTMSessionFetcher: 5aea5ba6bd522a239e236100971f10cb71b96ab6
   image_picker_ios: c560581cceedb403a6ff17f2f816d7fea1421fc1
+  just_audio: baa7252489dbcf47a4c7cc9ca663e9661c99aafa
   leveldb-library: cc8b8f8e013647a295ad3f8cd2ddf49a6f19be19
   local_auth_darwin: 66e40372f1c29f383a314c738c7446e2f7fdadc3
+  Masonry: 678fab65091a9290e40e2832a55e7ab731aad201
   nanopb: fad817b59e0457d11a5dfbde799381cd727c1275
+  native_device_orientation: 348b10c346a60ebbc62fb235a4fdb5d1b61a8f55
   network_info_plus: 9d930145451916919786087c4173226363616071
   package_info_plus: c0502532a26c7662a62a356cebe2692ec5fe4ec4
   path_provider_foundation: 2b6b4c569c0fb62ec74538f866245ac84301af46
+  permission_handler_apple: 9878588469a2b0d0fc1e048d9f43605f92e6cec2
   PromisesObjC: f5707f49cb48b9636751c5b2e7d227e43fba9f47
   RecaptchaInterop: 7d1a4a01a6b2cb1610a47ef3f85f0c411434cb21
   restart_app: 806659942bf932f6ce51c5372f91ce5e81c8c14a
   rive_common: 4743dbfd2911c99066547a3c6454681e0fa907df
+  SDWebImage: 73c6079366fea25fa4bb9640d5fb58f0893facd8
   shared_preferences_foundation: fcdcbc04712aee1108ac7fda236f363274528f78
   sqflite_darwin: 5a7236e3b501866c1c9befc6771dfd73ffb8702d
+  SwiftyGif: 706c60cf65fa2bc5ee0313beece843c8eb8194d4
   url_launcher_ios: 5334b05cef931de560670eeae103fd3e431ac3fe
+  vibration: 7d883d141656a1c1a6d8d238616b2042a51a1241
   video_player_avfoundation: 7c6c11d8470e1675df7397027218274b6d2360b3
   wakelock_plus: 373cfe59b235a6dd5837d0fb88791d2f13a90d56
+  zego_callkit: 72593f46ed01779c4cee6bc65d2e0e1cde86b42c
+  zego_express_engine: daca82b090b355ab20fcfae114f75c5ebb3ff9ac
+  zego_uikit: 6ceebb00df6af92b2a7a16b15f98330035a5d911
+  zego_uikit_prebuilt_call: 13173d7a3c6dcc1695cbdff15d19463acd1ca39c
+  zego_uikit_signaling_plugin: 7fdfcd9f796b591c9cb8770609f4fa85178aa40e
+  zego_zim: cf219fc7c532d3f17ded0d379c2caa5b875f555a
+  zego_zpns: 282d9f9926ea5dff87efbafae8cf33fdada41f4f
+  ZegoUIKitReport: a993f7ccc5d243998a7e601a60e16fcd6c084417
+  ZIM: f3ac70a6ddf0e2b70f2a2de29048ab67ce2875f6
+  ZIPFoundation: b8c29ea7ae353b309bc810586181fd073cb3312c
+  ZPNs: 73bad0046a74e37315201053f9a0e7ac625d9436
 
 PODFILE CHECKSUM: 1959d098c91d8a792531a723c4a9d7e9f6a01e38
 

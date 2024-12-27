@@ -7,52 +7,48 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:gallery_saver/gallery_saver.dart';
 import 'package:gap/gap.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:auto_scroll_text/auto_scroll_text.dart';
 
 import '../../../core/networking/dio_factory.dart';
+import '../../../themes/colors.dart';
 import '../../../helpers/extensions.dart';
 import '../../../helpers/notifications.dart';
 import '../../../router/routes.dart';
 import '../../../services/database.dart';
-import '../../../services/notification_service.dart';
-import '../../../themes/colors.dart';
-import 'widgets/message_bar.dart';
-import 'widgets/url_preview.dart';
+import '../../chat/ui/widgets/message_bar.dart';
+import '../../chat/ui/widgets/url_preview.dart';
 
-class ChatScreen extends StatefulWidget {
-  final String receivedUserName;
-  final String receivedUserID;
-  final String receivedMToken;
-  final String active;
-  final String? receivedUserProfilePic;
-  const ChatScreen({
+class GroupScreen extends StatefulWidget {
+  final String groupID;
+  final String groupName;
+  final String groupPic;
+  final List users;
+
+  const GroupScreen({
     super.key,
-    required this.receivedUserName,
-    required this.receivedUserID,
-    required this.receivedMToken,
-    required this.active,
-    required this.receivedUserProfilePic,
+    required this.groupID,
+    required this.groupName,
+    required this.groupPic,
+    required this.users,
   });
 
   @override
-  State<ChatScreen> createState() => _ChatScreenState();
+  State<GroupScreen> createState() => _GroupScreenState();
 }
 
-class _ChatScreenState extends State<ChatScreen> {
-  final _chatService = NotificationService();
+class _GroupScreenState extends State<GroupScreen> {
   final _auth = FirebaseAuth.instance;
+
   late String? token;
-  TextAlign textAlign = TextAlign.start;
-
-  final flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
-
   final _picker = ImagePicker();
+
+  String? usersList;
 
   @override
   Widget build(BuildContext context) {
@@ -75,17 +71,9 @@ class _ChatScreenState extends State<ChatScreen> {
               ),
               CustomMessageBar(
                 onSend: (message) async {
-                  await DatabaseMethods.sendMessage(
+                  await DatabaseMethods.sendGroupMessage(
                     message,
-                    widget.receivedUserID,
-                  );
-                  await _chatService.sendPushMessage(
-                    widget.receivedMToken,
-                    token!,
-                    message,
-                    _auth.currentUser!.displayName!,
-                    _auth.currentUser!.uid,
-                    _auth.currentUser!.photoURL,
+                    widget.groupID,
                   );
                 },
                 onShowOptions: showImageOptions,
@@ -93,6 +81,76 @@ class _ChatScreenState extends State<ChatScreen> {
             ],
           ),
         ),
+      ),
+    );
+  }
+
+  @override
+  void initState() {
+    super.initState();
+
+    List uList = [];
+    widget.users.forEach((user) async {
+      var u = await user.get();
+      uList.add(u['name']);
+
+      setState(() {
+        usersList = uList.join(', ');
+      });
+    });
+  }
+
+  AppBar _buildAppBar(BuildContext context) {
+    return AppBar(
+      leadingWidth: 85.w,
+      leading: InkWell(
+        borderRadius: BorderRadius.circular(50),
+        onTap: () => Navigator.pop(context),
+        child: Row(
+          children: [
+            Gap(10.w),
+            Icon(Icons.arrow_back_ios, size: 25.sp),
+            widget.groupPic != null &&
+                    widget.groupPic != ''
+                ? Hero(
+                    tag: widget.groupPic!,
+                    child: ClipOval(
+                      child: FadeInImage.assetNetwork(
+                        placeholder: 'assets/images/loading.gif',
+                        image: widget.groupPic!,
+                        fit: BoxFit.cover,
+                        width: 50.w,
+                        height: 50.h,
+                      ),
+                    ),
+                  )
+                : Image.asset(
+                    'assets/images/user.png',
+                    height: 50.h,
+                    width: 50.w,
+                    fit: BoxFit.cover,
+                  ),
+          ],
+        ),
+      ),
+      toolbarHeight: 70.h,
+      title: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(widget.groupName),
+          AutoScrollText(
+            (usersList != null) ? usersList! : '',
+            mode: AutoScrollTextMode.bouncing,
+            velocity: Velocity(pixelsPerSecond: Offset(25, 0)),
+            delayBefore: Duration(milliseconds: 500),
+            pauseBetween: Duration(milliseconds: 2000),
+            padding: EdgeInsets.only(right: 30),
+            style: TextStyle(
+              fontSize: 13.sp,
+              color: const Color.fromARGB(255, 179, 178, 178),
+            ),
+          ),
+        ],
       ),
     );
   }
@@ -107,8 +165,6 @@ class _ChatScreenState extends State<ChatScreen> {
       context.pushNamed(Routes.displayPictureScreen, arguments: [
         pickedFile,
         token!,
-        widget.receivedMToken,
-        widget.receivedUserID,
       ]);
     }
   }
@@ -122,34 +178,8 @@ class _ChatScreenState extends State<ChatScreen> {
       context.pushNamed(Routes.displayPictureScreen, arguments: [
         pickedFile,
         token!,
-        widget.receivedMToken,
-        widget.receivedUserID,
       ]);
     }
-  }
-
-  getToken() async {
-    token = await FirebaseMessaging.instance.getToken();
-    setState(() {});
-  }
-
-  @override
-  void initState() {
-    super.initState();
-    WidgetsBinding.instance.addPostFrameCallback((_) async {
-      await HelperNotification.initialize(flutterLocalNotificationsPlugin);
-      await getToken();
-    });
-    // listen for messages when the app is in the foreground
-    FirebaseMessaging.onMessage.listen(
-      (RemoteMessage message) {
-        HelperNotification.showNotification(
-          message.notification!.title!,
-          message.notification!.body!,
-          flutterLocalNotificationsPlugin,
-        );
-      },
-    );
   }
 
   Future showImageOptions() async {
@@ -170,58 +200,6 @@ class _ChatScreenState extends State<ChatScreen> {
               context.pop();
               getImageFromCamera();
             },
-          ),
-        ],
-      ),
-    );
-  }
-
-  AppBar _buildAppBar(BuildContext context) {
-    return AppBar(
-      leadingWidth: 85.w,
-      leading: InkWell(
-        borderRadius: BorderRadius.circular(50),
-        onTap: () => Navigator.pop(context),
-        child: Row(
-          children: [
-            Gap(10.w),
-            Icon(Icons.arrow_back_ios, size: 25.sp),
-            widget.receivedUserProfilePic != null &&
-                    widget.receivedUserProfilePic != ''
-                ? Hero(
-                    tag: widget.receivedUserProfilePic!,
-                    child: ClipOval(
-                      child: FadeInImage.assetNetwork(
-                        placeholder: 'assets/images/loading.gif',
-                        image: widget.receivedUserProfilePic!,
-                        fit: BoxFit.cover,
-                        width: 50.w,
-                        height: 50.h,
-                      ),
-                    ),
-                  )
-                : Image.asset(
-                    'assets/images/user.png',
-                    height: 50.h,
-                    width: 50.w,
-                    fit: BoxFit.cover,
-                  ),
-          ],
-        ),
-      ),
-      toolbarHeight: 70.h,
-      title: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(widget.receivedUserName),
-          Text(
-            widget.active == 'true'
-                ? context.tr('online')
-                : context.tr('offline'),
-            style: TextStyle(
-              fontSize: 13.sp,
-              color: const Color.fromARGB(255, 179, 178, 178),
-            ),
           ),
         ],
       ),
@@ -249,6 +227,30 @@ class _ChatScreenState extends State<ChatScreen> {
         errorWidget: (context, url, error) =>
             const Icon(Icons.error_outline_rounded),
       ),
+    );
+  }
+
+  Future<void> _downloadImageFromFirebase(Reference ref, String url) async {
+    _showLoadingDialog();
+    // Define the path where you want to save the image
+    final tempDir = await getTemporaryDirectory();
+    final path = '${tempDir.path}/${ref.name}';
+
+    // Download the image using Dio
+    await DioFactory.getDio().download(url, path);
+
+    // Save the file to the gallery
+    await GallerySaver.saveImage(
+      path,
+      albumName: 'ChatChat',
+      toDcim: true,
+    );
+    if (!mounted) return;
+    context.pop();
+
+    // Show a snackbar to indicate the download is complete
+    ScaffoldMessenger.of(context).showSnackBar(
+      const SnackBar(content: Text('Image Downloaded')),
     );
   }
 
@@ -337,10 +339,9 @@ class _ChatScreenState extends State<ChatScreen> {
 
   Widget _buildMessagesList() {
     late Stream<QuerySnapshot<Object?>> allMessages =
-        DatabaseMethods.getMessages(
-            widget.receivedUserID, _auth.currentUser!.uid);
+        DatabaseMethods.getGroupMessages(widget.groupID);
 
-    List<String> sortedIDs = [widget.receivedUserID, _auth.currentUser!.uid];
+    List<String> sortedIDs = [_auth.currentUser!.uid];
     sortedIDs.sort();
     String chatRoomID = sortedIDs.join('_');
 
@@ -370,10 +371,6 @@ class _ChatScreenState extends State<ChatScreen> {
                 !_isSameDay(currentMessage['timestamp'].toDate(),
                     nextMessage['timestamp'].toDate());
 
-            if (currentMessage['receiverID'] == _auth.currentUser!.uid) {
-              _setMessageAsViewed(chatRoomID, currentMessage.id);
-            }
-
             return _buildMessageItem(
               currentMessage,
               previousMessage,
@@ -401,38 +398,7 @@ class _ChatScreenState extends State<ChatScreen> {
       isSender: data['senderID'] == _auth.currentUser!.uid
           ? true
           : false,
-      seen: (data['senderID'] == _auth.currentUser!.uid) && data['isViewed'],
     );
-  }
-
-  Future<void> _downloadImageFromFirebase(Reference ref, String url) async {
-    _showLoadingDialog();
-    // Define the path where you want to save the image
-    final tempDir = await getTemporaryDirectory();
-    final path = '${tempDir.path}/${ref.name}';
-
-    // Download the image using Dio
-    await DioFactory.getDio().download(url, path);
-
-    // Save the file to the gallery
-    await GallerySaver.saveImage(
-      path,
-      albumName: 'ChatChat',
-      toDcim: true,
-    );
-    if (!mounted) return;
-    context.pop();
-
-    // Show a snackbar to indicate the download is complete
-    ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(content: Text('Image Downloaded')),
-    );
-  }
-
-  bool _isSameDay(DateTime timestamp1, DateTime timestamp2) {
-    return timestamp1.year == timestamp2.year &&
-        timestamp1.month == timestamp2.month &&
-        timestamp1.day == timestamp2.day;
   }
 
   Future<void> _launchURL(String myUrl) async {
@@ -448,8 +414,10 @@ class _ChatScreenState extends State<ChatScreen> {
     }
   }
 
-  void _setMessageAsViewed(chatRoomID, messageId) {
-    DatabaseMethods.setMessageAsViewed(chatRoomID, messageId);
+  bool _isSameDay(DateTime timestamp1, DateTime timestamp2) {
+    return timestamp1.year == timestamp2.year &&
+        timestamp1.month == timestamp2.month &&
+        timestamp1.day == timestamp2.day;
   }
 
   void _showLoadingDialog() {

@@ -8,6 +8,7 @@ environment:
   sdk: ^3.5.1
 
 dependencies:
+  auto_scroll_text: ^0.0.7
   awesome_dialog: ^3.2.1
   cached_network_image: ^3.4.1
   chat_bubbles:

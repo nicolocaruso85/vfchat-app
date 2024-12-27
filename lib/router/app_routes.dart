@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 
 import '../features/chat/ui/chat_page.dart';
+import '../features/group/ui/group_page.dart';
 import '../features/create_password/ui/create_password.dart';
 import '../features/display_picture/ui/display_picture_screen.dart';
 import '../features/forget_password/ui/forget_screen.dart';
@@ -39,6 +40,19 @@ class AppRoute {
               receivedMToken: arguments['mtoken'],
               active: arguments['isOnline'],
               receivedUserProfilePic: arguments['profilePic'],
+            ),
+          );
+        }
+
+      case Routes.groupScreen:
+        final arguments = routeSettings.arguments;
+        if (arguments is Map<String, dynamic>) {
+          return MaterialPageRoute(
+            builder: (_) => GroupScreen(
+              groupID: arguments['id'],
+              groupName: arguments['name'],
+              groupPic: arguments['groupPic'],
+              users: arguments['users'],
             ),
           );
         }
