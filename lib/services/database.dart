@@ -30,6 +30,13 @@ class DatabaseMethods {
         .get();
   }
 
+  static Future<DocumentSnapshot> getGroup(groupID) async {
+    return await _fireStore
+        .collection('groups')
+        .doc(groupID)
+        .get();
+  }
+
   static Stream<QuerySnapshot<Map<String, dynamic>>> getUsers() {
     return _fireStore
         .collection('users')

@@ -5,6 +5,7 @@ import '../features/chat/ui/chat_page.dart';
 import '../features/group/ui/group_page.dart';
 import '../features/create_password/ui/create_password.dart';
 import '../features/display_picture/ui/display_picture_screen.dart';
+import '../features/display_picture/ui/display_group_picture_screen.dart';
 import '../features/forget_password/ui/forget_screen.dart';
 import '../features/home/ui/home_screen.dart';
 import '../features/local_auth/auth.dart';
@@ -117,6 +118,18 @@ class AppRoute {
               token: arguments[1] as String,
               receivedMToken: arguments[2] as String,
               receivedUserID: arguments[3] as String,
+            ),
+          );
+        }
+
+      case Routes.displayGroupPictureScreen:
+        final arguments = routeSettings.arguments;
+        if (arguments is List) {
+          return MaterialPageRoute(
+            builder: (context) => DisplayGroupPictureScreen(
+              image: arguments[0] as XFile,
+              token: arguments[1] as String,
+              groupID: arguments[2] as String,
             ),
           );
         }

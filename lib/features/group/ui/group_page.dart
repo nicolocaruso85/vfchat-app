@@ -22,6 +22,7 @@ import '../../../helpers/extensions.dart';
 import '../../../helpers/notifications.dart';
 import '../../../router/routes.dart';
 import '../../../services/database.dart';
+import '../../../services/notification_service.dart';
 import '../../chat/ui/widgets/message_bar.dart';
 import '../../chat/ui/widgets/url_preview.dart';
 
@@ -44,6 +45,7 @@ class GroupScreen extends StatefulWidget {
 }
 
 class _GroupScreenState extends State<GroupScreen> {
+  final _chatService = NotificationService();
   final _auth = FirebaseAuth.instance;
   final flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
 
@@ -76,6 +78,14 @@ class _GroupScreenState extends State<GroupScreen> {
                   await DatabaseMethods.sendGroupMessage(
                     message,
                     widget.groupID,
+                  );
+                  await _chatService.sendGroupPushMessage(
+                    widget.groupID,
+                    token!,
+                    message,
+                    _auth.currentUser!.displayName!,
+                    _auth.currentUser!.uid,
+                    _auth.currentUser!.photoURL,
                   );
                 },
                 onShowOptions: showImageOptions,
@@ -179,9 +189,10 @@ class _GroupScreenState extends State<GroupScreen> {
     if (pickedFile != null) {
       if (!mounted) return;
 
-      context.pushNamed(Routes.displayPictureScreen, arguments: [
+      context.pushNamed(Routes.displayGroupPictureScreen, arguments: [
         pickedFile,
         token!,
+        widget.groupID,
       ]);
     }
   }
@@ -192,9 +203,10 @@ class _GroupScreenState extends State<GroupScreen> {
 
     if (pickedFile != null) {
       if (!mounted) return;
-      context.pushNamed(Routes.displayPictureScreen, arguments: [
+      context.pushNamed(Routes.displayGroupPictureScreen, arguments: [
         pickedFile,
         token!,
+        widget.groupID,
       ]);
     }
   }

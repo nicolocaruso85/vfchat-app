@@ -9,6 +9,7 @@ class Routes {
   static const createPassword = '/createPassword';
   static const chatScreen = '/chatScreen';
   static const displayPictureScreen = '/displayPictureScreen';
+  static const displayGroupPictureScreen = '/displayGroupPictureScreen';
   static const updateScreen = '/updateScreen';
   static const manageUsersScreen = '/manageUsersScreen';
   static const editUserScreen = '/editUserScreen';
