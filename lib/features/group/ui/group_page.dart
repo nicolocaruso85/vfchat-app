@@ -7,6 +7,7 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:gal/gal.dart';
 import 'package:gap/gap.dart';
@@ -44,6 +45,7 @@ class GroupScreen extends StatefulWidget {
 
 class _GroupScreenState extends State<GroupScreen> {
   final _auth = FirebaseAuth.instance;
+  final flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
 
   late String? token;
   final _picker = ImagePicker();
@@ -88,6 +90,21 @@ class _GroupScreenState extends State<GroupScreen> {
   @override
   void initState() {
     super.initState();
+
+    WidgetsBinding.instance.addPostFrameCallback((_) async {
+      await HelperNotification.initialize(flutterLocalNotificationsPlugin);
+      await getToken();
+    });
+    // listen for messages when the app is in the foreground
+    FirebaseMessaging.onMessage.listen(
+      (RemoteMessage message) {
+        HelperNotification.showNotification(
+          message.notification!.title!,
+          message.notification!.body!,
+          flutterLocalNotificationsPlugin,
+        );
+      },
+    );
 
     List uList = [];
     widget.users.forEach((user) async {
@@ -411,6 +428,11 @@ class _GroupScreenState extends State<GroupScreen> {
     )) {
       throw Exception('Could not launch $url');
     }
+  }
+
+  getToken() async {
+    token = await FirebaseMessaging.instance.getToken();
+    setState(() {});
   }
 
   bool _isSameDay(DateTime timestamp1, DateTime timestamp2) {

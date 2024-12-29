@@ -119,6 +119,7 @@ class _NewGroupScreenState extends State<NewGroupScreen> {
       onPressed: () async {
         if (formKey.currentState!.validate()) {
           var users = [];
+          users.add(FirebaseFirestore.instance.collection('users').doc(_auth.currentUser!.uid));
           selectedUsers.forEach((selectedUser) {
             users.add(FirebaseFirestore.instance.collection('users').doc(selectedUser.id));
           });
@@ -128,6 +129,7 @@ class _NewGroupScreenState extends State<NewGroupScreen> {
             .add({
               'name': nameController.text,
               'users': users,
+              'groupPic': '',
             });
 
           AwesomeDialog(

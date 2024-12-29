@@ -90,8 +90,12 @@ class GroupsTab extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final FirebaseAuth _auth = FirebaseAuth.instance;
+
     return StreamBuilder<QuerySnapshot>(
-      stream: FirebaseFirestore.instance.collection('groups').snapshots(),
+      stream: FirebaseFirestore.instance.collection('groups')
+        .where('users', arrayContains: FirebaseFirestore.instance.collection('users').doc(_auth.currentUser!.uid))
+        .snapshots(),
       builder: (context, snapshot) {
         if (snapshot.hasError) {
           return Text(context.tr('somethingWentWrong'));
