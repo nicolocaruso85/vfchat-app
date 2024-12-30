@@ -56,6 +56,7 @@ class GoogleSignin {
             'uid': _auth.currentUser!.uid,
             'mtoken': await getToken(),
             'isOnline': 'true',
+            'isAdmin': 'false',
           },
           SetOptions(merge: true),
         );

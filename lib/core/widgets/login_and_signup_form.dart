@@ -151,6 +151,7 @@ class _EmailAndPasswordState extends State<EmailAndPassword> {
                   'uid': _auth.currentUser!.uid,
                   'mtoken': await getToken(),
                   'isOnline': 'true',
+                  'isAdmin': 'false',
                 },
                 SetOptions(merge: true),
               );
@@ -259,6 +260,7 @@ class _EmailAndPasswordState extends State<EmailAndPassword> {
                 'uid': _auth.currentUser!.uid,
                 'mtoken': await getToken(),
                 'isOnline': 'true',
+                'isAdmin': 'false',
               },
             );
             if (!context.mounted) return;
@@ -392,6 +394,7 @@ class _EmailAndPasswordState extends State<EmailAndPassword> {
                 'uid': _auth.currentUser!.uid,
                 'mtoken': await getToken(),
                 'isOnline': 'false',
+                'isAdmin': 'false',
               },
             );
 
