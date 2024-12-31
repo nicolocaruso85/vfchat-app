@@ -9,6 +9,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:pub_semver/pub_semver.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 import 'chatchat.dart';
 import 'firebase_options.dart';
@@ -19,6 +20,8 @@ import 'services/database.dart';
 Future<void> main() async {
   WidgetsBinding widgetsBinding = WidgetsFlutterBinding.ensureInitialized();
   FlutterNativeSplash.preserve(widgetsBinding: widgetsBinding);
+
+  await dotenv.load(fileName: '.env');
 
   // Initialize EasyLocalization
   await EasyLocalization.ensureInitialized();

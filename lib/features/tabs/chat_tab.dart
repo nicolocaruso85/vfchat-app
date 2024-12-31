@@ -55,7 +55,7 @@ class BuildUsersListView extends StatelessWidget {
               overflow: TextOverflow.ellipsis,
             ),
             subtitle: Text(
-              data['isOnline'] == 'true'
+              data['isOnline']
                   ? context.tr('online')
                   : context.tr('offline'),
               style: const TextStyle(

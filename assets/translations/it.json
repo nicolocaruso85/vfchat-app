@@ -69,6 +69,8 @@
     "userProfile": "Profilo @:user",
     "manageUsers": "Gestione Utenti",
     "edit": "Modifica",
+    "delete": "Elimina",
+    "cancel": "Annulla",
     "editUser": "@:edit @:user",
     "search": "Cerca",
     "create": "Crea",

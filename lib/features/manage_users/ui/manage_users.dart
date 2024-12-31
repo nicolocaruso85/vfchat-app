@@ -2,10 +2,14 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_admin/firebase_admin.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 
+import '../../../firebase_options.dart';
+import '../../../services/database.dart';
 import '../../../themes/styles.dart';
 import '../../../router/routes.dart';
 
@@ -24,6 +28,15 @@ class _ManageUsersScreenState extends State<ManageUsersScreen> {
     return Scaffold(
       appBar: AppBar(
         title: Text(context.tr('manageUsers')),
+      ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+
+        },
+        child: const Icon(
+          Icons.add,
+          color: Colors.black,
+        ),
       ),
       body: Padding(
         padding: const EdgeInsets.all(10),
@@ -96,7 +109,7 @@ class _ManageUsersScreenState extends State<ManageUsersScreen> {
                     ),
                     horizontalTitleGap: 15.w,
                     onTap: () {
-                      Navigator.pushNamed(context, Routes.editUserScreen, arguments: data);
+                      showUserOptions(context, data);
                     },
                   );
                 } else {
@@ -113,5 +126,42 @@ class _ManageUsersScreenState extends State<ManageUsersScreen> {
   @override
   void initState() {
     super.initState();
+  }
+
+  Future showUserOptions(context, data) async {
+    await showCupertinoModalPopup(
+      context: context,
+      builder: (context) => CupertinoActionSheet(
+        actions: [
+          CupertinoActionSheetAction(
+            child: Text(context.tr('edit')),
+            onPressed: () {
+              Navigator.pop(context);
+              Navigator.pushNamed(context, Routes.editUserScreen, arguments: data);
+            },
+          ),
+          CupertinoActionSheetAction(
+            child: Text(context.tr('delete')),
+            isDestructiveAction: true,
+            onPressed: () async {
+              Navigator.pop(context);
+              DatabaseMethods.deleteUserDetails(data['uid']);
+
+              var app = FirebaseAdmin.instance.initializeApp(AppOptions(
+                credential: FirebaseAdmin.instance.certFromPath(dotenv.env['SERVICE_ACCOUNT_PATH']! + 'service-account.json'),
+              ));
+
+              await app.auth().deleteUser(data['uid']);
+            },
+          ),
+        ],
+        cancelButton: CupertinoActionSheetAction(
+          onPressed: (){
+            Navigator.pop(context);
+          }, 
+          child: Text(context.tr('cancel')),
+        ),
+      ),
+    );
   }
 }

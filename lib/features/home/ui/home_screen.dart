@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:flutter_speed_dial/flutter_speed_dial.dart';
 
 import '../../../helpers/extensions.dart';
 import '../../../router/routes.dart';
@@ -30,12 +31,39 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
     return DefaultTabController(
       length: 3,
       child: Scaffold(
-        floatingActionButton: FloatingActionButton(
-          onPressed: () {},
-          child: const Icon(
-            Icons.message,
-            color: Colors.black,
-          ),
+        floatingActionButton: SpeedDial(
+          icon: Icons.grid_view_rounded,
+          iconTheme: IconThemeData(color: Colors.black),
+          renderOverlay: false,
+          children: [
+            SpeedDialChild(
+              child: const Icon(Icons.message),
+              backgroundColor: Colors.red,
+              foregroundColor: Colors.white,
+              label: 'Nuovo Messaggio',
+              onTap: () {
+
+              },
+            ),
+            SpeedDialChild(
+              child: const Icon(Icons.group),
+              backgroundColor: Colors.red,
+              foregroundColor: Colors.white,
+              label: 'Crea Gruppo',
+              onTap: () {
+
+              },
+            ),
+            SpeedDialChild(
+              child: const Icon(Icons.video_call_outlined),
+              backgroundColor: Colors.red,
+              foregroundColor: Colors.white,
+              label: 'Avvia Chiamata',
+              onTap: () {
+
+              },
+            ),
+          ],
         ),
         appBar: AppBar(
           title: Text(context.tr('title')),
@@ -94,18 +122,18 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
   void didChangeAppLifecycleState(AppLifecycleState state) async {
     switch (state) {
       case AppLifecycleState.resumed:
-        await DatabaseMethods.updateUserDetails({'isOnline': 'true'});
+        await DatabaseMethods.updateUserDetails({'isOnline': true});
 
         break;
       case AppLifecycleState.inactive:
       case AppLifecycleState.detached:
       case AppLifecycleState.hidden:
       case AppLifecycleState.paused:
-        await DatabaseMethods.updateUserDetails({'isOnline': 'false'});
+        await DatabaseMethods.updateUserDetails({'isOnline': false});
 
         break;
       default:
-        await DatabaseMethods.updateUserDetails({'isOnline': 'false'});
+        await DatabaseMethods.updateUserDetails({'isOnline': false});
 
         break;
     }
@@ -123,7 +151,7 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
     WidgetsBinding.instance.addObserver(this);
     WidgetsBinding.instance.addPostFrameCallback(
       (_) async {
-        await DatabaseMethods.updateUserDetails({'isOnline': 'true'});
+        await DatabaseMethods.updateUserDetails({'isOnline': true});
         await setupInteractedMessage();
       },
     );
@@ -171,7 +199,7 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
             try {
               await GoogleSignIn().disconnect();
             } finally {
-              await DatabaseMethods.updateUserDetails({'isOnline': 'false'});
+              await DatabaseMethods.updateUserDetails({'isOnline': false});
 
               SharedPreferences prefs = await SharedPreferences.getInstance();
 

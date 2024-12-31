@@ -16,6 +16,13 @@ class DatabaseMethods {
         .set(data, options);
   }
 
+  static Future<void> deleteUserDetails(userID) async {
+    await _fireStore
+        .collection('users')
+        .doc(userID)
+        .delete();
+  }
+
   static Future<DocumentSnapshot> getCurrentUserDetails() async {
     return await _fireStore
         .collection('users')
