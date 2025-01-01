@@ -6,7 +6,6 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:package_info_plus/package_info_plus.dart';
 import 'package:pub_semver/pub_semver.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
@@ -53,15 +52,6 @@ Future<void> main() async {
 late String? initialRoute;
 
 Future<void> initApp() async {
-  // Compare Versions
-  PackageInfo packageInfo = await PackageInfo.fromPlatform();
-  /*DocumentSnapshot newestVersionDetails = await FirebaseFirestore.instance
-      .collection('version')
-      .doc('newest')
-      .get();
-  Version newestVersion = Version.parse(newestVersionDetails['version']);
-  Version currentVersion = Version.parse(packageInfo.version);
-  int compareResult = newestVersion.compareTo(currentVersion);*/
   int compareResult = 0;
 
   // handle initial route

@@ -32,7 +32,7 @@ class NotificationService extends ChangeNotifier {
           'type': 'chat',
           'uid': senderID,
           'mtoken': senderMToken,
-          'isOnline': true,
+          'isOnline': 'true',
           'profilePic': senderUserProfilePic
         }
       }
@@ -81,7 +81,7 @@ class NotificationService extends ChangeNotifier {
               'type': 'chat',
               'uid': senderID,
               'mtoken': senderMToken,
-              'isOnline': true,
+              'isOnline': 'true',
               'profilePic': senderUserProfilePic
             }
           }

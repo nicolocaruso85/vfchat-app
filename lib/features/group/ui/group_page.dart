@@ -1,3 +1,4 @@
+import 'dart:io';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:chat_bubbles/chat_bubbles.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -12,7 +13,6 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:gal/gal.dart';
 import 'package:gap/gap.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:path_provider/path_provider.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:auto_scroll_text/auto_scroll_text.dart';
 
@@ -262,7 +262,7 @@ class _GroupScreenState extends State<GroupScreen> {
   Future<void> _downloadImageFromFirebase(Reference ref, String url) async {
     _showLoadingDialog();
     // Define the path where you want to save the image
-    final tempDir = await getTemporaryDirectory();
+    final tempDir = Directory.systemTemp;
     final path = '${tempDir.path}/${ref.name}';
 
     // Download the image using Dio

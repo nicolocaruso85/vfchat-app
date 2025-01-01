@@ -15,7 +15,7 @@ class CustomMessageBar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MessageBar(
-      messageBarHitText: context.tr('message'),
+      messageBarHintText: context.tr('message'),
       messageBarHintStyle: TextStyles.font14Grey400Weight,
       messageBarTextStyle: TextStyles.font18White500Weight.copyWith(
         fontSize: 16.sp,

@@ -511,7 +511,7 @@ SPEC CHECKSUMS:
   flutter_callkit_incoming_yoer: a5936b9f065762a7b422594028d3a20901c88996
   flutter_local_notifications: df98d66e515e1ca797af436137b4459b160ad8c9
   flutter_logs: 5d0dca26963e0f30b11a995a764744ef77d5d428
-  flutter_native_splash: e8a1e01082d97a8099d973f919f57904c925008a
+  flutter_native_splash: f71420956eb811e6d310720fee915f1d42852e7a
   flutter_ringtone_player: 15eba85187230b87b2512f0e1b92225618bc03e7
   flutter_volume_controller: e4d5832f08008180f76e30faf671ffd5a425e529
   gal: 6a522c75909f1244732d4596d11d6a2f86ff37a5

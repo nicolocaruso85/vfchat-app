@@ -10,7 +10,7 @@ import 'package:flutter/material.dart';
 ///
 /// # STRINGS
 /// [replyingTo] is the string to tag the replying message
-/// [messageBarHitText] is the string to show as message bar hint
+/// [messageBarHintText] is the string to show as message bar hint
 ///
 /// # WIDGETS
 /// [actions] are the additional leading action buttons like camera
@@ -43,7 +43,7 @@ class MessageBar extends StatelessWidget {
   final EdgeInsetsGeometry paddingTextAndSendButton;
   final EdgeInsetsGeometry contentPadding;
 
-  final String messageBarHitText;
+  final String messageBarHintText;
   final TextStyle messageBarHintStyle;
   final TextStyle messageBarTextStyle;
 
@@ -68,7 +68,7 @@ class MessageBar extends StatelessWidget {
     this.sendButtonColor = Colors.blue,
     this.contentPadding =
         const EdgeInsets.symmetric(horizontal: 20, vertical: 17),
-    this.messageBarHitText = "Type your message here",
+    this.messageBarHintText = "Type your message here",
     this.messageBarHintStyle = const TextStyle(fontSize: 16),
     this.messageBarTextStyle = const TextStyle(fontSize: 16),
     this.onTextChanged,
@@ -141,7 +141,7 @@ class MessageBar extends StatelessWidget {
                     maxLines: 6,
                     onChanged: onTextChanged,
                     decoration: InputDecoration(
-                      hintText: messageBarHitText,
+                      hintText: messageBarHintText,
                       hintMaxLines: 1,
                       hintStyle: messageBarHintStyle,
                       contentPadding: contentPadding,
