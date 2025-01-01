@@ -39,7 +39,7 @@ class AppRoute {
               receivedUserName: arguments['name'],
               receivedUserID: arguments['uid'],
               receivedMToken: arguments['mtoken'],
-              active: arguments['isOnline'],
+              active: (arguments['isOnline'] is String) ? bool.parse(arguments['isOnline']) : arguments['isOnline'],
               receivedUserProfilePic: arguments['profilePic'],
             ),
           );

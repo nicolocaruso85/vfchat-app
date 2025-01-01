@@ -78,10 +78,11 @@ class NotificationService extends ChangeNotifier {
             "notification": {"body": message, "title": senderName},
             'data': {
               'name': senderName,
-              'type': 'chat',
+              'type': 'group',
               'uid': senderID,
               'mtoken': senderMToken,
               'isOnline': 'true',
+              'groupId': groupId,
               'profilePic': senderUserProfilePic
             }
           }

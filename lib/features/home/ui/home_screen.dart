@@ -226,11 +226,17 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
     );
   }
 
-  void _goToNotificationChatPage(RemoteMessage message) {
+  void _goToNotificationChatPage(RemoteMessage message) async {
     if (message.data['type'] == 'chat') {
       context.pushNamed(Routes.chatScreen, arguments: message.data);
-    } else if (message.data['type'] == 'update') {
-      context.pushReplacementNamed(Routes.groupScreen);
+    } else if (message.data['type'] == 'group') {
+      var group = await DatabaseMethods.getGroup(message.data['groupId']);
+      context.pushReplacementNamed(Routes.groupScreen, arguments: {
+        'id': message.data['groupId'],
+        'name': group['name'],
+        'groupPic': group['groupPic'],
+        'users': group['users'],
+      });
     } else {
       context.pushReplacementNamed(Routes.homeScreen);
     }
