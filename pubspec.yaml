@@ -44,6 +44,7 @@ dependencies:
   http: ^1.2.2
   image_picker: ^1.1.2
   intl: ^0.19.0
+  keyboard_dismisser: ^3.0.0
   local_auth: ^2.3.0
   lottie: ^3.3.0
   modal_bottom_sheet: ^3.0.0

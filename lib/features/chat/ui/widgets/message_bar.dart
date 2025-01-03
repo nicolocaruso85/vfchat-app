@@ -28,6 +28,7 @@ class CustomMessageBar extends StatelessWidget {
       ),
       paddingTextAndSendButton: EdgeInsets.only(left: 4.w),
       onSend: (message) async {
+        WidgetsBinding.instance.focusManager.primaryFocus?.unfocus();
         await onSend(message);
       },
       sendButtonColor: ColorsManager.greenPrimary,

@@ -17,6 +17,8 @@ class BuildUsersListView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ListView.builder(
+      scrollDirection: Axis.vertical,
+      shrinkWrap: true,
       itemCount: snapshot.data!.docs.length,
       itemBuilder: (context, index) {
         var doc = snapshot.data!.docs[index];

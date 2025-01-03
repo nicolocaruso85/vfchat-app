@@ -2,6 +2,7 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:keyboard_dismisser/keyboard_dismisser.dart';
 
 import 'main.dart';
 import 'router/app_routes.dart';
@@ -25,34 +26,40 @@ class _ChatChatState extends State<ChatChat> {
       designSize: const Size(375, 812),
       minTextAdapt: true,
       splitScreenMode: true,
-      child: MaterialApp(
-        title: 'Chat aziendale',
-        localizationsDelegates: context.localizationDelegates,
-        supportedLocales: context.supportedLocales,
-        locale: context.locale,
-        theme: ThemeData(
-          useMaterial3: true,
-          primaryColor: ColorsManager.greenPrimary,
-          textSelectionTheme: const TextSelectionThemeData(
-            cursorColor: ColorsManager.greenPrimary,
-            selectionHandleColor: ColorsManager.greenPrimary,
-            selectionColor: Color.fromARGB(209, 0, 168, 132),
+      child: KeyboardDismisser(
+        gestures: [
+          GestureType.onTap,
+          GestureType.onPanUpdateDownDirection,
+        ],
+        child: MaterialApp(
+          title: 'Chat aziendale',
+          localizationsDelegates: context.localizationDelegates,
+          supportedLocales: context.supportedLocales,
+          locale: context.locale,
+          theme: ThemeData(
+            useMaterial3: true,
+            primaryColor: ColorsManager.greenPrimary,
+            textSelectionTheme: const TextSelectionThemeData(
+              cursorColor: ColorsManager.greenPrimary,
+              selectionHandleColor: ColorsManager.greenPrimary,
+              selectionColor: Color.fromARGB(209, 0, 168, 132),
+            ),
+            progressIndicatorTheme: const ProgressIndicatorThemeData(
+              color: ColorsManager.greenPrimary,
+            ),
+            floatingActionButtonTheme: const FloatingActionButtonThemeData(
+              backgroundColor: ColorsManager.greenPrimary,
+            ),
+            scaffoldBackgroundColor: ColorsManager.backgroundDefaultColor,
+            appBarTheme: const AppBarTheme(
+              foregroundColor: Colors.white,
+              backgroundColor: ColorsManager.appBarBackgroundColor,
+            ),
           ),
-          progressIndicatorTheme: const ProgressIndicatorThemeData(
-            color: ColorsManager.greenPrimary,
-          ),
-          floatingActionButtonTheme: const FloatingActionButtonThemeData(
-            backgroundColor: ColorsManager.greenPrimary,
-          ),
-          scaffoldBackgroundColor: ColorsManager.backgroundDefaultColor,
-          appBarTheme: const AppBarTheme(
-            foregroundColor: Colors.white,
-            backgroundColor: ColorsManager.appBarBackgroundColor,
-          ),
+          onGenerateRoute: widget.appRoute.onGenerateRoute,
+          initialRoute: initialRoute,
+          debugShowCheckedModeBanner: false,
         ),
-        onGenerateRoute: widget.appRoute.onGenerateRoute,
-        initialRoute: initialRoute,
-        debugShowCheckedModeBanner: false,
       ),
     );
   }

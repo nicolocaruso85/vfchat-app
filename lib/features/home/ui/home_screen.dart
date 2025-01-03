@@ -6,6 +6,7 @@ import 'package:google_sign_in/google_sign_in.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flutter_speed_dial/flutter_speed_dial.dart';
+import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 
 import '../../../helpers/extensions.dart';
 import '../../../router/routes.dart';
@@ -25,6 +26,8 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
   final _auth = FirebaseAuth.instance;
   final _picker = ImagePicker();
+
+  TextEditingController? controller;
 
   @override
   Widget build(BuildContext context) {
@@ -102,7 +105,43 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
             IconButton(
               icon: const Icon(Icons.search),
               color: Colors.white,
-              onPressed: () {},
+              onPressed: () {
+                showCupertinoModalBottomSheet(
+                  context: context,
+                  expand: true,
+                  builder: (context) => Material(
+                    child: Scaffold(
+                      backgroundColor: ColorsManager.backgroundDefaultColor,
+                      body: Padding(
+                        padding: EdgeInsets.symmetric(horizontal: 5, vertical: 12),
+                        child: Column(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            SearchBar(
+                              controller: controller,
+                              autoFocus: true,
+                              hintText: context.tr('search'),
+                              padding: const WidgetStatePropertyAll<EdgeInsets>(EdgeInsets.symmetric(horizontal: 16.0)),
+                              onChanged: (value) {
+                                print(value);
+                              },
+                              trailing: [
+                                IconButton(
+                                  icon: const Icon(Icons.close),
+                                  onPressed: () {
+                                    Navigator.of(context).pop();
+                                  },
+                                ),
+                              ],
+                            ),
+                            ChatsTab(),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ),
+                );
+              },
             ),
             _buildPopMenu(),
           ],
