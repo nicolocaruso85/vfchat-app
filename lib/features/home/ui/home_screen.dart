@@ -7,6 +7,8 @@ import 'package:image_picker/image_picker.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flutter_speed_dial/flutter_speed_dial.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
+import 'package:event/event.dart';
+import 'package:gap/gap.dart';
 
 import '../../../helpers/extensions.dart';
 import '../../../router/routes.dart';
@@ -15,6 +17,8 @@ import '../../../themes/colors.dart';
 import '../../tabs/calls_tab.dart';
 import '../../tabs/chat_tab.dart';
 import '../../tabs/groups_tab.dart';
+import '../../search/ui/search_groups.dart';
+import '../../search/ui/search_users.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -28,6 +32,9 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
   final _picker = ImagePicker();
 
   TextEditingController? controller;
+
+  var userSearchEvent = Event('userSearch');
+  var groupSearchEvent = Event('groupSearch');
 
   @override
   Widget build(BuildContext context) {
@@ -123,18 +130,23 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
                               hintText: context.tr('search'),
                               padding: const WidgetStatePropertyAll<EdgeInsets>(EdgeInsets.symmetric(horizontal: 16.0)),
                               onChanged: (value) {
-                                print(value);
+                                userSearchEvent.broadcast(Value(value));
+                                groupSearchEvent.broadcast(Value(value));
                               },
                               trailing: [
                                 IconButton(
                                   icon: const Icon(Icons.close),
                                   onPressed: () {
+                                    userSearchEvent.unsubscribeAll();
+                                    groupSearchEvent.unsubscribeAll();
                                     Navigator.of(context).pop();
                                   },
                                 ),
                               ],
                             ),
-                            ChatsTab(),
+                            Gap(20),
+                            SearchUsers(userSearchEvent: userSearchEvent),
+                            SearchGroups(groupSearchEvent: groupSearchEvent),
                           ],
                         ),
                       ),
