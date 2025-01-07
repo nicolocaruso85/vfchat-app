@@ -45,7 +45,10 @@ class _AddUserScreenState extends State<AddUserScreen> {
         title: Text(context.tr('addUser')),
       ),
       body: Padding(
-        padding: const EdgeInsets.all(10),
+        padding: EdgeInsets.symmetric(
+          horizontal: 10,
+          vertical: 18.h,
+        ),
         child: Form(
           key: formKey,
           child: Column(
@@ -90,7 +93,7 @@ class _AddUserScreenState extends State<AddUserScreen> {
             context: context,
             dialogType: DialogType.success,
             animType: AnimType.rightSlide,
-            title: context.tr('success'),
+            title: context.tr('addUserSuccess'),
             desc: context.tr('addUserSuccess'),
           ).show();
 

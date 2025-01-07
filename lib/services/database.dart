@@ -139,6 +139,14 @@ class DatabaseMethods {
         .update(data);
   }
 
+  static Future<void> updateUserDetailsByUid(String uid, Map<String, dynamic> data,
+      [SetOptions? options]) async {
+    await _fireStore
+        .collection('users')
+        .doc(uid)
+        .update(data);
+  }
+
   static Future<void> setMessageAsViewed(chatRoomID, messageId) async {
     await _fireStore
         .collection('chats')

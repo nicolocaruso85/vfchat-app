@@ -46,16 +46,22 @@ class _EditUserScreenState extends State<EditUserScreen> {
         title: Text(context.tr('editUser')),
       ),
       body: Padding(
-        padding: const EdgeInsets.all(10),
-        child: Column(
-          children: [
-            nameField(),
-            emailField(),
-            passwordField(),
-            passwordConfirmationField(),
-            Gap(20.h),
-            modifyButton(context),
-          ],
+        padding: EdgeInsets.symmetric(
+          horizontal: 10,
+          vertical: 18.h,
+        ),
+        child: Form(
+          key: formKey,
+          child: Column(
+            children: [
+              nameField(),
+              emailField(),
+              passwordField(),
+              passwordConfirmationField(),
+              Gap(20.h),
+              modifyButton(context),
+            ],
+          ),
         ),
       ),
     );
@@ -74,67 +80,23 @@ class _EditUserScreenState extends State<EditUserScreen> {
       textStyle: TextStyles.font15DarkBlue500Weight,
       onPressed: () async {
         if (formKey.currentState!.validate()) {
-          /*try {
-            await _auth.createUserWithEmailAndPassword(
-              email: emailController.text,
-              password: passwordController.text,
-            );
-            await _auth.currentUser!.updateDisplayName(nameController.text);
-            await _auth.currentUser!.sendEmailVerification();
-            await DatabaseMethods.addUserDetails(
-              {
-                'name': nameController.text,
-                'email': emailController.text,
-                'profilePic': '',
-                'uid': _auth.currentUser!.uid,
-                'mtoken': await getToken(),
-                'isOnline': false,
-              },
-            );
+          await DatabaseMethods.updateUserDetailsByUid(
+            widget.uid,
+            {
+              'name': nameController.text,
+              'email': emailController.text,
+            },
+          );
 
-            await _auth.signOut();
-            if (!context.mounted) return;
-            await AwesomeDialog(
-              context: context,
-              dialogType: DialogType.success,
-              animType: AnimType.rightSlide,
-              title: context.tr('success'),
-              desc: context.tr('verifyYourEmail'),
-            ).show();
+          await AwesomeDialog(
+            context: context,
+            dialogType: DialogType.success,
+            animType: AnimType.rightSlide,
+            title: context.tr('editUserSuccess'),
+            desc: context.tr('editUserSuccess'),
+          ).show();
 
-            if (!context.mounted) return;
-
-            context.pushNamedAndRemoveUntil(
-              Routes.loginScreen,
-              predicate: (route) => false,
-            );
-          } on FirebaseAuthException catch (e) {
-            if (e.code == 'email-already-in-use') {
-              AwesomeDialog(
-                context: context,
-                dialogType: DialogType.error,
-                animType: AnimType.rightSlide,
-                title: context.tr('error'),
-                desc: context.tr('emailAlreadyExists'),
-              ).show();
-            } else {
-              AwesomeDialog(
-                context: context,
-                dialogType: DialogType.error,
-                animType: AnimType.rightSlide,
-                title: context.tr('error'),
-                desc: e.message,
-              ).show();
-            }
-          } catch (e) {
-            AwesomeDialog(
-              context: context,
-              dialogType: DialogType.error,
-              animType: AnimType.rightSlide,
-              title: context.tr('error'),
-              desc: e.toString(),
-            ).show();
-          }*/
+          Navigator.pop(context);
         }
       },
     );
@@ -174,12 +136,12 @@ class _EditUserScreenState extends State<EditUserScreen> {
         ),
       ),
       validator: (value) {
+        if (value == null || value.isEmpty) return null;
+
         if (value != passwordController.text) {
           return context.tr('passwordsDontMatch');
         }
-        if (value == null ||
-            value.isEmpty ||
-            !AppRegex.isPasswordValid(value)) {
+        if (value != null && !AppRegex.isPasswordValid(value)) {
           return context.tr('pleaseEnterValid', args: ['Password']);
         }
       },
@@ -205,9 +167,9 @@ class _EditUserScreenState extends State<EditUserScreen> {
             ),
           ),
           validator: (value) {
-            if (value == null ||
-                value.isEmpty ||
-                !AppRegex.isPasswordValid(value)) {
+            if (value == null || value.isEmpty) return null;
+
+            if (value != null && !AppRegex.isPasswordValid(value)) {
               return context.tr('pleaseEnterValid', args: ['Password']);
             }
           },
