@@ -47,6 +47,7 @@ class _EmailAndPasswordState extends State<EmailAndPassword> {
   late TextEditingController passwordController = TextEditingController();
   late TextEditingController passwordConfirmationController =
       TextEditingController();
+  late TextEditingController codiceAziendaController = TextEditingController();
 
   final formKey = GlobalKey<FormState>();
 
@@ -68,6 +69,7 @@ class _EmailAndPasswordState extends State<EmailAndPassword> {
           PasswordValidations(
             hasMinLength: hasMinLength,
           ),
+          if (widget.isSignUpPage == true) codiceAziendaField(),
           Gap(20.h),
           loginOrSignUpOrPasswordButton(context),
         ],
@@ -215,6 +217,20 @@ class _EmailAndPasswordState extends State<EmailAndPassword> {
     if (widget.isPasswordPage!) {
       return passwordButton(context);
     }
+  }
+
+  Column codiceAziendaField() {
+    return Column(
+      children: [
+        Gap(18.h),
+        AppTextFormField(
+          hint: context.tr('codiceAzienda'),
+          validator: (value) {
+          },
+          controller: codiceAziendaController,
+        ),
+      ],
+    );
   }
 
   Column nameField() {
@@ -395,6 +411,7 @@ class _EmailAndPasswordState extends State<EmailAndPassword> {
                 'mtoken': await getToken(),
                 'isOnline': false,
                 'isAdmin': false,
+                'codiceAzienda': codiceAziendaController.text,
               },
             );
 

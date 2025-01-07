@@ -13,5 +13,6 @@ class Routes {
   static const updateScreen = '/updateScreen';
   static const manageUsersScreen = '/manageUsersScreen';
   static const editUserScreen = '/editUserScreen';
+  static const addUserScreen = '/addUserScreen';
   static const groupScreen = '/groupScreen';
 }

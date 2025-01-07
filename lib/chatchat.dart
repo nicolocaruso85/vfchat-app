@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:keyboard_dismisser/keyboard_dismisser.dart';
+import 'package:firebase_admin/firebase_admin.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 import 'main.dart';
 import 'router/app_routes.dart';
@@ -68,5 +70,9 @@ class _ChatChatState extends State<ChatChat> {
   void initState() {
     super.initState();
     FlutterNativeSplash.remove();
+
+    FirebaseAdmin.instance.initializeApp(AppOptions(
+      credential: FirebaseAdmin.instance.certFromPath(dotenv.env['SERVICE_ACCOUNT_PATH']! + 'service-account.json'),
+    ));
   }
 }

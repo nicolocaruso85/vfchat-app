@@ -15,6 +15,7 @@ import '../features/settings/ui/settings_screen.dart';
 import '../features/signup/ui/sign_up_sceen.dart';
 import '../features/update/ui/update.dart';
 import '../features/manage_users/ui/manage_users.dart';
+import '../features/add_user/ui/add_user.dart';
 import '../features/edit_user/ui/edit_user.dart';
 import 'routes.dart';
 
@@ -92,6 +93,11 @@ class AppRoute {
       case Routes.manageUsersScreen:
         return MaterialPageRoute(
           builder: (context) => const ManageUsersScreen(),
+        );
+
+      case Routes.addUserScreen:
+        return MaterialPageRoute(
+          builder: (context) => const AddUserScreen(),
         );
 
       case Routes.editUserScreen:

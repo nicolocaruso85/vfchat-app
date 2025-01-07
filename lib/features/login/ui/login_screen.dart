@@ -33,27 +33,9 @@ class BuildLoginScreen extends StatelessWidget {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Text(
-                          context.tr('login'),
-                          style: TextStyles.font24White600Weight,
-                        ),
-                        IconButton(
-                          onPressed: () => showCupertinoModalBottomSheet(
-                            expand: false,
-                            context: context,
-                            backgroundColor: Colors.transparent,
-                            builder: (context) => const ModalFit(),
-                          ),
-                          tooltip: context.tr('language'),
-                          icon: const Icon(
-                            Icons.language_rounded,
-                            color: Colors.white,
-                          ),
-                        ),
-                      ],
+                    Text(
+                      context.tr('login'),
+                      style: TextStyles.font24White600Weight,
                     ),
                     Gap(10.h),
                     Text(

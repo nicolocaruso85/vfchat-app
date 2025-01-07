@@ -72,7 +72,10 @@
     "delete": "Elimina",
     "cancel": "Annulla",
     "editUser": "@:edit @:user",
+    "addUser": "@:create @:user",
     "search": "Cerca",
     "create": "Crea",
-    "users": "Utenti"
+    "users": "Utenti",
+    "codiceAzienda": "Codice Azienda",
+    "addUserSuccess": "Utente creato con successo"
 }

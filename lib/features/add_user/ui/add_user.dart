@@ -5,6 +5,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:gap/gap.dart';
+import 'package:firebase_admin/firebase_admin.dart';
 
 import '../../../themes/styles.dart';
 import '../../../services/database.dart';
@@ -13,18 +14,16 @@ import '../../../core/widgets/password_validations.dart';
 import '../../../core/widgets/app_button.dart';
 import '../../../helpers/app_regex.dart';
 
-class EditUserScreen extends StatefulWidget {
-  final String uid;
-  const EditUserScreen({
+class AddUserScreen extends StatefulWidget {
+  const AddUserScreen({
     super.key,
-    required this.uid,
   });
 
   @override
-  State<EditUserScreen> createState() => _EditUserScreenState();
+  State<AddUserScreen> createState() => _AddUserScreenState();
 }
 
-class _EditUserScreenState extends State<EditUserScreen> {
+class _AddUserScreenState extends State<AddUserScreen> {
   DocumentSnapshot? userDetails;
 
   bool isObscureText = true;
@@ -43,98 +42,59 @@ class _EditUserScreenState extends State<EditUserScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(context.tr('editUser')),
+        title: Text(context.tr('addUser')),
       ),
       body: Padding(
         padding: const EdgeInsets.all(10),
-        child: Column(
-          children: [
-            nameField(),
-            emailField(),
-            passwordField(),
-            passwordConfirmationField(),
-            Gap(20.h),
-            modifyButton(context),
-          ],
+        child: Form(
+          key: formKey,
+          child: Column(
+            children: [
+              nameField(),
+              emailField(),
+              passwordField(),
+              passwordConfirmationField(),
+              Gap(20.h),
+              addButton(context),
+            ],
+          ),
         ),
       ),
     );
   }
 
-  @override
-  void initState() {
-    super.initState();
-
-    _loadUserDetails();
-  }
-
-  modifyButton(BuildContext context) {
+  addButton(BuildContext context) {
     return AppButton(
-      buttonText: context.tr('edit'),
+      buttonText: context.tr('create'),
       textStyle: TextStyles.font15DarkBlue500Weight,
       onPressed: () async {
         if (formKey.currentState!.validate()) {
-          /*try {
-            await _auth.createUserWithEmailAndPassword(
-              email: emailController.text,
-              password: passwordController.text,
-            );
-            await _auth.currentUser!.updateDisplayName(nameController.text);
-            await _auth.currentUser!.sendEmailVerification();
-            await DatabaseMethods.addUserDetails(
-              {
-                'name': nameController.text,
-                'email': emailController.text,
-                'profilePic': '',
-                'uid': _auth.currentUser!.uid,
-                'mtoken': await getToken(),
-                'isOnline': false,
-              },
-            );
+          UserRecord user = await FirebaseAdmin.instance.app()!.auth().createUser(
+            email: emailController.text,
+            password: passwordController.text,
+          );
 
-            await _auth.signOut();
-            if (!context.mounted) return;
-            await AwesomeDialog(
-              context: context,
-              dialogType: DialogType.success,
-              animType: AnimType.rightSlide,
-              title: context.tr('success'),
-              desc: context.tr('verifyYourEmail'),
-            ).show();
+          await DatabaseMethods.addUserDetailsByUid(
+            user.uid,
+            {
+              'name': nameController.text,
+              'email': emailController.text,
+              'profilePic': '',
+              'uid': user.uid,
+              'isOnline': false,
+              'isAdmin': false,
+            },
+          );
 
-            if (!context.mounted) return;
+          await AwesomeDialog(
+            context: context,
+            dialogType: DialogType.success,
+            animType: AnimType.rightSlide,
+            title: context.tr('success'),
+            desc: context.tr('addUserSuccess'),
+          ).show();
 
-            context.pushNamedAndRemoveUntil(
-              Routes.loginScreen,
-              predicate: (route) => false,
-            );
-          } on FirebaseAuthException catch (e) {
-            if (e.code == 'email-already-in-use') {
-              AwesomeDialog(
-                context: context,
-                dialogType: DialogType.error,
-                animType: AnimType.rightSlide,
-                title: context.tr('error'),
-                desc: context.tr('emailAlreadyExists'),
-              ).show();
-            } else {
-              AwesomeDialog(
-                context: context,
-                dialogType: DialogType.error,
-                animType: AnimType.rightSlide,
-                title: context.tr('error'),
-                desc: e.message,
-              ).show();
-            }
-          } catch (e) {
-            AwesomeDialog(
-              context: context,
-              dialogType: DialogType.error,
-              animType: AnimType.rightSlide,
-              title: context.tr('error'),
-              desc: e.toString(),
-            ).show();
-          }*/
+          Navigator.pop(context);
         }
       },
     );
@@ -234,14 +194,5 @@ class _EditUserScreenState extends State<EditUserScreen> {
         Gap(18.h),
       ],
     );
-  }
-
-  Future<void> _loadUserDetails() async {
-    DocumentSnapshot details = await DatabaseMethods.getUserDetails(widget.uid);
-    setState(() {
-      userDetails = details;
-      nameController.text = userDetails?['name'];
-      emailController.text = userDetails?['email'];
-    });
   }
 }

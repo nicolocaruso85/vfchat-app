@@ -6,7 +6,6 @@ import 'package:firebase_admin/firebase_admin.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 import '../../../firebase_options.dart';
 import '../../../services/database.dart';
@@ -31,7 +30,7 @@ class _ManageUsersScreenState extends State<ManageUsersScreen> {
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
-
+          Navigator.pushNamed(context, Routes.addUserScreen);
         },
         child: const Icon(
           Icons.add,
@@ -147,11 +146,7 @@ class _ManageUsersScreenState extends State<ManageUsersScreen> {
               Navigator.pop(context);
               DatabaseMethods.deleteUserDetails(data['uid']);
 
-              var app = FirebaseAdmin.instance.initializeApp(AppOptions(
-                credential: FirebaseAdmin.instance.certFromPath(dotenv.env['SERVICE_ACCOUNT_PATH']! + 'service-account.json'),
-              ));
-
-              await app.auth().deleteUser(data['uid']);
+              await FirebaseAdmin.instance.app()!.auth().deleteUser(data['uid']);
             },
           ),
         ],
