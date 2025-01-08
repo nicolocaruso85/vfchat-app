@@ -5,6 +5,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:gap/gap.dart';
+import 'package:firebase_admin/firebase_admin.dart';
 
 import '../../../themes/styles.dart';
 import '../../../services/database.dart';
@@ -80,11 +81,34 @@ class _EditUserScreenState extends State<EditUserScreen> {
       textStyle: TextStyles.font15DarkBlue500Weight,
       onPressed: () async {
         if (formKey.currentState!.validate()) {
+          var name = nameController.text;
+          var email = emailController.text;
+          var password = passwordController.text;
+
+          if (name != userDetails?['name']) {
+            await FirebaseAdmin.instance.app()!.auth().updateUser(
+              widget.uid,
+              displayName: name,
+            );
+          }
+          if (email != userDetails?['email']) {
+            await FirebaseAdmin.instance.app()!.auth().updateUser(
+              widget.uid,
+              email: email,
+            );
+          }
+          if (password != null && password != '') {
+            await FirebaseAdmin.instance.app()!.auth().updateUser(
+              widget.uid,
+              password: password,
+            );
+          }
+
           await DatabaseMethods.updateUserDetailsByUid(
             widget.uid,
             {
-              'name': nameController.text,
-              'email': emailController.text,
+              'name': name,
+              'email': email,
             },
           );
 
