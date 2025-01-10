@@ -58,38 +58,43 @@ class _NewGroupScreenState extends State<NewGroupScreen> {
   }
 
   Widget selectUsersList() {
-    return StreamBuilder(
-      stream: DatabaseMethods.getUsers(),
-      builder: (context, snapshot) {
-        if (snapshot.connectionState == ConnectionState.waiting) {
-          return const Center(child: CircularProgressIndicator());
-        }
+    return FutureBuilder<String>(
+      future: getIdAzienda(),
+      builder: (context, AsyncSnapshot<String> snapshot) {
+        return StreamBuilder(
+          stream: DatabaseMethods.getUsers(snapshot.data),
+          builder: (context, snapshot) {
+            if (snapshot.connectionState == ConnectionState.waiting) {
+              return const Center(child: CircularProgressIndicator());
+            }
 
-        List<ListItem> items = [];
-        snapshot.data!.docs.forEach((var user) {
-          if (user['uid'] != _auth.currentUser!.uid) {
-            items.add(new ListItem(id: user['uid'], title: user['name']));
-          }
-        });
+            List<ListItem> items = [];
+            snapshot.data!.docs.forEach((var user) {
+              if (user['uid'] != _auth.currentUser!.uid) {
+                items.add(new ListItem(id: user['uid'], title: user['name']));
+              }
+            });
 
-        return Expanded(
-          child: MultiSelectListWidget(
-            searchHint: context.tr('search'),
-            selectAllTextStyle: const TextStyle(
-              fontSize: 18,
-              fontWeight: FontWeight.w600,
-              color: Colors.white,
-            ),
-            itemTitleStyle:  const TextStyle(
-              fontSize: 18,
-              fontWeight: FontWeight.w500,
-              color: Colors.white,
-            ),
-            items: items,
-            onItemsSelect: (selectedItems) {
-              selectedUsers = selectedItems;
-            },
-          ),
+            return Expanded(
+              child: MultiSelectListWidget(
+                searchHint: context.tr('search'),
+                selectAllTextStyle: const TextStyle(
+                  fontSize: 18,
+                  fontWeight: FontWeight.w600,
+                  color: Colors.white,
+                ),
+                itemTitleStyle:  const TextStyle(
+                  fontSize: 18,
+                  fontWeight: FontWeight.w500,
+                  color: Colors.white,
+                ),
+                items: items,
+                onItemsSelect: (selectedItems) {
+                  selectedUsers = selectedItems;
+                },
+              ),
+            );
+          },
         );
       },
     );
@@ -147,5 +152,10 @@ class _NewGroupScreenState extends State<NewGroupScreen> {
         }
       },
     );
+  }
+
+  Future<String> getIdAzienda() async {
+    DocumentSnapshot userDetails = await DatabaseMethods.getCurrentUserDetails();
+    return userDetails['azienda'].id;
   }
 }

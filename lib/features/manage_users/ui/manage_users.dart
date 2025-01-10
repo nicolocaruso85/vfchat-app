@@ -39,81 +39,88 @@ class _ManageUsersScreenState extends State<ManageUsersScreen> {
       ),
       body: Padding(
         padding: const EdgeInsets.all(10),
-        child: StreamBuilder<QuerySnapshot>(
-          stream: FirebaseFirestore.instance.collection('users').snapshots(),
-          builder: (context, snapshot) {
-            if (snapshot.hasError) {
-              return Text(context.tr('somethingWentWrong'));
-            }
-            if (snapshot.connectionState == ConnectionState.waiting) {
-              return const Center(child: CircularProgressIndicator());
-            }
-            return ListView.builder(
-              itemCount: snapshot.data!.docs.length,
-              itemBuilder: (context, index) {
-                var doc = snapshot.data!.docs[index];
-                Map<String, dynamic> data = doc.data() as Map<String, dynamic>;
+        child: FutureBuilder<String>(
+          future: getIdAzienda(),
+          builder: (context, AsyncSnapshot<String> snapshot) {
+            return StreamBuilder<QuerySnapshot>(
+              stream: FirebaseFirestore.instance.collection('users')
+                .where('azienda', isEqualTo: FirebaseFirestore.instance.collection('aziende').doc(snapshot.data))
+                .snapshots(),
+              builder: (context, snapshot) {
+                if (snapshot.hasError) {
+                  return Text(context.tr('somethingWentWrong'));
+                }
+                if (snapshot.connectionState == ConnectionState.waiting) {
+                  return const Center(child: CircularProgressIndicator());
+                }
+                return ListView.builder(
+                  itemCount: snapshot.data!.docs.length,
+                  itemBuilder: (context, index) {
+                    var doc = snapshot.data!.docs[index];
+                    Map<String, dynamic> data = doc.data() as Map<String, dynamic>;
 
-                if (_auth.currentUser!.email != data['email']) {
-                  return ListTile(
-                    leading: data['profilePic'] != null && data['profilePic'] != ''
-                        ? Hero(
-                            tag: data['profilePic'],
-                            child: ClipOval(
-                              child: CachedNetworkImage(
-                                imageUrl: data['profilePic'],
-                                placeholder: (context, url) =>
-                                    Image.asset('assets/images/loading.gif'),
-                                errorWidget: (context, url, error) =>
-                                    const Icon(Icons.error_outline_rounded),
-                                width: 50.w,
+                    if (_auth.currentUser!.email != data['email']) {
+                      return ListTile(
+                        leading: data['profilePic'] != null && data['profilePic'] != ''
+                            ? Hero(
+                                tag: data['profilePic'],
+                                child: ClipOval(
+                                  child: CachedNetworkImage(
+                                    imageUrl: data['profilePic'],
+                                    placeholder: (context, url) =>
+                                        Image.asset('assets/images/loading.gif'),
+                                    errorWidget: (context, url, error) =>
+                                        const Icon(Icons.error_outline_rounded),
+                                    width: 50.w,
+                                    height: 50.h,
+                                    fit: BoxFit.cover,
+                                  ),
+                                ),
+                              )
+                            : Image.asset(
+                                'assets/images/user.png',
                                 height: 50.h,
+                                width: 50.w,
                                 fit: BoxFit.cover,
                               ),
-                            ),
-                          )
-                        : Image.asset(
-                            'assets/images/user.png',
-                            height: 50.h,
-                            width: 50.w,
-                            fit: BoxFit.cover,
+                        tileColor: const Color(0xff111B21),
+                        title: Text(
+                          data['name'],
+                          style: const TextStyle(
+                            color: Colors.white,
                           ),
-                    tileColor: const Color(0xff111B21),
-                    title: Text(
-                      data['name'],
-                      style: const TextStyle(
-                        color: Colors.white,
-                      ),
-                      overflow: TextOverflow.ellipsis,
-                    ),
-                    subtitle: Text(
-                      data['email'],
-                      style: const TextStyle(
-                        color: Color.fromARGB(255, 179, 178, 178),
-                      ),
-                      overflow: TextOverflow.ellipsis,
-                      maxLines: 1,
-                    ),
-                    isThreeLine: true,
-                    titleAlignment: ListTileTitleAlignment.center,
-                    enableFeedback: true,
-                    dense: false,
-                    titleTextStyle: TextStyle(
-                      fontWeight: FontWeight.bold,
-                      fontSize: 20.sp,
-                      height: 1.2.h,
-                    ),
-                    subtitleTextStyle: TextStyle(
-                      height: 2.h,
-                    ),
-                    horizontalTitleGap: 15.w,
-                    onTap: () {
-                      showUserOptions(context, data);
-                    },
-                  );
-                } else {
-                  return const SizedBox.shrink();
-                }
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                        subtitle: Text(
+                          data['email'],
+                          style: const TextStyle(
+                            color: Color.fromARGB(255, 179, 178, 178),
+                          ),
+                          overflow: TextOverflow.ellipsis,
+                          maxLines: 1,
+                        ),
+                        isThreeLine: true,
+                        titleAlignment: ListTileTitleAlignment.center,
+                        enableFeedback: true,
+                        dense: false,
+                        titleTextStyle: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          fontSize: 20.sp,
+                          height: 1.2.h,
+                        ),
+                        subtitleTextStyle: TextStyle(
+                          height: 2.h,
+                        ),
+                        horizontalTitleGap: 15.w,
+                        onTap: () {
+                          showUserOptions(context, data);
+                        },
+                      );
+                    } else {
+                      return const SizedBox.shrink();
+                    }
+                  },
+                );
               },
             );
           },
@@ -158,5 +165,10 @@ class _ManageUsersScreenState extends State<ManageUsersScreen> {
         ),
       ),
     );
+  }
+
+  Future<String> getIdAzienda() async {
+    DocumentSnapshot userDetails = await DatabaseMethods.getCurrentUserDetails();
+    return userDetails['azienda'].id;
   }
 }

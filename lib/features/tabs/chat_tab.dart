@@ -5,6 +5,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
+import '../../../services/database.dart';
 import '../../helpers/extensions.dart';
 import '../../router/routes.dart';
 
@@ -96,19 +97,31 @@ class ChatsTab extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return StreamBuilder<QuerySnapshot>(
-      stream: FirebaseFirestore.instance.collection('users').snapshots(),
-      builder: (context, snapshot) {
-        if (snapshot.hasError) {
-          return Text(context.tr('somethingWentWrong'));
-        }
-        if (snapshot.connectionState == ConnectionState.waiting) {
-          return const Center(child: CircularProgressIndicator());
-        }
-        return BuildUsersListView(
-          snapshot: snapshot,
+    return FutureBuilder<String>(
+      future: getIdAzienda(),
+      builder: (context, AsyncSnapshot<String> snapshot) {
+        return StreamBuilder<QuerySnapshot>(
+          stream: FirebaseFirestore.instance.collection('users')
+            .where('azienda', isEqualTo: FirebaseFirestore.instance.collection('aziende').doc(snapshot.data))
+            .snapshots(),
+          builder: (context, snapshot) {
+            if (snapshot.hasError) {
+              return Text(context.tr('somethingWentWrong'));
+            }
+            if (snapshot.connectionState == ConnectionState.waiting) {
+              return const Center(child: CircularProgressIndicator());
+            }
+            return BuildUsersListView(
+              snapshot: snapshot,
+            );
+          },
         );
       },
     );
+  }
+
+  Future<String> getIdAzienda() async {
+    DocumentSnapshot userDetails = await DatabaseMethods.getCurrentUserDetails();
+    return userDetails['azienda'].id;
   }
 }

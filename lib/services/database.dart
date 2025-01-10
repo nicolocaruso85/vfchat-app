@@ -52,9 +52,29 @@ class DatabaseMethods {
         .get();
   }
 
-  static Stream<QuerySnapshot<Map<String, dynamic>>> getUsers() {
+  static Future<DocumentSnapshot> getAzienda(aziendaID) async {
+    return await _fireStore
+        .collection('aziende')
+        .doc(aziendaID)
+        .get();
+  }
+
+  static Future<DocumentReference> getAziendaReference(aziendaID) async {
+    return await _fireStore
+        .collection('aziende')
+        .doc(aziendaID);
+  }
+
+  static Stream<QuerySnapshot<Map<String, dynamic>>> getAllUsers() {
     return _fireStore
         .collection('users')
+        .snapshots();
+  }
+
+  static Stream<QuerySnapshot<Map<String, dynamic>>> getUsers(idAzienda) {
+    return _fireStore
+        .collection('users')
+        .where('azienda', isEqualTo: FirebaseFirestore.instance.collection('aziende').doc(idAzienda))
         .snapshots();
   }
 

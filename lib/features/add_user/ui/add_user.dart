@@ -72,6 +72,9 @@ class _AddUserScreenState extends State<AddUserScreen> {
       textStyle: TextStyles.font15DarkBlue500Weight,
       onPressed: () async {
         if (formKey.currentState!.validate()) {
+          DocumentSnapshot userDetails = await DatabaseMethods.getCurrentUserDetails();
+          DocumentReference azienda = await DatabaseMethods.getAziendaReference(userDetails['azienda'].id);
+
           UserRecord user = await FirebaseAdmin.instance.app()!.auth().createUser(
             email: emailController.text,
             password: passwordController.text,
@@ -86,6 +89,7 @@ class _AddUserScreenState extends State<AddUserScreen> {
               'uid': user.uid,
               'isOnline': false,
               'isAdmin': false,
+              'azienda': azienda,
             },
           );
 
