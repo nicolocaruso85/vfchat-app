@@ -78,5 +78,6 @@
     "users": "Utenti",
     "codiceAzienda": "Codice Azienda",
     "addUserSuccess": "Utente creato con successo",
-    "editUserSuccess": "Utente aggiornato con successo"
+    "editUserSuccess": "Utente aggiornato con successo",
+    "roles": "Ruoli"
 }

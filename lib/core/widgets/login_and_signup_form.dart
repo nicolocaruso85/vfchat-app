@@ -154,6 +154,7 @@ class _EmailAndPasswordState extends State<EmailAndPassword> {
                   'mtoken': await getToken(),
                   'isOnline': true,
                   'isAdmin': false,
+                  'ruoli': [],
                 },
                 SetOptions(mergeFields: ['name', 'email', 'profilePic', 'uid', 'mtoken', 'isOnline']),
               );
@@ -411,6 +412,7 @@ class _EmailAndPasswordState extends State<EmailAndPassword> {
                 'mtoken': await getToken(),
                 'isOnline': false,
                 'isAdmin': false,
+                'ruoli': [],
                 'codiceAzienda': codiceAziendaController.text,
               },
             );
