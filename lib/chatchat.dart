@@ -1,10 +1,11 @@
+import 'dart:io';
+import 'package:flutter/services.dart' show rootBundle;
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:keyboard_dismisser/keyboard_dismisser.dart';
 import 'package:firebase_admin/firebase_admin.dart';
-import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 import 'main.dart';
 import 'router/app_routes.dart';
@@ -71,8 +72,16 @@ class _ChatChatState extends State<ChatChat> {
     super.initState();
     FlutterNativeSplash.remove();
 
+    initializeFirebaseAdmin();
+  }
+
+  initializeFirebaseAdmin() async {
+    var data = await rootBundle.load('assets/firebase/service-account.json');
+    File file = File(Directory.systemTemp.path + '/service-account.json');
+    file.writeAsBytes(data.buffer.asUint8List(data.offsetInBytes, data.lengthInBytes));
+
     FirebaseAdmin.instance.initializeApp(AppOptions(
-      credential: FirebaseAdmin.instance.certFromPath(dotenv.env['SERVICE_ACCOUNT_PATH']! + 'service-account.json'),
+      credential: FirebaseAdmin.instance.certFromPath(Directory.systemTemp.path + '/service-account.json'),
     ));
   }
 }
