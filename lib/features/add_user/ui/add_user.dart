@@ -8,6 +8,7 @@ import 'package:gap/gap.dart';
 import 'package:firebase_admin/firebase_admin.dart';
 import 'package:multi_select_flutter/multi_select_flutter.dart';
 
+import '../../../themes/colors.dart';
 import '../../../themes/styles.dart';
 import '../../../services/database.dart';
 import '../../../core/widgets/app_text_form_field.dart';
@@ -19,7 +20,7 @@ class Ruolo {
   final int id;
   final String nome;
 
-  Ruolo({
+  const Ruolo({
     required this.id,
     required this.nome,
   });
@@ -62,18 +63,20 @@ class _AddUserScreenState extends State<AddUserScreen> {
           horizontal: 10,
           vertical: 18.h,
         ),
-        child: Form(
-          key: formKey,
-          child: Column(
-            children: [
-              nameField(),
-              emailField(),
-              passwordField(),
-              passwordConfirmationField(),
-              rolesField(),
-              Gap(20.h),
-              addButton(context),
-            ],
+        child: SingleChildScrollView(
+          child: Form(
+            key: formKey,
+            child: Column(
+              children: [
+                nameField(),
+                emailField(),
+                passwordField(),
+                passwordConfirmationField(),
+                rolesField(),
+                Gap(20.h),
+                addButton(context),
+              ],
+            ),
           ),
         ),
       ),
@@ -104,7 +107,7 @@ class _AddUserScreenState extends State<AddUserScreen> {
       searchable: true,
       title: Text(context.tr('roles')),
       cancelText: Text(context.tr('cancel')),
-      selectedColor: Colors.blue,
+      selectedColor: ColorsManager.greenPrimary,
       selectedItemsTextStyle: TextStyle(
         color: Colors.white,
       ),
@@ -128,6 +131,8 @@ class _AddUserScreenState extends State<AddUserScreen> {
         ),
       ),
       chipDisplay: MultiSelectChipDisplay(
+        chipColor: Colors.blue,
+        chipWidth: MediaQuery.of(context).size.width,
         textStyle: TextStyle(
           color: Colors.white,
           fontSize: 16,
