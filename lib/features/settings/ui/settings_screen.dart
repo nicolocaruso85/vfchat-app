@@ -48,12 +48,9 @@ class _SettingsScreenState extends State<SettingsScreen> {
                   fontSize: 18.sp,
                 ),
               ),
-              onTap: () => showCupertinoModalBottomSheet(
-                expand: false,
-                context: context,
-                backgroundColor: Colors.transparent,
-                builder: (context) => const ModalFit(),
-              ),
+              onTap: () {
+                Navigator.pushNamed(context, Routes.userProfileScreen);
+              },
             ),
             if (currentUserDetails != null && currentUserDetails?['isAdmin'])
               ListTile(
