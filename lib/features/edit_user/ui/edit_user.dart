@@ -201,6 +201,15 @@ class _EditUserScreenState extends State<EditUserScreen> {
             },
           );
 
+          await DatabaseMethods.addUserUpdatesByUid(
+            widget.uid,
+            {
+              'name': nameController.text,
+              'email': emailController.text,
+              'ruoli': ruoli,
+            },
+          );
+
           await AwesomeDialog(
             context: context,
             dialogType: DialogType.success,
