@@ -73,4 +73,5 @@ flutter:
     - assets/lottie/
     - assets/translations/
     - assets/svgs/
+    - assets/firebase/
     - .env

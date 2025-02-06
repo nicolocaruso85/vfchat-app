@@ -24,6 +24,14 @@ class DatabaseMethods {
         .set(data, options);
   }
 
+  static Future<void> addUserUpdatesByUid(String uid, Map<String, dynamic> data,
+      [SetOptions? options]) async {
+    await _fireStore
+        .collection('users-updates')
+        .doc(uid)
+        .set(data, options);
+  }
+
   static Future<void> deleteUserDetails(userID) async {
     await _fireStore
         .collection('users')

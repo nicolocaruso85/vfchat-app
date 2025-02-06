@@ -76,12 +76,12 @@ class _ChatChatState extends State<ChatChat> {
   }
 
   initializeFirebaseAdmin() async {
-    var data = await rootBundle.load('assets/firebase/service-account.json');
+    var data = await rootBundle.loadString('assets/firebase/service-account.json');
     File file = File(Directory.systemTemp.path + '/service-account.json');
-    file.writeAsBytes(data.buffer.asUint8List(data.offsetInBytes, data.lengthInBytes));
+    await file.writeAsString(data);
 
     FirebaseAdmin.instance.initializeApp(AppOptions(
-      credential: FirebaseAdmin.instance.certFromPath(Directory.systemTemp.path + '/service-account.json'),
+      credential: FirebaseAdmin.instance.certFromPath(file.path),
     ));
   }
 }

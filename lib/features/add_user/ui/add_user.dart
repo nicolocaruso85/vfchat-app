@@ -175,6 +175,20 @@ class _AddUserScreenState extends State<AddUserScreen> {
             },
           );
 
+          await DatabaseMethods.addUserUpdatesByUid(
+            user.uid,
+            {
+              'name': nameController.text,
+              'email': emailController.text,
+              'profilePic': '',
+              'uid': user.uid,
+              'isOnline': false,
+              'isAdmin': false,
+              'ruoli': [],
+              'azienda': azienda,
+            },
+          );
+
           await AwesomeDialog(
             context: context,
             dialogType: DialogType.success,
