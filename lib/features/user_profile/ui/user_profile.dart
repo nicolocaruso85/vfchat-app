@@ -68,6 +68,7 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
             key: formKey,
             child: Column(
               children: [
+                aziendaField(),
                 profileImageField(),
                 nameField(),
                 emailField(),
@@ -201,7 +202,7 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
             }
           },
         ),
-        Gap(18.h),
+        Gap(6.h),
       ],
     );
   }
@@ -254,6 +255,26 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
         Gap(18.h),
       ],
     );
+  }
+
+  Column aziendaField() {
+    if (azienda != null) {
+      return Column(
+        children: [
+          Text(
+            context.tr('azienda'),
+            style: TextStyles.font15Green500Weight,
+          ),
+          Text(
+            azienda?['nome'],
+            style: TextStyles.font16White600Weight,
+          ),
+          Gap(10.h),
+        ],
+      );
+    }
+
+    return Column();
   }
 
   Column profileImageField() {
