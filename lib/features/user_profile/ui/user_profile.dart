@@ -69,6 +69,8 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
             child: Column(
               children: [
                 aziendaField(),
+                ruoliField(),
+                gruppiField(),
                 profileImageField(),
                 nameField(),
                 emailField(),
@@ -269,7 +271,59 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
             azienda?['nome'],
             style: TextStyles.font16White600Weight,
           ),
-          Gap(10.h),
+          Gap(6.h),
+        ],
+      );
+    }
+
+    return Column();
+  }
+
+  Column ruoliField() {
+    if (azienda != null && userDetails != null && userDetails?['ruoli'].isNotEmpty) {
+      List<String> roles = [];
+
+      userDetails?['ruoli'].forEach((ruolo) {
+        roles.add(azienda?['ruoli'].where((el) => el['id'] == ruolo['id']).first['nome']);
+      });
+
+      return Column(
+        children: [
+          Text(
+            context.tr('roles'),
+            style: TextStyles.font15Green500Weight,
+          ),
+          Text(
+            roles.join(', '),
+            style: TextStyles.font16White600Weight,
+          ),
+          Gap(6.h),
+        ],
+      );
+    }
+
+    return Column();
+  }
+
+  Column gruppiField() {
+    if (azienda != null && userDetails != null && userDetails?['gruppi'].isNotEmpty) {
+      List<String> groups = [];
+
+      userDetails?['gruppi'].forEach((ruolo) {
+        groups.add(azienda?['gruppi'].where((el) => el['id'] == ruolo['id']).first['nome']);
+      });
+
+      return Column(
+        children: [
+          Text(
+            context.tr('groups'),
+            style: TextStyles.font15Green500Weight,
+          ),
+          Text(
+            groups.join(', '),
+            style: TextStyles.font16White600Weight,
+          ),
+          Gap(6.h),
         ],
       );
     }
@@ -280,9 +334,10 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
   Column profileImageField() {
     return Column(
       children: [
+        Gap(4.h),
         Avatar.profile(
           text: '',
-          radius: 85,
+          radius: 75,
           isBorderAvatar: true,
           gradientWidthBorder: const LinearGradient(colors: [Colors.white, Colors.white]),
           gradientBackgroundColor: const LinearGradient(colors: [const Color(0xff273443), const Color(0xff273443)]),

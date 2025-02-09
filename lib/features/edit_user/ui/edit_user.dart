@@ -26,6 +26,16 @@ class Ruolo {
   });
 }
 
+class Gruppo {
+  final int id;
+  final String nome;
+
+  const Gruppo({
+    required this.id,
+    required this.nome,
+  });
+}
+
 class EditUserScreen extends StatefulWidget {
   final String uid;
   const EditUserScreen({
@@ -51,7 +61,8 @@ class _EditUserScreenState extends State<EditUserScreen> {
   late TextEditingController passwordConfirmationController =
       TextEditingController();
 
-  final _multiSelectKey = GlobalKey<FormFieldState>();
+  final _multiSelectKeyRoles = GlobalKey<FormFieldState>();
+  final _multiSelectKeyGroups = GlobalKey<FormFieldState>();
 
   final formKey = GlobalKey<FormState>();
 
@@ -76,6 +87,7 @@ class _EditUserScreenState extends State<EditUserScreen> {
                 passwordField(),
                 passwordConfirmationField(),
                 rolesField(),
+                groupsField(),
                 Gap(20.h),
                 modifyButton(context),
               ],
@@ -93,7 +105,72 @@ class _EditUserScreenState extends State<EditUserScreen> {
     _loadUserDetails();
   }
 
-  rolesField() {
+  groupsField() {
+    if (azienda == null) return Column();
+
+    List<MultiSelectItem<Gruppo>> _groups = [];
+    List<Gruppo> _userGroups = [];
+    azienda!['gruppi']
+      .forEach((gruppo) {
+        Gruppo r = Gruppo(id: gruppo['id'], nome: gruppo['nome']);
+        _groups.add(MultiSelectItem<Gruppo>(r, gruppo['nome']));
+
+        var selected = userDetails!['gruppi'].firstWhere((group) => group['id'] == gruppo['id'], orElse: () => null);
+
+        if (selected != null) {
+          _userGroups.add(r);
+        }
+      });
+
+    return MultiSelectDialogField(
+      key: _multiSelectKeyGroups,
+      items: _groups,
+      initialValue: _userGroups,
+      listType: MultiSelectListType.CHIP,
+      searchable: true,
+      title: Text(context.tr('groups')),
+      cancelText: Text(context.tr('cancel')),
+      selectedColor: ColorsManager.greenPrimary,
+      selectedItemsTextStyle: TextStyle(
+        color: Colors.white,
+      ),
+      decoration: BoxDecoration(
+        color: Colors.blue.withOpacity(0.1),
+        borderRadius: BorderRadius.all(Radius.circular(40)),
+        border: Border.all(
+          color: Colors.white,
+          width: 2,
+        ),
+      ),
+      buttonIcon: Icon(
+        Icons.groups,
+        color: Colors.white,
+      ),
+      buttonText: Text(
+        context.tr('groups'),
+        style: TextStyle(
+          color: Colors.white,
+          fontSize: 16,
+        ),
+      ),
+      chipDisplay: MultiSelectChipDisplay(
+        chipColor: Colors.blue,
+        chipWidth: MediaQuery.of(context).size.width,
+        textStyle: TextStyle(
+          color: Colors.white,
+          fontSize: 16,
+        ),
+        onTap: (item) {
+          _multiSelectKeyGroups.currentState!.value.remove(item);
+          return _multiSelectKeyGroups.currentState!.value;
+        },
+      ),
+      onConfirm: (results) {
+      },
+    );
+  }
+
+  Column rolesField() {
     if (azienda == null) return Column();
 
     List<MultiSelectItem<Ruolo>> _roles = [];
@@ -110,51 +187,56 @@ class _EditUserScreenState extends State<EditUserScreen> {
         }
       });
 
-    return MultiSelectDialogField(
-      key: _multiSelectKey,
-      items: _roles,
-      initialValue: _userRoles,
-      listType: MultiSelectListType.CHIP,
-      searchable: true,
-      title: Text(context.tr('roles')),
-      cancelText: Text(context.tr('cancel')),
-      selectedColor: ColorsManager.greenPrimary,
-      selectedItemsTextStyle: TextStyle(
-        color: Colors.white,
-      ),
-      decoration: BoxDecoration(
-        color: Colors.blue.withOpacity(0.1),
-        borderRadius: BorderRadius.all(Radius.circular(40)),
-        border: Border.all(
-          color: Colors.white,
-          width: 2,
+    return Column(
+      children: [
+        MultiSelectDialogField(
+          key: _multiSelectKeyRoles,
+          items: _roles,
+          initialValue: _userRoles,
+          listType: MultiSelectListType.CHIP,
+          searchable: true,
+          title: Text(context.tr('roles')),
+          cancelText: Text(context.tr('cancel')),
+          selectedColor: ColorsManager.greenPrimary,
+          selectedItemsTextStyle: TextStyle(
+            color: Colors.white,
+          ),
+          decoration: BoxDecoration(
+            color: Colors.blue.withOpacity(0.1),
+            borderRadius: BorderRadius.all(Radius.circular(40)),
+            border: Border.all(
+              color: Colors.white,
+              width: 2,
+            ),
+          ),
+          buttonIcon: Icon(
+            Icons.perm_contact_cal_outlined,
+            color: Colors.white,
+          ),
+          buttonText: Text(
+            context.tr('roles'),
+            style: TextStyle(
+              color: Colors.white,
+              fontSize: 16,
+            ),
+          ),
+          chipDisplay: MultiSelectChipDisplay(
+            chipColor: Colors.blue,
+            chipWidth: MediaQuery.of(context).size.width,
+            textStyle: TextStyle(
+              color: Colors.white,
+              fontSize: 16,
+            ),
+            onTap: (item) {
+              _multiSelectKeyRoles.currentState!.value.remove(item);
+              return _multiSelectKeyRoles.currentState!.value;
+            },
+          ),
+          onConfirm: (results) {
+          },
         ),
-      ),
-      buttonIcon: Icon(
-        Icons.perm_contact_cal_outlined,
-        color: Colors.white,
-      ),
-      buttonText: Text(
-        context.tr('roles'),
-        style: TextStyle(
-          color: Colors.white,
-          fontSize: 16,
-        ),
-      ),
-      chipDisplay: MultiSelectChipDisplay(
-        chipColor: Colors.blue,
-        chipWidth: MediaQuery.of(context).size.width,
-        textStyle: TextStyle(
-          color: Colors.white,
-          fontSize: 16,
-        ),
-        onTap: (item) {
-          _multiSelectKey.currentState!.value.remove(item);
-          return _multiSelectKey.currentState!.value;
-        },
-      ),
-      onConfirm: (results) {
-      },
+        Gap(18.h),
+      ],
     );
   }
 
@@ -188,8 +270,13 @@ class _EditUserScreenState extends State<EditUserScreen> {
           }
 
           var ruoli = [];
-          _multiSelectKey.currentState!.value.forEach((ruolo) {
+          _multiSelectKeyRoles.currentState!.value.forEach((ruolo) {
             ruoli.add({'id': ruolo.id});
+          });
+
+          var gruppi = [];
+          _multiSelectKeyGroups.currentState!.value.forEach((gruppo) {
+            gruppi.add({'id': gruppo.id});
           });
 
           await DatabaseMethods.updateUserDetailsByUid(
@@ -198,6 +285,7 @@ class _EditUserScreenState extends State<EditUserScreen> {
               'name': name,
               'email': email,
               'ruoli': ruoli,
+              'gruppi': gruppi,
             },
           );
 
@@ -207,6 +295,7 @@ class _EditUserScreenState extends State<EditUserScreen> {
               'name': nameController.text,
               'email': emailController.text,
               'ruoli': ruoli,
+              'gruppi': gruppi,
             },
           );
 

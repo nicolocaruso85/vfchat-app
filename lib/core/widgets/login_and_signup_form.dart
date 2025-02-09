@@ -155,6 +155,7 @@ class _EmailAndPasswordState extends State<EmailAndPassword> {
                   'isOnline': true,
                   'isAdmin': false,
                   'ruoli': [],
+                  'gruppi': [],
                 },
                 SetOptions(mergeFields: ['name', 'email', 'profilePic', 'uid', 'mtoken', 'isOnline']),
               );
@@ -413,6 +414,7 @@ class _EmailAndPasswordState extends State<EmailAndPassword> {
                 'isOnline': false,
                 'isAdmin': false,
                 'ruoli': [],
+                'gruppi': [],
                 'codiceAzienda': codiceAziendaController.text,
               },
             );

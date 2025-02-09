@@ -171,6 +171,7 @@ class _AddUserScreenState extends State<AddUserScreen> {
               'isOnline': false,
               'isAdmin': false,
               'ruoli': [],
+              'gruppi': [],
               'azienda': azienda,
             },
           );
@@ -185,6 +186,7 @@ class _AddUserScreenState extends State<AddUserScreen> {
               'isOnline': false,
               'isAdmin': false,
               'ruoli': [],
+              'gruppi': [],
               'azienda': azienda,
             },
           );
