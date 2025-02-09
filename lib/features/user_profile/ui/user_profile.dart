@@ -1,3 +1,6 @@
+import 'dart:io';
+import 'package:avatar_better/avatar_better.dart' show Avatar, ProfileImageViewerOptions, BottomSheetStyles, OptionsCrop;
+import 'package:avatar_better/src/tools/gallery_buttom.dart';
 import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -7,7 +10,10 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:gap/gap.dart';
 import 'package:firebase_admin/firebase_admin.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:multi_select_flutter/multi_select_flutter.dart';
+import 'package:path/path.dart' show basename;
+import 'package:image_cropper/image_cropper.dart';
 
 import '../../../themes/colors.dart';
 import '../../../themes/styles.dart';
@@ -62,6 +68,7 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
             key: formKey,
             child: Column(
               children: [
+                profileImageField(),
                 nameField(),
                 emailField(),
                 passwordField(),
@@ -245,6 +252,72 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
           controller: emailController,
         ),
         Gap(18.h),
+      ],
+    );
+  }
+
+  Column profileImageField() {
+    return Column(
+      children: [
+        Avatar.profile(
+          text: '',
+          radius: 85,
+          isBorderAvatar: true,
+          gradientWidthBorder: const LinearGradient(colors: [Colors.white, Colors.white]),
+          gradientBackgroundColor: const LinearGradient(colors: [const Color(0xff273443), const Color(0xff273443)]),
+          imageNetwork: userDetails?['profilePic'],
+          bottomSheetStyles: BottomSheetStyles(
+            backgroundColor: const Color(0xff273443),
+            elevation: 0,
+            middleText: context.tr('or'),
+            middleTextStyle: const TextStyle(color: Colors.white),
+            galleryButton: GalleryBottom(
+              text: context.tr('photoGallery'),
+              style: TextStyles.font15DarkBlue500Weight,
+              color: Colors.white,
+              icon: null,
+            ),
+            cameraButton: CameraButton(
+              text: context.tr('camera'),
+              style: TextStyles.font15DarkBlue500Weight,
+              color: Colors.white,
+              icon: null,
+            ),
+          ),
+          optionsCrop: OptionsCrop(
+            aspectRatio: CropAspectRatio(ratioX: 1.0, ratioY: 1.0),
+            toolbarColorCrop: Colors.deepOrange,
+            toolbarWidgetColorCrop: Colors.white,
+            initAspectRatioCrop: CropAspectRatioPreset.square,
+            webPresentStyle: WebPresentStyle.dialog,
+          ),
+          onPickerChange: (file) async {
+            String filename = basename(file.path);
+
+            Reference storageRef =
+                FirebaseStorage.instance.ref('profile-images/${filename}');
+            await storageRef!.putFile(File(file.path));
+
+            String url = await storageRef!.getDownloadURL();
+            print(url);
+
+            await _auth.currentUser!.updatePhotoURL(url);
+
+            await DatabaseMethods.updateUserDetails(
+              {
+                'profilePic': url,
+              },
+            );
+
+            await DatabaseMethods.addUserUpdatesByUid(
+              _auth.currentUser!.uid,
+              {
+                'profilePic': url,
+              },
+            );
+          },
+        ),
+        Gap(20.h),
       ],
     );
   }

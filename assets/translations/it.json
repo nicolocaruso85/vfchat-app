@@ -80,5 +80,6 @@
     "addUserSuccess": "Utente creato con successo",
     "editUserSuccess": "Utente aggiornato con successo",
     "editUserProfileSuccess": "Profilo utente aggiornato con successo",
-    "roles": "Ruoli"
+    "roles": "Ruoli",
+    "or": "Oppure"
 }
