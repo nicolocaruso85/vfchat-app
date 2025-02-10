@@ -26,6 +26,16 @@ class Ruolo {
   });
 }
 
+class Gruppo {
+  final int id;
+  final String nome;
+
+  const Gruppo({
+    required this.id,
+    required this.nome,
+  });
+}
+
 class AddUserScreen extends StatefulWidget {
   const AddUserScreen({
     super.key,
@@ -48,7 +58,8 @@ class _AddUserScreenState extends State<AddUserScreen> {
   late TextEditingController passwordConfirmationController =
       TextEditingController();
 
-  final _multiSelectKey = GlobalKey<FormFieldState>();
+  final _multiSelectKeyRoles = GlobalKey<FormFieldState>();
+  final _multiSelectKeyGroups = GlobalKey<FormFieldState>();
 
   final formKey = GlobalKey<FormState>();
 
@@ -73,6 +84,7 @@ class _AddUserScreenState extends State<AddUserScreen> {
                 passwordField(),
                 passwordConfirmationField(),
                 rolesField(),
+                groupsField(),
                 Gap(20.h),
                 addButton(context),
               ],
@@ -90,22 +102,24 @@ class _AddUserScreenState extends State<AddUserScreen> {
     _loadUserDetails();
   }
 
-  rolesField() {
+  groupsField() {
     if (azienda == null) return Column();
 
-    List<MultiSelectItem<Ruolo>> _roles = [];
-    azienda!['ruoli']
-      .forEach((ruolo) {
-        Ruolo r = Ruolo(id: ruolo['id'], nome: ruolo['nome']);
-        _roles.add(MultiSelectItem<Ruolo>(r, ruolo['nome']));
+    List<MultiSelectItem<Gruppo>> _groups = [];
+    List<Gruppo> _userGroups = [];
+    azienda!['gruppi']
+      .forEach((gruppo) {
+        Gruppo r = Gruppo(id: gruppo['id'], nome: gruppo['nome']);
+        _groups.add(MultiSelectItem<Gruppo>(r, gruppo['nome']));
       });
 
     return MultiSelectDialogField(
-      key: _multiSelectKey,
-      items: _roles,
+      key: _multiSelectKeyGroups,
+      items: _groups,
+      initialValue: _userGroups,
       listType: MultiSelectListType.CHIP,
       searchable: true,
-      title: Text(context.tr('roles')),
+      title: Text(context.tr('groups')),
       cancelText: Text(context.tr('cancel')),
       selectedColor: ColorsManager.greenPrimary,
       selectedItemsTextStyle: TextStyle(
@@ -120,11 +134,11 @@ class _AddUserScreenState extends State<AddUserScreen> {
         ),
       ),
       buttonIcon: Icon(
-        Icons.perm_contact_cal_outlined,
+        Icons.groups,
         color: Colors.white,
       ),
       buttonText: Text(
-        context.tr('roles'),
+        context.tr('groups'),
         style: TextStyle(
           color: Colors.white,
           fontSize: 16,
@@ -138,12 +152,74 @@ class _AddUserScreenState extends State<AddUserScreen> {
           fontSize: 16,
         ),
         onTap: (item) {
-          _multiSelectKey.currentState!.value.remove(item);
-          _multiSelectKey.currentState!.validate();
+          _multiSelectKeyGroups.currentState!.value.remove(item);
+          return _multiSelectKeyGroups.currentState!.value;
         },
       ),
       onConfirm: (results) {
       },
+    );
+  }
+
+  Column rolesField() {
+    if (azienda == null) return Column();
+
+    List<MultiSelectItem<Ruolo>> _roles = [];
+    azienda!['ruoli']
+      .forEach((ruolo) {
+        Ruolo r = Ruolo(id: ruolo['id'], nome: ruolo['nome']);
+        _roles.add(MultiSelectItem<Ruolo>(r, ruolo['nome']));
+      });
+
+    return Column(
+      children: [
+        MultiSelectDialogField(
+          key: _multiSelectKeyRoles,
+          items: _roles,
+          listType: MultiSelectListType.CHIP,
+          searchable: true,
+          title: Text(context.tr('roles')),
+          cancelText: Text(context.tr('cancel')),
+          selectedColor: ColorsManager.greenPrimary,
+          selectedItemsTextStyle: TextStyle(
+            color: Colors.white,
+          ),
+          decoration: BoxDecoration(
+            color: Colors.blue.withOpacity(0.1),
+            borderRadius: BorderRadius.all(Radius.circular(40)),
+            border: Border.all(
+              color: Colors.white,
+              width: 2,
+            ),
+          ),
+          buttonIcon: Icon(
+            Icons.perm_contact_cal_outlined,
+            color: Colors.white,
+          ),
+          buttonText: Text(
+            context.tr('roles'),
+            style: TextStyle(
+              color: Colors.white,
+              fontSize: 16,
+            ),
+          ),
+          chipDisplay: MultiSelectChipDisplay(
+            chipColor: Colors.blue,
+            chipWidth: MediaQuery.of(context).size.width,
+            textStyle: TextStyle(
+              color: Colors.white,
+              fontSize: 16,
+            ),
+            onTap: (item) {
+              _multiSelectKeyRoles.currentState!.value.remove(item);
+              _multiSelectKeyRoles.currentState!.validate();
+            },
+          ),
+          onConfirm: (results) {
+          },
+        ),
+        Gap(18.h),
+      ],
     );
   }
 
@@ -161,6 +237,16 @@ class _AddUserScreenState extends State<AddUserScreen> {
             password: passwordController.text,
           );
 
+          var ruoli = [];
+          _multiSelectKeyRoles.currentState!.value.forEach((ruolo) {
+            ruoli.add({'id': ruolo.id});
+          });
+
+          var gruppi = [];
+          _multiSelectKeyGroups.currentState!.value.forEach((gruppo) {
+            gruppi.add({'id': gruppo.id});
+          });
+
           await DatabaseMethods.addUserDetailsByUid(
             user.uid,
             {
@@ -170,8 +256,8 @@ class _AddUserScreenState extends State<AddUserScreen> {
               'uid': user.uid,
               'isOnline': false,
               'isAdmin': false,
-              'ruoli': [],
-              'gruppi': [],
+              'ruoli': ruoli,
+              'gruppi': gruppi,
               'azienda': azienda,
             },
           );
@@ -185,8 +271,8 @@ class _AddUserScreenState extends State<AddUserScreen> {
               'uid': user.uid,
               'isOnline': false,
               'isAdmin': false,
-              'ruoli': [],
-              'gruppi': [],
+              'ruoli': ruoli,
+              'gruppi': gruppi,
               'azienda': azienda,
             },
           );
