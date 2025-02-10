@@ -83,5 +83,7 @@
     "roles": "Ruoli",
     "groups": "Gruppi",
     "or": "Oppure",
-    "azienda": "Azienda"
+    "azienda": "Azienda",
+    "noPermissionMessage": "Non hai il permesso di inviare messaggi a questo utente",
+    "noPermissionImage": "Non hai il permesso di inviare immagini a questo utente"
 }

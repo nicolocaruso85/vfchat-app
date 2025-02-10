@@ -14,6 +14,9 @@ import 'package:gal/gal.dart';
 import 'package:gap/gap.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:king_cache/king_cache.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:awesome_dialog/awesome_dialog.dart';
 
 import '../../../core/networking/dio_factory.dart';
 import '../../../helpers/extensions.dart';
@@ -54,6 +57,8 @@ class _ChatScreenState extends State<ChatScreen> {
 
   final _picker = ImagePicker();
 
+  DocumentSnapshot? azienda;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -75,6 +80,42 @@ class _ChatScreenState extends State<ChatScreen> {
               ),
               CustomMessageBar(
                 onSend: (message) async {
+                  bool permission = false;
+
+                  await KingCache.cacheViaRest(
+                    dotenv.env['SITE_URL']! + '/check-permission/' + _auth.currentUser!.uid + '/' + widget.receivedUserID + '/' + azienda!.id + '/messaggi',
+                    method: HttpMethod.get,
+                    onSuccess: (data) {
+                      print(data);
+                      if (data != null && data.containsKey('success')) {
+                        print(data['success']);
+
+                        if (data['success'] == 1) {
+                         permission = true;
+                        }
+                      }
+                    },
+                    onError: (data) => debugPrint(data.message),
+                    apiResponse: (data) {
+                      print(data);
+                    },
+                    isCacheHit: (isHit) => debugPrint('Is Cache Hit: $isHit'),
+                    shouldUpdate: false,
+                    expiryTime: DateTime.now().add(const Duration(hours: 1)),
+                  );
+
+                  if (permission == false) {
+                    AwesomeDialog(
+                      context: context,
+                      dialogType: DialogType.error,
+                      animType: AnimType.rightSlide,
+                      title: context.tr('error'),
+                      desc: context.tr('noPermissionMessage'),
+                    ).show();
+
+                    return;
+                  }
+
                   await DatabaseMethods.sendMessage(
                     message,
                     widget.receivedUserID,
@@ -136,10 +177,14 @@ class _ChatScreenState extends State<ChatScreen> {
   @override
   void initState() {
     super.initState();
+
+    _loadUserDetails();
+
     WidgetsBinding.instance.addPostFrameCallback((_) async {
       await HelperNotification.initialize(flutterLocalNotificationsPlugin);
       await getToken();
     });
+
     // listen for messages when the app is in the foreground
     FirebaseMessaging.onMessage.listen(
       (RemoteMessage message) {
@@ -153,6 +198,43 @@ class _ChatScreenState extends State<ChatScreen> {
   }
 
   Future showImageOptions() async {
+    bool permission = false;
+
+    await KingCache.cacheViaRest(
+      dotenv.env['SITE_URL']! + '/check-permission/' + _auth.currentUser!.uid + '/' + widget.receivedUserID + '/' + azienda!.id + '/immagini',
+      method: HttpMethod.get,
+      onSuccess: (data) {
+        print(data);
+
+        if (data != null && data.containsKey('success')) {
+          print(data['success']);
+
+          if (data['success'] == 1) {
+            permission = true;
+          }
+        }
+      },
+      onError: (data) => debugPrint(data.message),
+      apiResponse: (data) {
+        print(data);
+      },
+      isCacheHit: (isHit) => debugPrint('Is Cache Hit: $isHit'),
+      shouldUpdate: false,
+      expiryTime: DateTime.now().add(const Duration(hours: 1)),
+    );
+
+    if (permission == false) {
+      AwesomeDialog(
+        context: context,
+        dialogType: DialogType.error,
+        animType: AnimType.rightSlide,
+        title: context.tr('error'),
+        desc: context.tr('noPermissionImage'),
+      ).show();
+
+      return;
+    }
+
     await showCupertinoModalPopup(
       context: context,
       builder: (context) => CupertinoActionSheet(
@@ -466,5 +548,14 @@ class _ChatScreenState extends State<ChatScreen> {
         );
       },
     );
+  }
+
+  Future<void> _loadUserDetails() async {
+    DocumentSnapshot details = await DatabaseMethods.getCurrentUserDetails();
+    DocumentSnapshot a = await DatabaseMethods.getAzienda(details!['azienda'].id);
+
+    setState(() {
+      azienda = a;
+    });
   }
 }
