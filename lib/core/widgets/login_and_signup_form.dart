@@ -146,7 +146,23 @@ class _EmailAndPasswordState extends State<EmailAndPassword> {
               password: passwordController.text,
             );
             if (c.user!.emailVerified) {
-              await DatabaseMethods.addUserDetails(
+              DocumentSnapshot userDetails = await DatabaseMethods.getCurrentUserDetails();
+
+              if (userDetails['isApproved'] == false) {
+                _auth.signOut();
+
+                AwesomeDialog(
+                  context: context,
+                  dialogType: DialogType.info,
+                  animType: AnimType.rightSlide,
+                  title: context.tr('userNotApproved'),
+                  desc: context.tr('userNotApprovedDesc'),
+                ).show();
+
+                return;
+              }
+
+              /*await DatabaseMethods.addUserDetails(
                 {
                   'name': _auth.currentUser!.displayName,
                   'email': _auth.currentUser!.email,
@@ -159,7 +175,7 @@ class _EmailAndPasswordState extends State<EmailAndPassword> {
                   'gruppi': [],
                 },
                 SetOptions(mergeFields: ['name', 'email', 'profilePic', 'uid', 'mtoken', 'isOnline']),
-              );
+              );*/
 
               if (!context.mounted) return;
               context.pushNamedAndRemoveUntil(
@@ -415,9 +431,10 @@ class _EmailAndPasswordState extends State<EmailAndPassword> {
               title: context.tr('error'),
               desc: context.tr('codiceAziendaNotFound'),
             ).show();
+
+            return;
           }
         }
-        return;
 
         if (formKey.currentState!.validate()) {
           try {
@@ -436,6 +453,24 @@ class _EmailAndPasswordState extends State<EmailAndPassword> {
                 'mtoken': await getToken(),
                 'isOnline': false,
                 'isAdmin': false,
+                'isApproved': false,
+                'ruoli': [],
+                'gruppi': [],
+                'codiceAzienda': codiceAziendaController.text,
+              },
+            );
+
+            await DatabaseMethods.addUserUpdatesByUid(
+              _auth.currentUser!.uid,
+              {
+                'name': nameController.text,
+                'email': emailController.text,
+                'profilePic': '',
+                'uid': _auth.currentUser!.uid,
+                'mtoken': await getToken(),
+                'isOnline': false,
+                'isAdmin': false,
+                'isApproved': false,
                 'ruoli': [],
                 'gruppi': [],
                 'codiceAzienda': codiceAziendaController.text,

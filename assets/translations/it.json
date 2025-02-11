@@ -32,7 +32,7 @@
     "emailAlreadyExists": "Esiste già un account per questa @:email. Torna alla schermata di @:login.",
     "confirmPassword": "Ripeti @:password",
     "passwordsDontMatch": "Le password non coincidono",
-    "verifyYourEmail": "Don't forget to verify your @:email. Please check inbox.",
+    "verifyYourEmail": "Non dimenticare di confermare la tua email. Controlla la tua casella di posta.",
     "orSignInWith": "oppure entra con",
     "passwordValidation": "Almeno 6 caratteri",
     "terms1": "Accedendo accetti i nostri",
@@ -87,5 +87,7 @@
     "or": "Oppure",
     "azienda": "Azienda",
     "noPermissionMessage": "Non hai il permesso di inviare messaggi a questo utente",
-    "noPermissionImage": "Non hai il permesso di inviare immagini a questo utente"
+    "noPermissionImage": "Non hai il permesso di inviare immagini a questo utente",
+    "userNotApproved": "Utente non approvato",
+    "userNotApprovedDesc": "Un amministratore deve ancora approvare la tua iscrizione."
 }
