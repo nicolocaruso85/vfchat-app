@@ -88,6 +88,10 @@
     "azienda": "Azienda",
     "noPermissionMessage": "Non hai il permesso di inviare messaggi a questo utente",
     "noPermissionImage": "Non hai il permesso di inviare immagini a questo utente",
+    "approve": "Approva utente",
+    "approveConfirmation": "Sei sicuro di voler approvare questo utente?",
     "userNotApproved": "Utente non approvato",
-    "userNotApprovedDesc": "Un amministratore deve ancora approvare la tua iscrizione."
+    "userNotApprovedDesc": "Un amministratore deve ancora approvare la tua iscrizione.",
+    "yes": "Si",
+    "no": "No"
 }

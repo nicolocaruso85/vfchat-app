@@ -1,3 +1,4 @@
+import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -44,7 +45,10 @@ class _ManageUsersScreenState extends State<ManageUsersScreen> {
           builder: (context, AsyncSnapshot<String> snapshot) {
             return StreamBuilder<QuerySnapshot>(
               stream: FirebaseFirestore.instance.collection('users')
-                .where('azienda', isEqualTo: FirebaseFirestore.instance.collection('aziende').doc(snapshot.data))
+                .where(Filter.or(
+                  Filter('azienda', isEqualTo: FirebaseFirestore.instance.collection('aziende').doc(snapshot.data)),
+                  Filter('codiceAzienda', isEqualTo: 'PS8N6ZHS')
+                ))
                 .snapshots(),
               builder: (context, snapshot) {
                 if (snapshot.hasError) {
@@ -85,16 +89,16 @@ class _ManageUsersScreenState extends State<ManageUsersScreen> {
                               ),
                         tileColor: const Color(0xff111B21),
                         title: Text(
-                          data['name'],
-                          style: const TextStyle(
-                            color: Colors.white,
+                          (data['isApproved']) ? data['name'] : data['name'] + ' (non approvato)',
+                          style: TextStyle(
+                            color: (data['isApproved']) ? Colors.white : Colors.red,
                           ),
                           overflow: TextOverflow.ellipsis,
                         ),
                         subtitle: Text(
                           data['email'],
-                          style: const TextStyle(
-                            color: Color.fromARGB(255, 179, 178, 178),
+                          style: TextStyle(
+                            color: (data['isApproved']) ? Color.fromARGB(255, 179, 178, 178) : Colors.red,
                           ),
                           overflow: TextOverflow.ellipsis,
                           maxLines: 1,
@@ -140,10 +144,39 @@ class _ManageUsersScreenState extends State<ManageUsersScreen> {
       builder: (context) => CupertinoActionSheet(
         actions: [
           CupertinoActionSheetAction(
-            child: Text(context.tr('edit')),
+            child: (data['isApproved']) ? Text(context.tr('edit')) : Text(context.tr('approve')),
             onPressed: () {
-              Navigator.pop(context);
-              Navigator.pushNamed(context, Routes.editUserScreen, arguments: data);
+              if (data['isApproved']) {
+                Navigator.pop(context);
+                Navigator.pushNamed(context, Routes.editUserScreen, arguments: data);
+              }
+              else {
+                AwesomeDialog(
+                  context: context,
+                  dialogType: DialogType.question,
+                  animType: AnimType.rightSlide,
+                  title: context.tr('approve'),
+                  desc: context.tr('approveConfirmation'),
+                  btnOkText: context.tr('yes'),
+                  btnOkOnPress: () async {
+                    String idAzienda = await getIdAzienda();
+
+                    DatabaseMethods.updateUserDetailsByUid(
+                      data['uid'],
+                      {
+                        'isApproved': true,
+                        'azienda': FirebaseFirestore.instance.collection('aziende').doc(idAzienda),
+                      }
+                    );
+
+                    Navigator.pop(context);
+                  },
+                  btnCancelText: context.tr('no'),
+                  btnCancelOnPress: () {
+                    Navigator.pop(context);
+                  },
+                ).show();
+              }
             },
           ),
           CupertinoActionSheetAction(
