@@ -77,6 +77,8 @@
     "create": "Crea",
     "users": "Utenti",
     "codiceAzienda": "Codice Azienda",
+    "codiceAziendaDesc": "Inserisci il codice di 8 cifre della tua azienda, un amministratore dovrà comunque approvare la tua iscrizione",
+    "codiceAziendaNotFound": "Il codice azienda inserito non è corretto",
     "addUserSuccess": "Utente creato con successo",
     "editUserSuccess": "Utente aggiornato con successo",
     "editUserProfileSuccess": "Profilo utente aggiornato con successo",

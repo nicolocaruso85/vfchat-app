@@ -95,6 +95,14 @@ class DatabaseMethods {
         .snapshots();
   }
 
+  static Future<AggregateQuerySnapshot> getNumberAziendeByCodice(String codiceAzienda) {
+    return _fireStore
+        .collection('aziende')
+        .where('codice_azienda', isEqualTo: codiceAzienda)
+        .count()
+        .get();
+  }
+
   // Get Messages from firestore
   static Stream<QuerySnapshot> getMessages(String userID, String otherUserID) {
     List<String> sortedIDs = [userID, otherUserID];

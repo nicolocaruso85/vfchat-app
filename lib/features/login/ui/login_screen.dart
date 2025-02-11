@@ -45,7 +45,7 @@ class BuildLoginScreen extends StatelessWidget {
                     Gap(10.h),
                     EmailAndPassword(),
                     Gap(10.h),
-                    const SigninWithGoogleText(),
+                    /*const SigninWithGoogleText(),
                     Gap(5.h),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.center,
@@ -62,7 +62,7 @@ class BuildLoginScreen extends StatelessWidget {
                           ),
                         )
                       ],
-                    ),
+                    ),*/
                   ],
                 ),
               ),

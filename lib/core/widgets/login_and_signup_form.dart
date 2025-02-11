@@ -13,6 +13,7 @@ import '../../../themes/styles.dart';
 import '../../helpers/extensions.dart';
 import '../../router/routes.dart';
 import '../../services/database.dart';
+import '../../themes/colors.dart';
 import 'app_button.dart';
 import 'app_text_form_field.dart';
 import 'password_validations.dart';
@@ -231,6 +232,13 @@ class _EmailAndPasswordState extends State<EmailAndPassword> {
           },
           controller: codiceAziendaController,
         ),
+        Gap(10.h),
+        Text(
+          context.tr('codiceAziendaDesc'),
+          style: TextStyles.font14DarkBlue500Weight.copyWith(
+            color: ColorsManager.lightShadeOfGray,
+          ),
+        ),
       ],
     );
   }
@@ -396,6 +404,21 @@ class _EmailAndPasswordState extends State<EmailAndPassword> {
       buttonText: context.tr('createAccount'),
       textStyle: TextStyles.font15DarkBlue500Weight,
       onPressed: () async {
+        String codiceAzienda = codiceAziendaController.text;
+        if (codiceAzienda != '') {
+          AggregateQuerySnapshot numberAziende = await DatabaseMethods.getNumberAziendeByCodice(codiceAzienda);
+          if (numberAziende.count == 0) {
+            AwesomeDialog(
+              context: context,
+              dialogType: DialogType.error,
+              animType: AnimType.rightSlide,
+              title: context.tr('error'),
+              desc: context.tr('codiceAziendaNotFound'),
+            ).show();
+          }
+        }
+        return;
+
         if (formKey.currentState!.validate()) {
           try {
             await _auth.createUserWithEmailAndPassword(

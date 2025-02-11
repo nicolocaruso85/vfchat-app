@@ -23,11 +23,11 @@ class AlreadyHaveAccountText extends StatelessWidget {
           children: [
             TextSpan(
               text: context.tr('alreadyHaveAccount'),
-              style: TextStyles.font11MediumLightShadeOfGray400Weight,
+              style: TextStyles.font13MediumLightShadeOfGray400Weight,
             ),
             TextSpan(
               text: context.tr('login'),
-              style: TextStyles.font11Green500Weight,
+              style: TextStyles.font13Green500Weight,
             ),
           ],
         ),
