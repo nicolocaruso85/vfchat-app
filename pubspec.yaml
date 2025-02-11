@@ -55,7 +55,7 @@ dependencies:
   pub_semver: ^2.1.5
   restart_app: ^1.3.2
   selectable_search_list: ^0.0.2
-  shared_preferences: ^2.5.1
+  shared_preferences: ^2.5.2
   typesense: ^0.5.2
   url_launcher: ^6.3.1
   zego_uikit_prebuilt_call: ^4.16.22
