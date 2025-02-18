@@ -32,7 +32,7 @@ dependencies:
   flutter_link_previewer:
     path: packages/flutter_link_previewer/
   flutter_local_notifications: ^18.0.1
-  flutter_native_splash: ^2.4.4
+  flutter_native_splash: ^2.4.5
   flutter_offline: ^4.0.0
   flutter_riverpod: ^2.6.1
   flutter_screenutil: ^5.9.3
