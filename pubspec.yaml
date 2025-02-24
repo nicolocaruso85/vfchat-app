@@ -15,16 +15,16 @@ dependencies:
   chat_bubbles:
     path: packages/chat_bubbles/
   chewie: ^1.9.2
-  cloud_firestore: ^5.6.3
+  cloud_firestore: ^5.6.4
   cupertino_icons: ^1.0.8
   dio: ^5.7.0
   easy_localization: ^3.0.7+1
   event: ^3.1.0
   firebase_admin: ^0.3.0+1
-  firebase_auth: ^5.4.2
-  firebase_core: ^3.10.1
-  firebase_messaging: ^15.2.2
-  firebase_storage: ^12.4.2
+  firebase_auth: ^5.5.0
+  firebase_core: ^3.12.0
+  firebase_messaging: ^15.2.3
+  firebase_storage: ^12.4.3
   flutter:
     sdk: flutter
   flutter_chat_types: ^3.6.2
@@ -58,8 +58,8 @@ dependencies:
   shared_preferences: ^2.5.2
   typesense: ^0.5.2
   url_launcher: ^6.3.1
-  zego_uikit_prebuilt_call: ^4.16.22
-  zego_uikit_signaling_plugin: ^2.8.10
+  zego_uikit_prebuilt_call: ^4.16.23
+  zego_uikit_signaling_plugin: ^2.8.11
 
 dev_dependencies:
   flutter_lints: ^3.0.2
