@@ -15,16 +15,16 @@ dependencies:
   chat_bubbles:
     path: packages/chat_bubbles/
   chewie: ^1.9.2
-  cloud_firestore: ^5.6.4
+  cloud_firestore: ^5.6.5
   cupertino_icons: ^1.0.8
   dio: ^5.7.0
   easy_localization: ^3.0.7+1
   event: ^3.1.0
   firebase_admin: ^0.3.0+1
-  firebase_auth: ^5.5.0
-  firebase_core: ^3.12.0
-  firebase_messaging: ^15.2.3
-  firebase_storage: ^12.4.3
+  firebase_auth: ^5.5.1
+  firebase_core: ^3.12.1
+  firebase_messaging: ^15.2.4
+  firebase_storage: ^12.4.4
   flutter:
     sdk: flutter
   flutter_chat_types: ^3.6.2

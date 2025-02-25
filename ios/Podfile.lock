@@ -9,7 +9,7 @@ PODS:
     - Flutter
   - audioplayers_darwin (0.0.1):
     - Flutter
-  - cloud_firestore (5.6.4):
+  - cloud_firestore (5.6.5):
     - Firebase/Firestore (= 11.8.0)
     - firebase_core
     - Flutter
@@ -49,6 +49,8 @@ PODS:
   - DKPhotoGallery/Resource (0.0.19):
     - SDWebImage
     - SwiftyGif
+  - external_path (2.0.1):
+    - Flutter
   - external_path_ios_mac (0.0.1):
     - Flutter
   - file_picker (0.0.1):
@@ -73,22 +75,22 @@ PODS:
   - Firebase/Storage (11.8.0):
     - Firebase/CoreOnly
     - FirebaseStorage (~> 11.8.0)
-  - firebase_analytics (11.4.2):
+  - firebase_analytics (11.4.3):
     - Firebase/Analytics (= 11.8.0)
     - firebase_core
     - Flutter
-  - firebase_auth (5.5.0):
+  - firebase_auth (5.5.1):
     - Firebase/Auth (= 11.8.0)
     - firebase_core
     - Flutter
-  - firebase_core (3.12.0):
+  - firebase_core (3.12.1):
     - Firebase/CoreOnly (= 11.8.0)
     - Flutter
-  - firebase_messaging (15.2.3):
+  - firebase_messaging (15.2.4):
     - Firebase/Messaging (= 11.8.0)
     - firebase_core
     - Flutter
-  - firebase_storage (12.4.3):
+  - firebase_storage (12.4.4):
     - Firebase/Storage (= 11.8.0)
     - firebase_core
     - Flutter
@@ -343,6 +345,7 @@ DEPENDENCIES:
   - cloud_firestore (from `.symlinks/plugins/cloud_firestore/ios`)
   - connectivity_plus (from `.symlinks/plugins/connectivity_plus/ios`)
   - device_info_plus (from `.symlinks/plugins/device_info_plus/ios`)
+  - external_path (from `.symlinks/plugins/external_path/ios`)
   - external_path_ios_mac (from `.symlinks/plugins/external_path_ios_mac/ios`)
   - file_picker (from `.symlinks/plugins/file_picker/ios`)
   - firebase_analytics (from `.symlinks/plugins/firebase_analytics/ios`)
@@ -439,6 +442,8 @@ EXTERNAL SOURCES:
     :path: ".symlinks/plugins/connectivity_plus/ios"
   device_info_plus:
     :path: ".symlinks/plugins/device_info_plus/ios"
+  external_path:
+    :path: ".symlinks/plugins/external_path/ios"
   external_path_ios_mac:
     :path: ".symlinks/plugins/external_path_ios_mac/ios"
   file_picker:
@@ -532,20 +537,21 @@ SPEC CHECKSUMS:
   AppAuth: d4f13a8fe0baf391b2108511793e4b479691fb73
   audio_session: 19e9480dbdd4e5f6c4543826b2e8b0e4ab6145fe
   audioplayers_darwin: 877d9a4d06331c5c374595e46e16453ac7eafa40
-  cloud_firestore: 63a98b4e73424e1b66ebb6f289eb1a73514cbc49
+  cloud_firestore: 56e7bb3888f09698dc061d38d02d87d4fd80e2cb
   connectivity_plus: 2a701ffec2c0ae28a48cf7540e279787e77c447d
   CryptoSwift: e64e11850ede528a02a0f3e768cec8e9d92ecb90
   device_info_plus: bf2e3232933866d73fe290f2942f2156cdd10342
   DKImagePickerController: 946cec48c7873164274ecc4624d19e3da4c1ef3c
   DKPhotoGallery: b3834fecb755ee09a593d7c9e389d8b5d6deed60
+  external_path: 2594f1f0d6afcff9e202cfe9c8908dd605b86f32
   external_path_ios_mac: e3bd178849df0d853b97f9b2bb9080b622aa194d
   file_picker: b159e0c068aef54932bb15dc9fd1571818edaf49
   Firebase: d80354ed7f6df5f9aca55e9eb47cc4b634735eaf
-  firebase_analytics: b28f4326bcc463d8251498e81e449dd0d7e92413
-  firebase_auth: cecfcb5b0655e1cb66a5c45a88ee77811ca93514
-  firebase_core: 6e223dfa350b2edceb729cea505eaaef59330682
-  firebase_messaging: 07fde77ae28c08616a1d4d870450efc2b38cf40d
-  firebase_storage: b57a7b96e6f7ce6a48e7d6cea67c3eabeaedd525
+  firebase_analytics: 7ec1166af61987fa968766eb11587c562a5650ee
+  firebase_auth: 3d848b9b866b201e5c8e0c06d8b2cec272fd8825
+  firebase_core: ac395f994af4e28f6a38b59e05a88ca57abeb874
+  firebase_messaging: 7e223f4ee7ca053bf4ce43748e84a6d774ec9728
+  firebase_storage: b31bacb1f1d7abeb753d9195e97eb5d2180e1d6f
   FirebaseAnalytics: 4fd42def128146e24e480e89f310e3d8534ea42b
   FirebaseAppCheckInterop: 7bf86d55a2b7e9bd91464120eba3e52e4b63b2e2
   FirebaseAuth: ad59a1a7b161e75f74c39f70179d2482d40e2737
