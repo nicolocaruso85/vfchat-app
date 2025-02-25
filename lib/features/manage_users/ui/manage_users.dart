@@ -160,12 +160,21 @@ class _ManageUsersScreenState extends State<ManageUsersScreen> {
                   btnOkText: context.tr('yes'),
                   btnOkOnPress: () async {
                     String idAzienda = await getIdAzienda();
+                    DocumentReference azienda = FirebaseFirestore.instance.collection('aziende').doc(idAzienda);
 
-                    DatabaseMethods.updateUserDetailsByUid(
+                    await DatabaseMethods.updateUserDetailsByUid(
                       data['uid'],
                       {
                         'isApproved': true,
-                        'azienda': FirebaseFirestore.instance.collection('aziende').doc(idAzienda),
+                        'azienda': azienda,
+                      }
+                    );
+
+                    await DatabaseMethods.addUserUpdatesByUid(
+                      _auth.currentUser!.uid,
+                      {
+                        'isApproved': true,
+                        'azienda': azienda,
                       }
                     );
 

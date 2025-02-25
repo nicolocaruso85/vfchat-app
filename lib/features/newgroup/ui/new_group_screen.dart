@@ -7,6 +7,8 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:gap/gap.dart';
 import 'package:selectable_search_list/selectable_search_list.dart';
+import 'package:king_cache/king_cache.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 import '../../../themes/styles.dart';
 import '../../../core/widgets/app_text_form_field.dart';
@@ -27,7 +29,11 @@ class _NewGroupScreenState extends State<NewGroupScreen> {
 
   final formKey = GlobalKey<FormState>();
 
+  List<ListItem> items = [];
+
   var selectedUsers = [];
+
+  bool userLoaded = false;
 
   @override
   Widget build(BuildContext context) {
@@ -61,19 +67,26 @@ class _NewGroupScreenState extends State<NewGroupScreen> {
     return FutureBuilder<String>(
       future: getIdAzienda(),
       builder: (context, AsyncSnapshot<String> snapshot) {
+        String? idAzienda = snapshot.data;
+
         return StreamBuilder(
-          stream: DatabaseMethods.getUsers(snapshot.data),
+          stream: DatabaseMethods.getUsers(idAzienda),
           builder: (context, snapshot) {
             if (snapshot.connectionState == ConnectionState.waiting) {
-              return const Center(child: CircularProgressIndicator());
+              return Expanded(
+                child: const Center(child: CircularProgressIndicator()),
+              );
             }
 
-            List<ListItem> items = [];
-            snapshot.data!.docs.forEach((var user) {
-              if (user['uid'] != _auth.currentUser!.uid) {
-                items.add(new ListItem(id: user['uid'], title: user['name']));
-              }
-            });
+            if (!userLoaded) {
+              List<String> userIds = [];
+              snapshot.data!.docs.forEach((var user) {
+                if (user['uid'] != _auth.currentUser!.uid) {
+                  userIds.add(user['uid']);
+                }
+              });
+              checkUserPermissions(snapshot.data!.docs, userIds, idAzienda);
+            }
 
             return Expanded(
               child: MultiSelectListWidget(
@@ -157,5 +170,45 @@ class _NewGroupScreenState extends State<NewGroupScreen> {
   Future<String> getIdAzienda() async {
     DocumentSnapshot userDetails = await DatabaseMethods.getCurrentUserDetails();
     return userDetails['azienda'].id;
+  }
+
+  checkUserPermissions(users, userIDs, idAzienda) async {
+    print(dotenv.env['SITE_URL']! + '/check-permission/' + _auth.currentUser!.uid + '/' + idAzienda + '/gruppo');
+
+    await KingCache.cacheViaRest(
+      dotenv.env['SITE_URL']! + '/check-permission/' + _auth.currentUser!.uid + '/' + idAzienda + '/gruppo',
+      method: HttpMethod.post,
+      formData: {
+        'user_ids': userIDs,
+      },
+      onSuccess: (data) {
+        print(data);
+        if (data != null && data.containsKey('success')) {
+          print(data['success']);
+
+          if (data['success'] == 1) {
+            List<dynamic> ids = data['user_ids'];
+
+            setState(() {
+              userLoaded = true;
+
+              items = [];
+              users.forEach((var user) {
+                if (ids.contains(user['uid'])) {
+                  items.add(new ListItem(id: user['uid'], title: user['name']));
+                }
+              });
+            });
+          }
+        }
+      },
+      onError: (data) => debugPrint(data.message),
+      apiResponse: (data) {
+        print(data);
+      },
+      isCacheHit: (isHit) => debugPrint('Is Cache Hit: $isHit'),
+      shouldUpdate: true,
+      expiryTime: DateTime.now().add(const Duration(minutes: 1)),
+    );
   }
 }

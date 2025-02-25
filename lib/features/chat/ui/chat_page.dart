@@ -91,7 +91,7 @@ class _ChatScreenState extends State<ChatScreen> {
                         print(data['success']);
 
                         if (data['success'] == 1) {
-                         permission = true;
+                          permission = true;
                         }
                       }
                     },
@@ -100,7 +100,7 @@ class _ChatScreenState extends State<ChatScreen> {
                       print(data);
                     },
                     isCacheHit: (isHit) => debugPrint('Is Cache Hit: $isHit'),
-                    shouldUpdate: false,
+                    shouldUpdate: true,
                     expiryTime: DateTime.now().add(const Duration(minutes: 1)),
                   );
 
@@ -219,7 +219,7 @@ class _ChatScreenState extends State<ChatScreen> {
         print(data);
       },
       isCacheHit: (isHit) => debugPrint('Is Cache Hit: $isHit'),
-      shouldUpdate: false,
+      shouldUpdate: true,
       expiryTime: DateTime.now().add(const Duration(minutes: 1)),
     );
 
