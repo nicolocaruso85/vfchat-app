@@ -7,6 +7,7 @@ import 'package:firebase_admin/firebase_admin.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:searchable_listview/searchable_listview.dart';
 
 import '../../../firebase_options.dart';
 import '../../../services/database.dart';
@@ -57,10 +58,29 @@ class _ManageUsersScreenState extends State<ManageUsersScreen> {
                 if (snapshot.connectionState == ConnectionState.waiting) {
                   return const Center(child: CircularProgressIndicator());
                 }
-                return ListView.builder(
-                  itemCount: snapshot.data!.docs.length,
-                  itemBuilder: (context, index) {
-                    var doc = snapshot.data!.docs[index];
+
+                var users = snapshot.data!.docs;
+
+                return SearchableList<DocumentSnapshot>(
+                  inputDecoration: InputDecoration(
+                    labelText: context.tr('search'),
+                    fillColor: Colors.white,
+                    labelStyle: TextStyle(color: Colors.white),
+                    focusedBorder: OutlineInputBorder(
+                      borderSide: const BorderSide(
+                        color: Colors.blue,
+                        width: 1.0,
+                      ),
+                      borderRadius: BorderRadius.circular(10.0),
+                    ),
+                  ),
+                  textStyle: TextStyles.font16White600Weight,
+                  filter: (search) {
+                    return users.where((user) => user['name'].toLowerCase().contains(search.toLowerCase()) || user['email'].toLowerCase().contains(search.toLowerCase())).toList();
+                  },
+                  lazyLoadingEnabled: false,
+                  initialList: users,
+                  itemBuilder: (DocumentSnapshot doc) {
                     Map<String, dynamic> data = doc.data() as Map<String, dynamic>;
 
                     if (_auth.currentUser!.email != data['email']) {
