@@ -94,6 +94,7 @@ class _EmailAndPasswordState extends State<EmailAndPassword> {
       children: [
         AppTextFormField(
           hint: context.tr('email'),
+          textInputAction: TextInputAction.next,
           validator: (value) {
             if (value == null ||
                 value.isEmpty ||
@@ -245,6 +246,9 @@ class _EmailAndPasswordState extends State<EmailAndPassword> {
         AppTextFormField(
           hint: context.tr('codiceAzienda'),
           validator: (value) {
+            if (value == null || value.isEmpty) {
+              return context.tr('pleaseEnterValid', args: ['Codice Azienda']);
+            }
           },
           controller: codiceAziendaController,
         ),
@@ -264,6 +268,7 @@ class _EmailAndPasswordState extends State<EmailAndPassword> {
       children: [
         AppTextFormField(
           hint: context.tr('name'),
+          textInputAction: TextInputAction.next,
           validator: (value) {
             if (value == null || value.isEmpty || value.startsWith(' ')) {
               return context.tr('pleaseEnterValid', args: ['Nome']);
@@ -356,6 +361,7 @@ class _EmailAndPasswordState extends State<EmailAndPassword> {
     return AppTextFormField(
       controller: passwordConfirmationController,
       hint: context.tr('confirmPassword'),
+      textInputAction: TextInputAction.next,
       isObscureText: isObscureText,
       suffixIcon: GestureDetector(
         onTap: () {
@@ -385,6 +391,7 @@ class _EmailAndPasswordState extends State<EmailAndPassword> {
     return AppTextFormField(
       controller: passwordController,
       hint: context.tr('password'),
+      textInputAction: (widget.isSignUpPage == true) ? TextInputAction.next : TextInputAction.done,
       isObscureText: isObscureText,
       suffixIcon: GestureDetector(
         onTap: () {
@@ -456,7 +463,7 @@ class _EmailAndPasswordState extends State<EmailAndPassword> {
                 'isApproved': false,
                 'ruoli': [],
                 'gruppi': [],
-                'codiceAzienda': codiceAziendaController.text,
+                'codiceAzienda': codiceAziendaController.text.toUpperCase(),
               },
             );
 
@@ -473,7 +480,7 @@ class _EmailAndPasswordState extends State<EmailAndPassword> {
                 'isApproved': false,
                 'ruoli': [],
                 'gruppi': [],
-                'codiceAzienda': codiceAziendaController.text,
+                'codiceAzienda': codiceAziendaController.text.toUpperCase(),
               },
             );
 

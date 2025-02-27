@@ -29,7 +29,7 @@
     "wrongPassword": "@:password non valida per questo @:user.",
     "success": "Registrato con successo",
     "accountCreated": "Sei stato registrato.",
-    "emailAlreadyExists": "Esiste già un account per questa @:email. Torna alla schermata di @:login.",
+    "emailAlreadyExists": "Esiste già un account per questa email. Torna alla schermata di Login.",
     "confirmPassword": "Ripeti @:password",
     "passwordsDontMatch": "Le password non coincidono",
     "verifyYourEmail": "Non dimenticare di confermare la tua email. Controlla la tua casella di posta.",

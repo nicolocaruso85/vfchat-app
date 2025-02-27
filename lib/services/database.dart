@@ -98,7 +98,7 @@ class DatabaseMethods {
   static Future<AggregateQuerySnapshot> getNumberAziendeByCodice(String codiceAzienda) {
     return _fireStore
         .collection('aziende')
-        .where('codice_azienda', isEqualTo: codiceAzienda)
+        .where('codice_azienda', isEqualTo: codiceAzienda.toUpperCase())
         .count()
         .get();
   }

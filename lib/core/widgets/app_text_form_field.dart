@@ -13,6 +13,7 @@ class AppTextFormField extends StatelessWidget {
   final bool? isDense;
   final TextEditingController? controller;
   final Function(String?) validator;
+  final TextInputAction? textInputAction;
   const AppTextFormField({
     super.key,
     required this.hint,
@@ -22,11 +23,13 @@ class AppTextFormField extends StatelessWidget {
     this.controller,
     this.onChanged,
     this.focusNode,
+    this.textInputAction,
     required this.validator,
   });
   @override
   Widget build(BuildContext context) {
     return TextFormField(
+      textInputAction: textInputAction,
       focusNode: focusNode,
       validator: (value) {
         return validator(value);
