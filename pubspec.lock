@@ -401,13 +401,13 @@ packages:
     source: hosted
     version: "0.2.5+2"
   external_path:
-    dependency: transitive
+    dependency: "direct main"
     description:
       name: external_path
-      sha256: e6d70bd47ee25d164287ecab65426684825439c6a39ee1895c6193d65576ee13
+      sha256: "272d067c719c2421ff40c202ac32ccddcb689f3b0c839ec370942666dae589db"
       url: "https://pub.dev"
     source: hosted
-    version: "2.1.0"
+    version: "2.0.1"
   external_path_ios_mac:
     dependency: transitive
     description:

@@ -49,8 +49,6 @@ PODS:
   - DKPhotoGallery/Resource (0.0.19):
     - SDWebImage
     - SwiftyGif
-  - external_path (2.0.1):
-    - Flutter
   - external_path_ios_mac (0.0.1):
     - Flutter
   - file_picker (0.0.1):
@@ -75,7 +73,7 @@ PODS:
   - Firebase/Storage (11.8.0):
     - Firebase/CoreOnly
     - FirebaseStorage (~> 11.8.0)
-  - firebase_analytics (11.4.3):
+  - firebase_analytics (11.4.4):
     - Firebase/Analytics (= 11.8.0)
     - firebase_core
     - Flutter
@@ -317,7 +315,7 @@ PODS:
     - Flutter
   - zego_callkit (1.0.0):
     - Flutter
-  - zego_express_engine (3.19.0):
+  - zego_express_engine (3.19.1):
     - Flutter
   - zego_uikit (0.0.1):
     - Flutter
@@ -345,7 +343,6 @@ DEPENDENCIES:
   - cloud_firestore (from `.symlinks/plugins/cloud_firestore/ios`)
   - connectivity_plus (from `.symlinks/plugins/connectivity_plus/ios`)
   - device_info_plus (from `.symlinks/plugins/device_info_plus/ios`)
-  - external_path (from `.symlinks/plugins/external_path/ios`)
   - external_path_ios_mac (from `.symlinks/plugins/external_path_ios_mac/ios`)
   - file_picker (from `.symlinks/plugins/file_picker/ios`)
   - firebase_analytics (from `.symlinks/plugins/firebase_analytics/ios`)
@@ -442,8 +439,6 @@ EXTERNAL SOURCES:
     :path: ".symlinks/plugins/connectivity_plus/ios"
   device_info_plus:
     :path: ".symlinks/plugins/device_info_plus/ios"
-  external_path:
-    :path: ".symlinks/plugins/external_path/ios"
   external_path_ios_mac:
     :path: ".symlinks/plugins/external_path_ios_mac/ios"
   file_picker:
@@ -543,11 +538,10 @@ SPEC CHECKSUMS:
   device_info_plus: bf2e3232933866d73fe290f2942f2156cdd10342
   DKImagePickerController: 946cec48c7873164274ecc4624d19e3da4c1ef3c
   DKPhotoGallery: b3834fecb755ee09a593d7c9e389d8b5d6deed60
-  external_path: 2594f1f0d6afcff9e202cfe9c8908dd605b86f32
   external_path_ios_mac: e3bd178849df0d853b97f9b2bb9080b622aa194d
   file_picker: b159e0c068aef54932bb15dc9fd1571818edaf49
   Firebase: d80354ed7f6df5f9aca55e9eb47cc4b634735eaf
-  firebase_analytics: 7ec1166af61987fa968766eb11587c562a5650ee
+  firebase_analytics: e3b6782e70e32b7fa18f7cd233e3201975dd86aa
   firebase_auth: 3d848b9b866b201e5c8e0c06d8b2cec272fd8825
   firebase_core: ac395f994af4e28f6a38b59e05a88ca57abeb874
   firebase_messaging: 7e223f4ee7ca053bf4ce43748e84a6d774ec9728
@@ -611,7 +605,7 @@ SPEC CHECKSUMS:
   video_player_avfoundation: 7c6c11d8470e1675df7397027218274b6d2360b3
   wakelock_plus: 373cfe59b235a6dd5837d0fb88791d2f13a90d56
   zego_callkit: 72593f46ed01779c4cee6bc65d2e0e1cde86b42c
-  zego_express_engine: b2a09737ffc1cc32fb93ade14b6e593abae758f1
+  zego_express_engine: 828102bd0bc176d91663390152bcd78013f28d48
   zego_uikit: 6ceebb00df6af92b2a7a16b15f98330035a5d911
   zego_uikit_prebuilt_call: 13173d7a3c6dcc1695cbdff15d19463acd1ca39c
   zego_uikit_signaling_plugin: 7fdfcd9f796b591c9cb8770609f4fa85178aa40e

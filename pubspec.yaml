@@ -20,6 +20,7 @@ dependencies:
   dio: ^5.7.0
   easy_localization: ^3.0.7+1
   event: ^3.1.0
+  external_path: 2.0.1
   firebase_admin: ^0.3.0+1
   firebase_auth: ^5.5.1
   firebase_core: ^3.12.1
