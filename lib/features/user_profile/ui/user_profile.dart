@@ -163,6 +163,7 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
       children: [
         AppTextFormField(
           hint: context.tr('name'),
+          textInputAction: TextInputAction.next,
           validator: (value) {
             if (value == null || value.isEmpty || value.startsWith(' ')) {
               return context.tr('pleaseEnterValid', args: ['Name']);
@@ -215,6 +216,7 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
         AppTextFormField(
           controller: passwordController,
           hint: context.tr('password'),
+          textInputAction: TextInputAction.next,
           isObscureText: isObscureText,
           suffixIcon: GestureDetector(
             onTap: () {
@@ -245,6 +247,7 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
       children: [
         AppTextFormField(
           hint: context.tr('email'),
+          textInputAction: TextInputAction.next,
           validator: (value) {
             if (value == null ||
                 value.isEmpty ||
@@ -341,7 +344,7 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
           isBorderAvatar: true,
           gradientWidthBorder: const LinearGradient(colors: [Colors.white, Colors.white]),
           gradientBackgroundColor: const LinearGradient(colors: [const Color(0xff273443), const Color(0xff273443)]),
-          imageNetwork: userDetails?['profilePic'],
+          imageNetwork: userDetails?['profilePic'] != '' ? (userDetails?['profilePic']) : null,
           bottomSheetStyles: BottomSheetStyles(
             backgroundColor: const Color(0xff273443),
             elevation: 0,
