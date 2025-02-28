@@ -134,7 +134,7 @@ class _ChatsTabState extends State<ChatsTab> {
     if (unreadMessagesCount[otherUserID] != null) return;
 
     var p = await DatabaseMethods.getUnreadMessagesCount(userID, otherUserID);
-    if (p.count! > 0) {
+    if (p.count! > 0 && p.count! != unreadMessagesCount[otherUserID]) {
       setState(() {
         unreadMessagesCount[otherUserID] = p.count!;
       });

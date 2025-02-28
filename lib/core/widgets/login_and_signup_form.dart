@@ -163,21 +163,6 @@ class _EmailAndPasswordState extends State<EmailAndPassword> {
                 return;
               }
 
-              /*await DatabaseMethods.addUserDetails(
-                {
-                  'name': _auth.currentUser!.displayName,
-                  'email': _auth.currentUser!.email,
-                  'profilePic': _auth.currentUser!.photoURL,
-                  'uid': _auth.currentUser!.uid,
-                  'mtoken': await getToken(),
-                  'isOnline': true,
-                  'isAdmin': false,
-                  'ruoli': [],
-                  'gruppi': [],
-                },
-                SetOptions(mergeFields: ['name', 'email', 'profilePic', 'uid', 'mtoken', 'isOnline']),
-              );*/
-
               if (!context.mounted) return;
               context.pushNamedAndRemoveUntil(
                 Routes.homeScreen,

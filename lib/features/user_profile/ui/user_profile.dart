@@ -8,11 +8,9 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:gap/gap.dart';
-import 'package:firebase_admin/firebase_admin.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:multi_select_flutter/multi_select_flutter.dart';
-import 'package:path/path.dart' show basename;
 import 'package:image_cropper/image_cropper.dart';
 
 import '../../../themes/colors.dart';
@@ -104,22 +102,15 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
           var password = passwordController.text;
 
           if (name != userDetails?['name']) {
-            await FirebaseAdmin.instance.app()!.auth().updateUser(
-              _auth.currentUser!.uid,
+            _auth.currentUser!.updateProfile(
               displayName: name,
             );
           }
           if (email != userDetails?['email']) {
-            await FirebaseAdmin.instance.app()!.auth().updateUser(
-              _auth.currentUser!.uid,
-              email: email,
-            );
+            _auth.currentUser!.updateEmail(email);
           }
           if (password != null && password != '') {
-            await FirebaseAdmin.instance.app()!.auth().updateUser(
-              _auth.currentUser!.uid,
-              password: password,
-            );
+            _auth.currentUser!.updatePassword(password);
           }
 
           await DatabaseMethods.updateUserDetails(
@@ -371,10 +362,8 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
             webPresentStyle: WebPresentStyle.dialog,
           ),
           onPickerChange: (file) async {
-            String filename = basename(file.path);
-
             Reference storageRef =
-                FirebaseStorage.instance.ref('profile-images/${filename}');
+                FirebaseStorage.instance.ref('profile-images/${_auth.currentUser!.uid}');
             await storageRef!.putFile(File(file.path));
 
             String url = await storageRef!.getDownloadURL();
@@ -409,6 +398,7 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
       userDetails = details;
       nameController.text = userDetails?['name'];
       emailController.text = userDetails?['email'];
+      print(userDetails);
 
       azienda = a;
     });
