@@ -116,6 +116,20 @@ class DatabaseMethods {
         .snapshots();
   }
 
+  static Future<AggregateQuerySnapshot> getUnreadMessagesCount(String userID, String otherUserID) {
+    List<String> sortedIDs = [userID, otherUserID];
+    sortedIDs.sort();
+    String chatRoomID = sortedIDs.join('_');
+    return _fireStore
+        .collection('chats')
+        .doc(chatRoomID)
+        .collection('messages')
+        .where('isViewed', isEqualTo: false)
+        .where('receiverID', isEqualTo: userID)
+        .count()
+        .get();
+  }
+
   static Future<void> sendGroupMessage(String message, String groupID) async {
     final currentUserID = _auth.currentUser!.uid;
     final currentUserName = _auth.currentUser!.displayName;
