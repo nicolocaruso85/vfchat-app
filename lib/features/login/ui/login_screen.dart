@@ -9,7 +9,6 @@ import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import '../../../core/widgets/login_and_signup_form.dart';
 import '../../../core/widgets/modal_fit.dart';
 import '../../../core/widgets/no_internet.dart';
-import '../../../core/widgets/or_sign_in_with_text.dart';
 import '../../../core/widgets/terms_and_conditions_text.dart';
 import '../../../services/google_sign_in.dart';
 import '../../../themes/styles.dart';
@@ -45,24 +44,6 @@ class BuildLoginScreen extends StatelessWidget {
                     Gap(10.h),
                     EmailAndPassword(),
                     Gap(10.h),
-                    /*const SigninWithGoogleText(),
-                    Gap(5.h),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        InkWell(
-                          onTap: () async {
-                            await GoogleSignin.signInWithGoogle(context);
-                          },
-                          borderRadius: BorderRadius.circular(15.r),
-                          child: SvgPicture.asset(
-                            'assets/svgs/google.svg',
-                            width: 40.w,
-                            height: 40.h,
-                          ),
-                        )
-                      ],
-                    ),*/
                   ],
                 ),
               ),
