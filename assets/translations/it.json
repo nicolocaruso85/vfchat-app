@@ -45,7 +45,7 @@
     "reset": "Resettare",
     "emailNotFound": "@:email non trovata",
     "resetPassword": "@:reset @:password",
-    "checkYourEmail": "Link to @:resetPassword send to your @:email, please check inbox messages.",
+    "checkYourEmail": "Il link per il reset della password è stato inviato alla tua @:email, controlla la tua posta in arrivo.",
     "newGroup": "Nuovo gruppo",
     "newGroupCreated": "@:newGroup creato",
     "chats": "Conversazioni",
