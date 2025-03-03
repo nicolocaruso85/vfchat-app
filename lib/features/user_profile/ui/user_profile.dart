@@ -360,6 +360,7 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
             toolbarWidgetColorCrop: Colors.white,
             initAspectRatioCrop: CropAspectRatioPreset.square,
             webPresentStyle: WebPresentStyle.dialog,
+            maxHeight: 600,
           ),
           onPickerChange: (file) async {
             Reference storageRef =

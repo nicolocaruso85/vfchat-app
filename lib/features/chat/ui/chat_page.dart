@@ -25,6 +25,7 @@ import '../../../router/routes.dart';
 import '../../../services/database.dart';
 import '../../../services/notification_service.dart';
 import '../../../themes/colors.dart';
+import '../../../themes/styles.dart';
 import 'widgets/message_bar.dart';
 import 'widgets/url_preview.dart';
 
@@ -292,20 +293,31 @@ class _ChatScreenState extends State<ChatScreen> {
         ),
       ),
       toolbarHeight: 70.h,
-      title: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(widget.receivedUserName),
-          Text(
-            widget.active
-                ? context.tr('online')
-                : context.tr('offline'),
-            style: TextStyle(
-              fontSize: 13.sp,
-              color: const Color.fromARGB(255, 179, 178, 178),
+      title: TextButton(
+        onPressed: () {
+          Navigator.pushNamed(context, Routes.otherUserProfileScreen, arguments: {'uid': widget.receivedUserID});
+        },
+        style: TextButton.styleFrom(
+          foregroundColor: Colors.white,
+        ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              widget.receivedUserName,
+              style: TextStyles.font18White500Weight,
             ),
-          ),
-        ],
+            Text(
+              widget.active
+                  ? context.tr('online')
+                  : context.tr('offline'),
+              style: TextStyle(
+                fontSize: 13.sp,
+                color: const Color.fromARGB(255, 179, 178, 178),
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }

@@ -18,6 +18,7 @@ import '../features/manage_users/ui/manage_users.dart';
 import '../features/add_user/ui/add_user.dart';
 import '../features/edit_user/ui/edit_user.dart';
 import '../features/user_profile/ui/user_profile.dart';
+import '../features/user_profile/ui/other_user_profile.dart';
 import 'routes.dart';
 
 class AppRoute {
@@ -105,6 +106,16 @@ class AppRoute {
         return MaterialPageRoute(
           builder: (context) => const UserProfileScreen(),
         );
+
+      case Routes.otherUserProfileScreen:
+        final arguments = routeSettings.arguments;
+        if (arguments is Map<String, dynamic>) {
+          return MaterialPageRoute(
+            builder: (_) => OtherUserProfileScreen(
+              uid: arguments['uid'],
+            ),
+          );
+        }
 
       case Routes.editUserScreen:
         final arguments = routeSettings.arguments;
