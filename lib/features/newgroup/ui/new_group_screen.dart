@@ -148,6 +148,8 @@ class _NewGroupScreenState extends State<NewGroupScreen> {
               'name': nameController.text,
               'users': users,
               'groupPic': '',
+              'creatorId': FirebaseFirestore.instance.collection('users').doc(_auth.currentUser!.uid),
+              'createdDate': FieldValue.serverTimestamp(),
             });
 
           AwesomeDialog(
