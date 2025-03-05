@@ -47,7 +47,7 @@ dependencies:
   image_picker: ^1.1.2
   intl: ^0.19.0
   keyboard_dismisser: ^3.0.0
-  king_cache: ^0.0.42
+  king_cache: ^0.0.44
   local_auth: ^2.3.0
   lottie: ^3.3.1
   modal_bottom_sheet: ^3.0.0
@@ -60,7 +60,7 @@ dependencies:
   shared_preferences: ^2.5.2
   typesense: ^0.5.2
   url_launcher: ^6.3.1
-  zego_uikit_prebuilt_call: ^4.16.23
+  zego_uikit_prebuilt_call: ^4.16.24
   zego_uikit_signaling_plugin: ^2.8.11
 
 dev_dependencies:
