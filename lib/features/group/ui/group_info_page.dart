@@ -1,3 +1,6 @@
+import 'dart:io';
+import 'package:avatar_better/avatar_better.dart' show Avatar, ProfileImageViewerOptions, BottomSheetStyles, OptionsCrop;
+import 'package:avatar_better/src/tools/gallery_buttom.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -6,6 +9,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:gap/gap.dart';
 import 'package:intl/intl.dart';
+import 'package:firebase_storage/firebase_storage.dart';
+import 'package:image_cropper/image_cropper.dart';
 
 import '../../../themes/colors.dart';
 import '../../../themes/styles.dart';
@@ -48,6 +53,7 @@ class _GroupInfoScreenState extends State<GroupInfoScreen> {
             width: MediaQuery.of(context).size.width,
             child: Column(
               children: [
+                groupImageField(),
                 nameField(),
                 descriptionField(),
                 createdByField(),
@@ -66,6 +72,66 @@ class _GroupInfoScreenState extends State<GroupInfoScreen> {
     super.initState();
 
     _loadGroupDetails();
+  }
+
+  Column groupImageField() {
+    return Column(
+      children: [
+        Gap(4.h),
+        Avatar.profile(
+          text: '',
+          radius: 50,
+          isBorderAvatar: true,
+          gradientWidthBorder: const LinearGradient(colors: [Colors.white, Colors.white]),
+          gradientBackgroundColor: const LinearGradient(colors: [const Color(0xff273443), const Color(0xff273443)]),
+          imageNetwork: groupDetails?['groupPic'] != '' ? (groupDetails?['groupPic']) : null,
+          bottomSheetStyles: BottomSheetStyles(
+            backgroundColor: const Color(0xff273443),
+            elevation: 0,
+            middleText: context.tr('or'),
+            middleTextStyle: const TextStyle(color: Colors.white),
+            galleryButton: GalleryBottom(
+              text: context.tr('photoGallery'),
+              style: TextStyles.font15DarkBlue500Weight,
+              color: Colors.white,
+              icon: null,
+            ),
+            cameraButton: CameraButton(
+              text: context.tr('camera'),
+              style: TextStyles.font15DarkBlue500Weight,
+              color: Colors.white,
+              icon: null,
+            ),
+          ),
+          optionsCrop: OptionsCrop(
+            aspectRatio: CropAspectRatio(ratioX: 1.0, ratioY: 1.0),
+            toolbarColorCrop: Colors.deepOrange,
+            toolbarWidgetColorCrop: Colors.white,
+            initAspectRatioCrop: CropAspectRatioPreset.square,
+            webPresentStyle: WebPresentStyle.dialog,
+            maxHeight: 600,
+          ),
+          onPickerChange: (file) async {
+            Reference storageRef =
+                FirebaseStorage.instance.ref('group-images/${groupDetails!.id}');
+            await storageRef!.putFile(File(file.path));
+
+            String url = await storageRef!.getDownloadURL();
+            print(url);
+
+            await DatabaseMethods.updateGroupDetails(
+              groupDetails!.id,
+              {
+                'groupPic': url,
+              },
+            );
+
+            _loadGroupDetails();
+          },
+        ),
+        Gap(20.h),
+      ],
+    );
   }
 
   SizedBox nameField() {

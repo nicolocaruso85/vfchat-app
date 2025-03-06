@@ -1,6 +1,5 @@
 import 'dart:io';
 import 'package:avatar_better/avatar_better.dart' show Avatar;
-import 'package:avatar_better/src/tools/gallery_buttom.dart';
 import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
