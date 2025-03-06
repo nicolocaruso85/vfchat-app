@@ -197,6 +197,14 @@ class DatabaseMethods {
         .update(data);
   }
 
+  static Future<void> updateGroupDetails(String groupID, Map<String, dynamic> data,
+      [SetOptions? options]) async {
+    await _fireStore
+        .collection('groups')
+        .doc(groupID)
+        .update(data);
+  }
+
   static Future<void> setMessageAsViewed(chatRoomID, messageId) async {
     await _fireStore
         .collection('chats')

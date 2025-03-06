@@ -3,6 +3,7 @@ import 'package:image_picker/image_picker.dart';
 
 import '../features/chat/ui/chat_page.dart';
 import '../features/group/ui/group_page.dart';
+import '../features/group/ui/group_info_page.dart';
 import '../features/create_password/ui/create_password.dart';
 import '../features/display_picture/ui/display_picture_screen.dart';
 import '../features/display_picture/ui/display_group_picture_screen.dart';
@@ -54,9 +55,16 @@ class AppRoute {
           return MaterialPageRoute(
             builder: (_) => GroupScreen(
               groupID: arguments['id'],
-              groupName: arguments['name'],
-              groupPic: arguments['groupPic'],
-              users: arguments['users'],
+            ),
+          );
+        }
+
+      case Routes.groupInfoScreen:
+        final arguments = routeSettings.arguments;
+        if (arguments is Map<String, dynamic>) {
+          return MaterialPageRoute(
+            builder: (_) => GroupInfoScreen(
+              groupID: arguments['groupID'],
             ),
           );
         }

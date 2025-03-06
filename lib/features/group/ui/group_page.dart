@@ -28,16 +28,10 @@ import '../../chat/ui/widgets/url_preview.dart';
 
 class GroupScreen extends StatefulWidget {
   final String groupID;
-  final String groupName;
-  final String groupPic;
-  final List users;
 
   const GroupScreen({
     super.key,
     required this.groupID,
-    required this.groupName,
-    required this.groupPic,
-    required this.users,
   });
 
   @override
@@ -53,6 +47,9 @@ class _GroupScreenState extends State<GroupScreen> {
   final _picker = ImagePicker();
 
   String? usersList;
+
+  DocumentSnapshot? groupDetails;
+  List users = [];
 
   @override
   Widget build(BuildContext context) {
@@ -116,15 +113,7 @@ class _GroupScreenState extends State<GroupScreen> {
       },
     );
 
-    List uList = [];
-    widget.users.forEach((user) async {
-      var u = await user.get();
-      uList.add(u['name']);
-
-      setState(() {
-        usersList = uList.join(', ');
-      });
-    });
+    _loadGroupDetails();
   }
 
   AppBar _buildAppBar(BuildContext context) {
@@ -137,14 +126,14 @@ class _GroupScreenState extends State<GroupScreen> {
           children: [
             Gap(10.w),
             Icon(Icons.arrow_back_ios, size: 25.sp),
-            widget.groupPic != null &&
-                    widget.groupPic != ''
+            groupDetails != null &&
+                    groupDetails!['groupPic'] != ''
                 ? Hero(
-                    tag: widget.groupPic!,
+                    tag: groupDetails!['groupPic']!,
                     child: ClipOval(
                       child: FadeInImage.assetNetwork(
                         placeholder: 'assets/images/loading.gif',
-                        image: widget.groupPic!,
+                        image: groupDetails!['groupPic']!,
                         fit: BoxFit.cover,
                         width: 50.w,
                         height: 50.h,
@@ -161,23 +150,31 @@ class _GroupScreenState extends State<GroupScreen> {
         ),
       ),
       toolbarHeight: 70.h,
-      title: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(widget.groupName),
-          AutoScrollText(
-            (usersList != null) ? usersList! : '',
-            mode: AutoScrollTextMode.bouncing,
-            velocity: Velocity(pixelsPerSecond: Offset(25, 0)),
-            delayBefore: Duration(milliseconds: 500),
-            pauseBetween: Duration(milliseconds: 2000),
-            padding: EdgeInsets.only(right: 30),
-            style: TextStyle(
-              fontSize: 13.sp,
-              color: const Color.fromARGB(255, 179, 178, 178),
+      title: TextButton(
+        onPressed: () {
+          Navigator.pushNamed(context, Routes.groupInfoScreen, arguments: {'groupID': widget.groupID});
+        },
+        style: TextButton.styleFrom(
+          foregroundColor: Colors.white,
+        ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text((groupDetails != null) ? groupDetails!['name']! : ''),
+            AutoScrollText(
+              (usersList != null) ? usersList! : '',
+              mode: AutoScrollTextMode.bouncing,
+              velocity: Velocity(pixelsPerSecond: Offset(25, 0)),
+              delayBefore: Duration(milliseconds: 500),
+              pauseBetween: Duration(milliseconds: 2000),
+              padding: EdgeInsets.only(right: 30),
+              style: TextStyle(
+                fontSize: 13.sp,
+                color: const Color.fromARGB(255, 179, 178, 178),
+              ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }
@@ -468,5 +465,23 @@ class _GroupScreenState extends State<GroupScreen> {
         );
       },
     );
+  }
+
+  Future<void> _loadGroupDetails() async {
+    DocumentSnapshot details = await DatabaseMethods.getGroup(widget.groupID);
+
+    List uList = [];
+    details['users'].forEach((user) async {
+      var u = await user.get();
+      uList.add(u['name']);
+
+      setState(() {
+        usersList = uList.join(', ');
+      });
+    });
+
+    setState(() {
+      groupDetails = details;
+    });
   }
 }

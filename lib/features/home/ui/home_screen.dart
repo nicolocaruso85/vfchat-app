@@ -284,9 +284,6 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
       var group = await DatabaseMethods.getGroup(message.data['groupId']);
       context.pushNamed(Routes.groupScreen, arguments: {
         'id': message.data['groupId'],
-        'name': group['name'],
-        'groupPic': group['groupPic'],
-        'users': group['users'],
       });
     } else {
       context.pushReplacementNamed(Routes.homeScreen);

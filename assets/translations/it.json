@@ -93,5 +93,9 @@
     "userNotApproved": "Utente non approvato",
     "userNotApprovedDesc": "Un amministratore deve ancora approvare la tua iscrizione.",
     "yes": "Si",
-    "no": "No"
+    "no": "No",
+    "createdBy": "Creato da",
+    "createdDate": "Date di creazione",
+    "members": "Membri",
+    "admin": "Amministratore"
 }
