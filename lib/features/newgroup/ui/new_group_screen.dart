@@ -26,6 +26,7 @@ class _NewGroupScreenState extends State<NewGroupScreen> {
   final _auth = FirebaseAuth.instance;
 
   late TextEditingController nameController = TextEditingController();
+  late TextEditingController descriptionController = TextEditingController();
 
   final formKey = GlobalKey<FormState>();
 
@@ -48,6 +49,7 @@ class _NewGroupScreenState extends State<NewGroupScreen> {
           child: Column(
             children: [
               nameField(),
+              descriptionField(),
               selectUsersList(),
               createButton(context),
               Gap(18.h),
@@ -118,12 +120,29 @@ class _NewGroupScreenState extends State<NewGroupScreen> {
       children: [
         AppTextFormField(
           hint: context.tr('name'),
+          textInputAction: TextInputAction.next,
           validator: (value) {
             if (value == null || value.isEmpty || value.startsWith(' ')) {
               return context.tr('pleaseEnterValid', args: ['Nome']);
             }
           },
           controller: nameController,
+        ),
+        Gap(18.h),
+      ],
+    );
+  }
+
+  Column descriptionField() {
+    return Column(
+      children: [
+        AppTextFormField(
+          hint: context.tr('description'),
+          keyboardType: TextInputType.multiline,
+          maxLines: null,
+          validator: (value) {
+          },
+          controller: descriptionController,
         ),
         Gap(18.h),
       ],
@@ -146,6 +165,7 @@ class _NewGroupScreenState extends State<NewGroupScreen> {
             .collection('groups')
             .add({
               'name': nameController.text,
+              'description': descriptionController.text,
               'users': users,
               'groupPic': '',
               'creatorId': FirebaseFirestore.instance.collection('users').doc(_auth.currentUser!.uid),

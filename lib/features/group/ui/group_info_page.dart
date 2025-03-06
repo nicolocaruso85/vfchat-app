@@ -49,6 +49,7 @@ class _GroupInfoScreenState extends State<GroupInfoScreen> {
             child: Column(
               children: [
                 nameField(),
+                descriptionField(),
                 createdByField(),
                 createdDateField(),
                 membersField(),
@@ -79,6 +80,26 @@ class _GroupInfoScreenState extends State<GroupInfoScreen> {
           ),
           Text(
             (groupDetails != null) ? (groupDetails?['name']) : '',
+            style: TextStyles.font16White600Weight,
+          ),
+          Gap(8.h),
+        ],
+      ),
+    );
+  }
+
+  SizedBox descriptionField() {
+    return SizedBox(
+      width: MediaQuery.of(context).size.width,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            context.tr('description'),
+            style: TextStyles.font15Green500Weight,
+          ),
+          Text(
+            (groupDetails != null) ? (groupDetails?['description']) : '',
             style: TextStyles.font16White600Weight,
           ),
           Gap(8.h),

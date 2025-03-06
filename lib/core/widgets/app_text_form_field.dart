@@ -11,6 +11,8 @@ class AppTextFormField extends StatelessWidget {
   final Function(String)? onChanged;
   final bool? isObscureText;
   final bool? isDense;
+  final TextInputType? keyboardType;
+  final int? maxLines;
   final TextEditingController? controller;
   final Function(String?) validator;
   final TextInputAction? textInputAction;
@@ -24,6 +26,8 @@ class AppTextFormField extends StatelessWidget {
     this.onChanged,
     this.focusNode,
     this.textInputAction,
+    this.keyboardType,
+    this.maxLines,
     required this.validator,
   });
   @override
@@ -36,6 +40,8 @@ class AppTextFormField extends StatelessWidget {
       },
       onChanged: onChanged,
       controller: controller,
+      maxLines: maxLines,
+      keyboardType: keyboardType,
       decoration: InputDecoration(
         hintText: hint,
         hintFadeDuration: const Duration(milliseconds: 500),
