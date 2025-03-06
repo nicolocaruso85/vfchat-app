@@ -100,5 +100,8 @@
     "admin": "Amministratore",
     "description": "Descrizione",
     "editGroup": "Modifica Gruppo",
-    "editGroupDone": "Gruppo modificato con successo"
+    "editGroupDone": "Gruppo modificato con successo",
+    "add": "Aggiungi",
+    "addGroupUsers": "Aggiungi membri",
+    "addGroupUsersDone": "Membri aggiunti con successo al gruppo"
 }

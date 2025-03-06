@@ -13,6 +13,10 @@ import 'package:intl/intl.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:image_cropper/image_cropper.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
+import 'package:king_cache/king_cache.dart';
+import 'package:selectable_search_list/selectable_search_list.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 import '../../../themes/colors.dart';
 import '../../../themes/styles.dart';
@@ -33,6 +37,8 @@ class GroupInfoScreen extends StatefulWidget {
 }
 
 class _GroupInfoScreenState extends State<GroupInfoScreen> {
+  final _auth = FirebaseAuth.instance;
+
   DocumentSnapshot? groupDetails;
   String? creatorName;
   String? creatorID;
@@ -43,6 +49,12 @@ class _GroupInfoScreenState extends State<GroupInfoScreen> {
   late TextEditingController descriptionController = TextEditingController();
 
   final formKey = GlobalKey<FormState>();
+
+  List<ListItem> items = [];
+
+  var selectedUsers = [];
+
+  ValueNotifier<bool> userLoaded = ValueNotifier(false);
 
   @override
   Widget build(BuildContext context) {
@@ -102,6 +114,7 @@ class _GroupInfoScreenState extends State<GroupInfoScreen> {
                 createdByField(),
                 createdDateField(),
                 membersField(),
+                addUsersButton(),
               ],
             ),
           ),
@@ -272,7 +285,7 @@ class _GroupInfoScreenState extends State<GroupInfoScreen> {
             style: TextStyles.font15Green500Weight,
           ),
           ListView.builder(
-            scrollDirection: Axis.vertical,
+            physics: const NeverScrollableScrollPhysics(),
             shrinkWrap: true,
             itemCount: membersList.length,
             itemBuilder: (context, index) {
@@ -433,6 +446,134 @@ class _GroupInfoScreenState extends State<GroupInfoScreen> {
     );
   }
 
+  Column addUsersButton() {
+    return Column(
+      children: [
+        AppButton(
+          buttonText: context.tr('addGroupUsers'),
+          textStyle: TextStyles.font15DarkBlue500Weight,
+          onPressed: () async {
+            showCupertinoModalBottomSheet(
+              context: context,
+              builder: (context) => Material(
+                child: Scaffold(
+                  appBar: AppBar(
+                    title: Text(context.tr('addGroupUsers')),
+                  ),
+                  backgroundColor: ColorsManager.backgroundDefaultColor,
+                  body: Padding(
+                    padding: EdgeInsets.only(left: 5, right: 5, top: 12, bottom: 22),
+                    child: Column(
+                      children: [
+                        selectUsersList(),
+                        confirmAddUsersButton(context),
+                      ],
+                    ),
+                  ),
+                ),
+              ),
+            );
+          }
+        ),
+        Gap(10.h),
+      ],
+    );
+  }
+
+  Widget selectUsersList() {
+    return FutureBuilder<String>(
+      future: getIdAzienda(),
+      builder: (context, AsyncSnapshot<String> snapshot) {
+        String? idAzienda = snapshot.data;
+
+        return StreamBuilder(
+          stream: DatabaseMethods.getUsers(idAzienda),
+          builder: (context, snapshot) {
+            if (snapshot.connectionState == ConnectionState.waiting) {
+              return Expanded(
+                child: const Center(child: CircularProgressIndicator()),
+              );
+            }
+
+            if (!userLoaded.value) {
+              List<String> userIds = [];
+              snapshot.data!.docs.forEach((var user) {
+                if (user['uid'] != _auth.currentUser!.uid) {
+                  userIds.add(user['uid']);
+                }
+              });
+              checkUserPermissions(snapshot.data!.docs, userIds, idAzienda);
+            }
+
+            return Expanded(
+              child: ValueListenableBuilder<bool>(
+                valueListenable: userLoaded,
+                builder: (context, value, _) {
+                  return MultiSelectListWidget(
+                    key: ValueKey(userLoaded.value),
+                    searchHint: context.tr('search'),
+                    selectAllTextStyle: const TextStyle(
+                      fontSize: 18,
+                      fontWeight: FontWeight.w600,
+                      color: Colors.white,
+                    ),
+                    itemTitleStyle:  const TextStyle(
+                      fontSize: 18,
+                      fontWeight: FontWeight.w500,
+                      color: Colors.white,
+                    ),
+                    items: items,
+                    onItemsSelect: (selectedItems) {
+                      selectedUsers = selectedItems;
+                    },
+                  );
+                },
+              ),
+            );
+          },
+        );
+      },
+    );
+  }
+
+  confirmAddUsersButton(BuildContext context) {
+    return AppButton(
+      buttonText: context.tr('add'),
+      textStyle: TextStyles.font15DarkBlue500Weight,
+      onPressed: () async {
+        var users = [];
+        membersList.forEach((member) {
+          users.add(FirebaseFirestore.instance.collection('users').doc(member.id));
+        });
+        selectedUsers.forEach((selectedUser) {
+          users.add(FirebaseFirestore.instance.collection('users').doc(selectedUser.id));
+        });
+
+        DatabaseMethods.updateGroupDetails(
+          widget.groupID,
+          {
+            'users': users,
+          },
+        );
+
+        _loadGroupDetails();
+
+        AwesomeDialog(
+          dismissOnBackKeyPress: false,
+          dismissOnTouchOutside: false,
+          context: context,
+          dialogType: DialogType.info,
+          animType: AnimType.rightSlide,
+          title: context.tr('addGroupUsers'),
+          desc: context.tr('addGroupUsersDone'),
+          btnOkOnPress: () async {
+            Navigator.of(context).pop();
+          }
+        ).show();
+      },
+    );
+  }
+
   String formatDate(date) {
     return DateFormat(DateFormat.YEAR_MONTH_DAY, 'it_IT').format(date.toUtc()) + ' ' + DateFormat(DateFormat.HOUR24_MINUTE, 'it_IT').format(date.toUtc());
   }
@@ -494,6 +635,53 @@ class _GroupInfoScreenState extends State<GroupInfoScreen> {
           child: Text(context.tr('cancel')),
         ),
       ),
+    );
+  }
+
+  Future<String> getIdAzienda() async {
+    DocumentSnapshot userDetails = await DatabaseMethods.getCurrentUserDetails();
+    return userDetails['azienda'].id;
+  }
+
+  checkUserPermissions(users, userIDs, idAzienda) async {
+    print(dotenv.env['SITE_URL']! + '/check-permission/' + _auth.currentUser!.uid + '/' + idAzienda + '/gruppo');
+
+    await KingCache.cacheViaRest(
+      dotenv.env['SITE_URL']! + '/check-permission/' + _auth.currentUser!.uid + '/' + idAzienda + '/gruppo',
+      method: HttpMethod.post,
+      formData: {
+        'user_ids': userIDs,
+      },
+      onSuccess: (data) {
+        print(data);
+        if (data != null && data.containsKey('success')) {
+          print(data['success']);
+
+          if (data['success'] == 1) {
+            List<dynamic> ids = data['user_ids'];
+
+            setState(() {
+              items = [];
+              users.forEach((var user) {
+                if (ids.contains(user['uid'])) {
+                  items.add(new ListItem(id: user['uid'], title: user['name']));
+                }
+              });
+            });
+
+            setState(() {
+              userLoaded.value = true;
+            });
+          }
+        }
+      },
+      onError: (data) => debugPrint(data.message),
+      apiResponse: (data) {
+        print(data);
+      },
+      isCacheHit: (isHit) => debugPrint('Is Cache Hit: $isHit'),
+      shouldUpdate: true,
+      expiryTime: DateTime.now().add(const Duration(minutes: 1)),
     );
   }
 }
