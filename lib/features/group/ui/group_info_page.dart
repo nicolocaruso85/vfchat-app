@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:avatar_better/avatar_better.dart' show Avatar, ProfileImageViewerOptions, BottomSheetStyles, OptionsCrop;
 import 'package:avatar_better/src/tools/gallery_buttom.dart';
 import 'package:cached_network_image/cached_network_image.dart';
@@ -11,9 +12,12 @@ import 'package:gap/gap.dart';
 import 'package:intl/intl.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:image_cropper/image_cropper.dart';
+import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 
 import '../../../themes/colors.dart';
 import '../../../themes/styles.dart';
+import '../../../core/widgets/app_text_form_field.dart';
+import '../../../core/widgets/app_button.dart';
 import '../../../services/database.dart';
 
 class GroupInfoScreen extends StatefulWidget {
@@ -35,6 +39,11 @@ class _GroupInfoScreenState extends State<GroupInfoScreen> {
 
   List membersList = [];
 
+  late TextEditingController nameController = TextEditingController();
+  late TextEditingController descriptionController = TextEditingController();
+
+  final formKey = GlobalKey<FormState>();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -42,6 +51,40 @@ class _GroupInfoScreenState extends State<GroupInfoScreen> {
         title: Text(
           (groupDetails != null) ? groupDetails!['name'] : ''
         ),
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.edit),
+            onPressed: () {
+              showCupertinoModalBottomSheet(
+                context: context,
+                builder: (context) => Material(
+                  child: Scaffold(
+                    appBar: AppBar(
+                      title: Text(context.tr('editGroup')),
+                      automaticallyImplyLeading: false,
+                    ),
+                    backgroundColor: ColorsManager.backgroundDefaultColor,
+                    body: Padding(
+                      padding: EdgeInsets.symmetric(horizontal: 5, vertical: 12),
+                      child: Form(
+                        key: formKey,
+                        child: Column(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            nameEditField(),
+                            descriptionEditField(),
+                            modifyButton(),
+                            cancelButton(),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+              );
+            },
+          ),
+        ],
       ),
       body: Padding(
         padding: EdgeInsets.symmetric(
@@ -307,6 +350,89 @@ class _GroupInfoScreenState extends State<GroupInfoScreen> {
     );
   }
 
+  Column nameEditField() {
+    return Column(
+      children: [
+        AppTextFormField(
+          hint: context.tr('name'),
+          textInputAction: TextInputAction.next,
+          validator: (value) {
+            if (value == null || value.isEmpty || value.startsWith(' ')) {
+              return context.tr('pleaseEnterValid', args: ['Nome']);
+            }
+          },
+          controller: nameController,
+        ),
+        Gap(18.h),
+      ],
+    );
+  }
+
+  Column descriptionEditField() {
+    return Column(
+      children: [
+        AppTextFormField(
+          hint: context.tr('description'),
+          keyboardType: TextInputType.multiline,
+          maxLines: null,
+          validator: (value) {
+          },
+          controller: descriptionController,
+        ),
+        Gap(18.h),
+      ],
+    );
+  }
+
+  Column modifyButton() {
+    return Column(
+      children: [
+        AppButton(
+          buttonText: context.tr('edit'),
+          textStyle: TextStyles.font15DarkBlue500Weight,
+          onPressed: () async {
+            if (formKey.currentState!.validate()) {
+              DatabaseMethods.updateGroupDetails(
+                widget.groupID,
+                {
+                  'name': nameController.text,
+                  'description': descriptionController.text,
+                }
+              );
+
+              _loadGroupDetails();
+
+              AwesomeDialog(
+                dismissOnBackKeyPress: false,
+                dismissOnTouchOutside: false,
+                context: context,
+                dialogType: DialogType.info,
+                animType: AnimType.rightSlide,
+                title: context.tr('editGroup'),
+                desc: context.tr('editGroupDone'),
+                btnOkOnPress: () async {
+                  Navigator.of(context).pop();
+                }
+              ).show();
+            }
+          },
+        ),
+        Gap(18.h),
+      ],
+    );
+  }
+
+  cancelButton() {
+    return AppButton(
+      buttonText: context.tr('cancel'),
+      textStyle: TextStyles.font15DarkBlue500Weight,
+      backgroundColor: Colors.red.shade700,
+      onPressed: () async {
+        Navigator.of(context).pop();
+      },
+    );
+  }
+
   String formatDate(date) {
     return DateFormat(DateFormat.YEAR_MONTH_DAY, 'it_IT').format(date.toUtc()) + ' ' + DateFormat(DateFormat.HOUR24_MINUTE, 'it_IT').format(date.toUtc());
   }
@@ -329,6 +455,9 @@ class _GroupInfoScreenState extends State<GroupInfoScreen> {
       groupDetails = details;
       creatorID = creatorDetails['uid'];
       creatorName = creatorDetails['name'];
+
+      nameController.text = groupDetails?['name'];
+      descriptionController.text = groupDetails?['description'];
     });
   }
 

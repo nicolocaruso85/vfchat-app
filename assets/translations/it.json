@@ -98,5 +98,7 @@
     "createdDate": "Date di creazione",
     "members": "Membri",
     "admin": "Amministratore",
-    "description": "Descrizione"
+    "description": "Descrizione",
+    "editGroup": "Modifica Gruppo",
+    "editGroupDone": "Gruppo modificato con successo"
 }
