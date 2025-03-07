@@ -8,6 +8,7 @@ environment:
   sdk: ^3.6.0
 
 dependencies:
+  auto_animated_list: ^2.0.0
   auto_scroll_text: ^0.0.7
   avatar_better: ^0.0.9+5
   awesome_dialog: ^3.2.1
