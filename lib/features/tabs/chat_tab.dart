@@ -26,15 +26,23 @@ class _ChatsTabState extends State<ChatsTab> {
   Map<String, int> unreadMessagesCount = {};
   Map<String, DateTime> lastMessageTime = {};
 
+  Stream<QuerySnapshot>? _stream;
+
   @override
   Widget build(BuildContext context) {
     return FutureBuilder<String>(
       future: getIdAzienda(),
       builder: (context, AsyncSnapshot<String> snapshot) {
+        if (snapshot.data == null) return Column();
+
+        String idAzienda = snapshot.data!;
+
+        _stream = FirebaseFirestore.instance.collection('users')
+          .where('azienda', isEqualTo: FirebaseFirestore.instance.collection('aziende').doc(idAzienda))
+          .snapshots();
+
         return StreamBuilder<QuerySnapshot>(
-          stream: FirebaseFirestore.instance.collection('users')
-            .where('azienda', isEqualTo: FirebaseFirestore.instance.collection('aziende').doc(snapshot.data))
-            .snapshots(),
+          stream: _stream,
           builder: (context, snapshot) {
             if (snapshot.hasError) {
               return Text(context.tr('somethingWentWrong'));
@@ -151,7 +159,13 @@ class _ChatsTabState extends State<ChatsTab> {
                     ),
                     horizontalTitleGap: 15.w,
                     onTap: () {
-                      context.pushNamed(Routes.chatScreen, arguments: data);
+                      context.pushNamed(Routes.chatScreen, arguments: data)
+                        .then((_) {
+                          setState(() {
+                            lastMessageTime = {};
+                            unreadMessagesCount = {};
+                          });
+                        });
                     },
                   );
                 } else {
