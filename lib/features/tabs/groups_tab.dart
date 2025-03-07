@@ -10,85 +10,106 @@ import 'package:intl/intl.dart';
 import '../../helpers/extensions.dart';
 import '../../router/routes.dart';
 
-class BuildGroupsListView extends StatelessWidget {
-  final FirebaseAuth _auth = FirebaseAuth.instance;
-  final AsyncSnapshot<QuerySnapshot<Object?>> snapshot;
+class GroupsTab extends StatefulWidget {
+  const GroupsTab({super.key});
 
-  BuildGroupsListView({super.key, required this.snapshot});
+  @override
+  State<GroupsTab> createState() => _GroupsTabState();
+}
+
+class _GroupsTabState extends State<GroupsTab> {
+  final FirebaseAuth _auth = FirebaseAuth.instance;
 
   @override
   Widget build(BuildContext context) {
-    var sortedGroups = snapshot.data!.docs;
+    final FirebaseAuth _auth = FirebaseAuth.instance;
 
-    return AutoAnimatedList(
-      items: sortedGroups,
-      itemBuilder: (context, doc, index, animation) {
-        Map<String, dynamic> data = doc.data() as Map<String, dynamic>;
+    return StreamBuilder<QuerySnapshot>(
+      stream: FirebaseFirestore.instance.collection('groups')
+        .where('users', arrayContains: FirebaseFirestore.instance.collection('users').doc(_auth.currentUser!.uid))
+        .orderBy('lastMessage', descending: true)
+        .snapshots(),
+      builder: (context, snapshot) {
+        if (snapshot.hasError) {
+          return Text(context.tr('somethingWentWrong'));
+        }
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          return const Center(child: CircularProgressIndicator());
+        }
 
-        return SizeFadeTransition(
-          animation: animation,
-          child: ListTile(
-            leading: data['groupPic'] != null && data['groupPic'] != ''
-                ? Hero(
-                    tag: data['groupPic'],
-                    child: ClipOval(
-                      child: CachedNetworkImage(
-                        imageUrl: data['groupPic'],
-                        placeholder: (context, url) =>
-                            Image.asset('assets/images/loading.gif'),
-                        errorWidget: (context, url, error) =>
-                            const Icon(Icons.error_outline_rounded),
-                        width: 50.w,
+        var sortedGroups = snapshot.data!.docs;
+
+        return AutoAnimatedList(
+          items: sortedGroups,
+          itemBuilder: (context, doc, index, animation) {
+            Map<String, dynamic> data = doc.data() as Map<String, dynamic>;
+
+            return SizeFadeTransition(
+              animation: animation,
+              child: ListTile(
+                leading: data['groupPic'] != null && data['groupPic'] != ''
+                    ? Hero(
+                        tag: data['groupPic'],
+                        child: ClipOval(
+                          child: CachedNetworkImage(
+                            imageUrl: data['groupPic'],
+                            placeholder: (context, url) =>
+                                Image.asset('assets/images/loading.gif'),
+                            errorWidget: (context, url, error) =>
+                                const Icon(Icons.error_outline_rounded),
+                            width: 50.w,
+                            height: 50.h,
+                            fit: BoxFit.cover,
+                          ),
+                        ),
+                      )
+                    : Image.asset(
+                        'assets/images/user.png',
                         height: 50.h,
+                        width: 50.w,
                         fit: BoxFit.cover,
                       ),
-                    ),
-                  )
-                : Image.asset(
-                    'assets/images/user.png',
-                    height: 50.h,
-                    width: 50.w,
-                    fit: BoxFit.cover,
+                tileColor: const Color(0xff111B21),
+                title: Text(
+                  data['name'],
+                  style: const TextStyle(
+                    color: Colors.white,
                   ),
-            tileColor: const Color(0xff111B21),
-            title: Text(
-              data['name'],
-              style: const TextStyle(
-                color: Colors.white,
+                  overflow: TextOverflow.ellipsis,
+                ),
+                subtitle: Text(
+                  data['users'].length.toString() + ' ' + context.tr('users'),
+                  style: const TextStyle(
+                    color: Color.fromARGB(255, 179, 178, 178),
+                  ),
+                  overflow: TextOverflow.ellipsis,
+                  maxLines: 1,
+                ),
+                trailing: Text(
+                  data['lastMessage'] != null ? formatDate(data['lastMessage']!.toDate()) : '',
+                  style: const TextStyle(
+                    color: Colors.white,
+                  ),
+                ),
+                isThreeLine: true,
+                titleAlignment: ListTileTitleAlignment.center,
+                enableFeedback: true,
+                dense: false,
+                titleTextStyle: TextStyle(
+                  fontWeight: FontWeight.bold,
+                  fontSize: 20.sp,
+                  height: 1.2.h,
+                ),
+                subtitleTextStyle: TextStyle(
+                  height: 2.h,
+                ),
+                horizontalTitleGap: 15.w,
+                onTap: () {
+                  context.pushNamed(Routes.groupScreen, arguments: data);
+                },
               ),
-              overflow: TextOverflow.ellipsis,
-            ),
-            subtitle: Text(
-              data['users'].length.toString() + ' ' + context.tr('users'),
-              style: const TextStyle(
-                color: Color.fromARGB(255, 179, 178, 178),
-              ),
-              overflow: TextOverflow.ellipsis,
-              maxLines: 1,
-            ),
-            trailing: Text(
-              data['lastMessage'] != null ? formatDate(data['lastMessage']!.toDate()) : '',
-              style: const TextStyle(
-                color: Colors.white,
-              ),
-            ),
-            isThreeLine: true,
-            titleAlignment: ListTileTitleAlignment.center,
-            enableFeedback: true,
-            dense: false,
-            titleTextStyle: TextStyle(
-              fontWeight: FontWeight.bold,
-              fontSize: 20.sp,
-              height: 1.2.h,
-            ),
-            subtitleTextStyle: TextStyle(
-              height: 2.h,
-            ),
-            horizontalTitleGap: 15.w,
-            onTap: () {
-              context.pushNamed(Routes.groupScreen, arguments: data);
-            },
-          ),
+            );
+          },
         );
       },
     );
@@ -115,32 +136,5 @@ class BuildGroupsListView extends StatelessWidget {
     }
 
     return formatedDate;
-  }
-}
-
-class GroupsTab extends StatelessWidget {
-  const GroupsTab({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    final FirebaseAuth _auth = FirebaseAuth.instance;
-
-    return StreamBuilder<QuerySnapshot>(
-      stream: FirebaseFirestore.instance.collection('groups')
-        .where('users', arrayContains: FirebaseFirestore.instance.collection('users').doc(_auth.currentUser!.uid))
-        .orderBy('lastMessage', descending: true)
-        .snapshots(),
-      builder: (context, snapshot) {
-        if (snapshot.hasError) {
-          return Text(context.tr('somethingWentWrong'));
-        }
-        if (snapshot.connectionState == ConnectionState.waiting) {
-          return const Center(child: CircularProgressIndicator());
-        }
-        return BuildGroupsListView(
-          snapshot: snapshot,
-        );
-      },
-    );
   }
 }
