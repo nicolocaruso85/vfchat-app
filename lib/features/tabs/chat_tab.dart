@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:intl/intl.dart';
 import 'package:gap/gap.dart';
+import 'package:collection/collection.dart';
 
 import '../../../services/database.dart';
 import '../../helpers/extensions.dart';
@@ -23,7 +24,7 @@ class _ChatsTabState extends State<ChatsTab> {
   final FirebaseAuth _auth = FirebaseAuth.instance;
 
   Map<String, int> unreadMessagesCount = {};
-  Map<String, String> lastMessageTime = {};
+  Map<String, DateTime> lastMessageTime = {};
 
   @override
   Widget build(BuildContext context) {
@@ -42,12 +43,25 @@ class _ChatsTabState extends State<ChatsTab> {
               return const Center(child: CircularProgressIndicator());
             }
 
+            var users = snapshot.data!.docs;
+            Map<int, dynamic> tempUsers = {};
+            users.forEachIndexed((index, user) {
+              if (lastMessageTime[user['uid']] != null) {
+                tempUsers[lastMessageTime[user['uid']]!.microsecondsSinceEpoch * -1] = user;
+              }
+              else {
+                tempUsers[index * -1] = user;
+              }
+            });
+
+            List sortedUsers = Map.fromEntries(tempUsers.entries.toList()..sort((e1, e2) => e1.key.compareTo(e2.key))).values.toList();
+
             return ListView.builder(
               scrollDirection: Axis.vertical,
               shrinkWrap: true,
-              itemCount: snapshot.data!.docs.length,
+              itemCount: sortedUsers.length,
               itemBuilder: (context, index) {
-                var doc = snapshot.data!.docs[index];
+                var doc = sortedUsers[index];
                 Map<String, dynamic> data = doc.data() as Map<String, dynamic>;
 
                 if (_auth.currentUser!.email != data['email']) {
@@ -100,7 +114,7 @@ class _ChatsTabState extends State<ChatsTab> {
                       children: [
                         lastMessageTime[data['uid']] != null ?
                           Text(
-                            lastMessageTime[data['uid']]!,
+                            formatDate(lastMessageTime[data['uid']]!),
                             style: const TextStyle(
                               color: Colors.white,
                             ),
@@ -158,31 +172,35 @@ class _ChatsTabState extends State<ChatsTab> {
 
       var lastMessage = data['lastMessage'].toDate();
 
-      var year = DateFormat(DateFormat.YEAR, 'it_IT').format(lastMessage.toUtc());
-      var currentYear = DateFormat(DateFormat.YEAR, 'it_IT').format(DateTime.now());
-
-      var monthDay = DateFormat(DateFormat.MONTH_DAY, 'it_IT').format(lastMessage.toUtc());
-      var currentMonthDay = DateFormat(DateFormat.MONTH_DAY, 'it_IT').format(DateTime.now());
-
-      String date = '';
-      if (year == currentYear) {
-        if (monthDay == currentMonthDay) {
-          date = DateFormat(DateFormat.HOUR24_MINUTE, 'it_IT').format(lastMessage.toUtc());
-        }
-        else {
-          date = DateFormat(DateFormat.MONTH_DAY, 'it_IT').format(lastMessage.toUtc()) + ' ' + DateFormat(DateFormat.HOUR24_MINUTE, 'it_IT').format(lastMessage.toUtc());
-        }
-      }
-      else {
-        date = DateFormat(DateFormat.YEAR_MONTH_DAY, 'it_IT').format(lastMessage.toUtc()) + ' ' + DateFormat(DateFormat.HOUR24_MINUTE, 'it_IT').format(lastMessage.toUtc());
-      }
-
       if (lastMessageTime[otherUserID] == null) {
         setState(() {
-          lastMessageTime[otherUserID] = date;
+          lastMessageTime[otherUserID] = lastMessage;
         });
       }
     }
+  }
+
+  String formatDate(date) {
+    var year = DateFormat(DateFormat.YEAR, 'it_IT').format(date.toUtc());
+    var currentYear = DateFormat(DateFormat.YEAR, 'it_IT').format(DateTime.now());
+
+    var monthDay = DateFormat(DateFormat.MONTH_DAY, 'it_IT').format(date.toUtc());
+    var currentMonthDay = DateFormat(DateFormat.MONTH_DAY, 'it_IT').format(DateTime.now());
+
+    String formatedDate = '';
+    if (year == currentYear) {
+      if (monthDay == currentMonthDay) {
+        formatedDate = DateFormat(DateFormat.HOUR24_MINUTE, 'it_IT').format(date.toUtc());
+      }
+      else {
+        formatedDate = DateFormat(DateFormat.MONTH_DAY, 'it_IT').format(date.toUtc()) + ' ' + DateFormat(DateFormat.HOUR24_MINUTE, 'it_IT').format(date.toUtc());
+      }
+    }
+    else {
+      formatedDate = DateFormat(DateFormat.YEAR_MONTH_DAY, 'it_IT').format(date.toUtc()) + ' ' + DateFormat(DateFormat.HOUR24_MINUTE, 'it_IT').format(date.toUtc());
+    }
+
+    return formatedDate;
   }
 
   getUnreadMessagesCount(String userID, String otherUserID) async {
