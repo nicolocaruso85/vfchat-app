@@ -195,7 +195,8 @@ class _ManageUsersScreenState extends State<ManageUsersScreen> {
                       {
                         'isApproved': true,
                         'azienda': azienda,
-                      }
+                      },
+                      SetOptions(merge: true),
                     );
 
                     Navigator.pop(context);

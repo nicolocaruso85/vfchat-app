@@ -297,6 +297,7 @@ class _EditUserScreenState extends State<EditUserScreen> {
               'ruoli': ruoli,
               'gruppi': gruppi,
             },
+            SetOptions(merge: true),
           );
 
           await AwesomeDialog(

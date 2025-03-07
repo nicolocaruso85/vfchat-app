@@ -116,6 +116,16 @@ class DatabaseMethods {
         .snapshots();
   }
 
+  static Future<DocumentSnapshot> getChat(String userID, String otherUserID) {
+    List<String> sortedIDs = [userID, otherUserID];
+    sortedIDs.sort();
+    String chatRoomID = sortedIDs.join('_');
+    return _fireStore
+        .collection('chats')
+        .doc(chatRoomID)
+        .get();
+  }
+
   static Future<AggregateQuerySnapshot> getUnreadMessagesCount(String userID, String otherUserID) {
     List<String> sortedIDs = [userID, otherUserID];
     sortedIDs.sort();
@@ -149,6 +159,11 @@ class DatabaseMethods {
         .add(
           newMessage.toMap(),
         );
+
+    await _fireStore
+        .collection('groups')
+        .doc(groupID)
+        .set({ 'lastMessage': FieldValue.serverTimestamp() }, SetOptions(merge: true));
   }
 
   // SEND MESSAGE
@@ -179,6 +194,11 @@ class DatabaseMethods {
         .add(
           newMessage.toMap(),
         );
+
+    await _fireStore
+        .collection('chats')
+        .doc(chatRoomID)
+        .set({ 'lastMessage': FieldValue.serverTimestamp() }, SetOptions(merge: true));
   }
 
   static Future<void> updateUserDetails(Map<String, dynamic> data,

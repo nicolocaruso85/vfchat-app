@@ -133,6 +133,7 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
               'name': nameController.text,
               'email': emailController.text,
             },
+            SetOptions(merge: true),
           );
 
           await AwesomeDialog(
@@ -383,6 +384,7 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
               {
                 'profilePic': url,
               },
+              SetOptions(merge: true),
             );
           },
         ),

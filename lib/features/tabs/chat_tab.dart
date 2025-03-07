@@ -4,6 +4,8 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:intl/intl.dart';
+import 'package:gap/gap.dart';
 
 import '../../../services/database.dart';
 import '../../helpers/extensions.dart';
@@ -21,6 +23,7 @@ class _ChatsTabState extends State<ChatsTab> {
   final FirebaseAuth _auth = FirebaseAuth.instance;
 
   Map<String, int> unreadMessagesCount = {};
+  Map<String, String> lastMessageTime = {};
 
   @override
   Widget build(BuildContext context) {
@@ -49,6 +52,7 @@ class _ChatsTabState extends State<ChatsTab> {
 
                 if (_auth.currentUser!.email != data['email']) {
                   getUnreadMessagesCount(_auth.currentUser!.uid, data['uid']);
+                  getLastMessageTime(_auth.currentUser!.uid, data['uid']);
 
                   return ListTile(
                     leading: data['profilePic'] != null && data['profilePic'] != ''
@@ -91,17 +95,34 @@ class _ChatsTabState extends State<ChatsTab> {
                       overflow: TextOverflow.ellipsis,
                       maxLines: 1,
                     ),
-                    trailing: unreadMessagesCount[data['uid']] != null ? 
-                      CircleAvatar(
-                        backgroundColor: Colors.red,
-                        maxRadius: 10,
-                        child: Center(
-                          child: Text(
-                            unreadMessagesCount[data['uid']].toString(),
-                            style: TextStyles.font12White500Weight,
-                          ),
-                        ),
-                      ) : Text(''),
+                    trailing: Column(
+                       mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        lastMessageTime[data['uid']] != null ?
+                          Text(
+                            lastMessageTime[data['uid']]!,
+                            style: const TextStyle(
+                              color: Colors.white,
+                            ),
+                          ) : Column(),
+                        unreadMessagesCount[data['uid']] != null ?
+                          Column(
+                            children: [
+                              Gap(5.h),
+                              CircleAvatar(
+                                backgroundColor: Colors.red,
+                                maxRadius: 10,
+                                child: Center(
+                                  child: Text(
+                                    unreadMessagesCount[data['uid']].toString(),
+                                    style: TextStyles.font12White500Weight,
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ) : Column(),
+                      ],
+                    ),
                     isThreeLine: true,
                     titleAlignment: ListTileTitleAlignment.center,
                     enableFeedback: true,
@@ -128,6 +149,40 @@ class _ChatsTabState extends State<ChatsTab> {
         );
       },
     );
+  }
+
+  getLastMessageTime(String userID, String otherUserID) async {
+    var snapshot = await DatabaseMethods.getChat(userID, otherUserID);
+    if (snapshot.data() != null) {
+      Map<String, dynamic> data = snapshot.data() as Map<String, dynamic>;
+
+      var lastMessage = data['lastMessage'].toDate();
+
+      var year = DateFormat(DateFormat.YEAR, 'it_IT').format(lastMessage.toUtc());
+      var currentYear = DateFormat(DateFormat.YEAR, 'it_IT').format(DateTime.now());
+
+      var monthDay = DateFormat(DateFormat.MONTH_DAY, 'it_IT').format(lastMessage.toUtc());
+      var currentMonthDay = DateFormat(DateFormat.MONTH_DAY, 'it_IT').format(DateTime.now());
+
+      String date = '';
+      if (year == currentYear) {
+        if (monthDay == currentMonthDay) {
+          date = DateFormat(DateFormat.HOUR24_MINUTE, 'it_IT').format(lastMessage.toUtc());
+        }
+        else {
+          date = DateFormat(DateFormat.MONTH_DAY, 'it_IT').format(lastMessage.toUtc()) + ' ' + DateFormat(DateFormat.HOUR24_MINUTE, 'it_IT').format(lastMessage.toUtc());
+        }
+      }
+      else {
+        date = DateFormat(DateFormat.YEAR_MONTH_DAY, 'it_IT').format(lastMessage.toUtc()) + ' ' + DateFormat(DateFormat.HOUR24_MINUTE, 'it_IT').format(lastMessage.toUtc());
+      }
+
+      if (lastMessageTime[otherUserID] == null) {
+        setState(() {
+          lastMessageTime[otherUserID] = date;
+        });
+      }
+    }
   }
 
   getUnreadMessagesCount(String userID, String otherUserID) async {
