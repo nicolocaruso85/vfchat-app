@@ -40,7 +40,7 @@ class AppTextFormField extends StatelessWidget {
       },
       onChanged: onChanged,
       controller: controller,
-      maxLines: maxLines,
+      maxLines: (isObscureText == true) ? 1 : maxLines,
       keyboardType: keyboardType,
       decoration: InputDecoration(
         hintText: hint,
