@@ -74,6 +74,8 @@ class LoginScreen extends StatefulWidget {
 }
 
 class _LoginScreenState extends State<LoginScreen> {
+  bool first = true;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -83,9 +85,14 @@ class _LoginScreenState extends State<LoginScreen> {
           List<ConnectivityResult> connectivity,
           Widget child,
         ) {
+          if (first) {
+            first = false;
+            return BuildLoginScreen();
+          }
+
           final bool connected =
               !connectivity.contains(ConnectivityResult.none);
-          return connected ? const BuildLoginScreen() : const BuildNoInternet();
+          return (connected) ? const BuildLoginScreen() : const BuildNoInternet();
         },
         child: const Center(
           child: CircularProgressIndicator(),
