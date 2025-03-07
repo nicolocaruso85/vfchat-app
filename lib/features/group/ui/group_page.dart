@@ -152,7 +152,10 @@ class _GroupScreenState extends State<GroupScreen> {
       toolbarHeight: 70.h,
       title: TextButton(
         onPressed: () {
-          Navigator.pushNamed(context, Routes.groupInfoScreen, arguments: {'groupID': widget.groupID});
+          Navigator.pushNamed(context, Routes.groupInfoScreen, arguments: {'groupID': widget.groupID})
+            .then((_) {
+              _loadGroupDetails();
+            });
         },
         style: TextButton.styleFrom(
           foregroundColor: Colors.white,
