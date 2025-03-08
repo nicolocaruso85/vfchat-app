@@ -27,7 +27,6 @@ class _GroupsTabState extends State<GroupsTab> {
     return StreamBuilder<QuerySnapshot>(
       stream: FirebaseFirestore.instance.collection('groups')
         .where('users', arrayContains: FirebaseFirestore.instance.collection('users').doc(_auth.currentUser!.uid))
-        .orderBy('lastMessage', descending: true)
         .snapshots(),
       builder: (context, snapshot) {
         if (snapshot.hasError) {
@@ -38,11 +37,24 @@ class _GroupsTabState extends State<GroupsTab> {
         }
 
         var sortedGroups = snapshot.data!.docs;
+        sortedGroups.sort((a, b) {
+          if (a.data().toString().contains('lastMessage')) {
+            if (b.data().toString().contains('lastMessage')) {
+              return b['lastMessage'].compareTo(a['lastMessage']);
+            }
+          }
+          else {
+            return 1;
+          }
+          return 0;
+        });
 
         return AutoAnimatedList(
           items: sortedGroups,
           itemBuilder: (context, doc, index, animation) {
             Map<String, dynamic> data = doc.data() as Map<String, dynamic>;
+
+            data['id'] = doc.id;
 
             return SizeFadeTransition(
               animation: animation,

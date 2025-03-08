@@ -228,7 +228,6 @@ class _ChatsTabState extends State<ChatsTab> {
         unreadMessagesCount[otherUserID] = p.count!;
       });
     }
-    print(p.count!);
   }
 
   Future<String> getIdAzienda() async {
