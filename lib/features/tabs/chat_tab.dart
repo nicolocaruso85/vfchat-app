@@ -29,10 +29,22 @@ class _ChatsTabState extends State<ChatsTab> {
 
   Stream<QuerySnapshot>? _stream;
 
+  int loadedUnreadMessagesCount = -1;
+  int loadedLastMessageTime = -1;
+
+  late final Future<String> idAzienda;
+
+  @override
+  void initState() {
+    super.initState();
+
+    idAzienda = getIdAzienda();
+  }
+
   @override
   Widget build(BuildContext context) {
     return FutureBuilder<String>(
-      future: getIdAzienda(),
+      future: idAzienda,
       builder: (context, AsyncSnapshot<String> snapshot) {
         if (snapshot.data == null) return Column();
 
@@ -66,15 +78,25 @@ class _ChatsTabState extends State<ChatsTab> {
 
             List sortedUsers = Map.fromEntries(tempUsers.entries.toList()..sort((e1, e2) => e1.key.compareTo(e2.key))).values.toList();
 
+            if (loadedUnreadMessagesCount <= 0 || loadedLastMessageTime <= 0) {
+              if (loadedUnreadMessagesCount == -1) {
+                loadedUnreadMessagesCount = 0;
+                getUnreadMessagesCount(sortedUsers);
+              }
+              if (loadedLastMessageTime == -1) {
+                loadedLastMessageTime = 0;
+                getLastMessageTime(sortedUsers);
+              }
+
+              return const Center(child: CircularProgressIndicator());
+            }
+
             return AutoAnimatedList(
               items: sortedUsers,
               itemBuilder: (context, doc, index, animation) {
                 Map<String, dynamic> data = doc.data() as Map<String, dynamic>;
 
                 if (_auth.currentUser!.email != data['email']) {
-                  getUnreadMessagesCount(_auth.currentUser!.uid, data['uid']);
-                  getLastMessageTime(_auth.currentUser!.uid, data['uid']);
-
                   return SizeFadeTransition(
                     animation: animation,
                     child: ListTile(
@@ -163,6 +185,8 @@ class _ChatsTabState extends State<ChatsTab> {
                         context.pushNamed(Routes.chatScreen, arguments: data)
                           .then((_) {
                             setState(() {
+                              loadedLastMessageTime = -1;
+                              loadedUnreadMessagesCount = -1;
                               lastMessageTime = {};
                               unreadMessagesCount = {};
                             });
@@ -181,53 +205,70 @@ class _ChatsTabState extends State<ChatsTab> {
     );
   }
 
-  getLastMessageTime(String userID, String otherUserID) async {
-    var snapshot = await DatabaseMethods.getChat(userID, otherUserID);
-    if (snapshot.data() != null) {
-      Map<String, dynamic> data = snapshot.data() as Map<String, dynamic>;
+  getLastMessageTime(List users) async {
+    Map<String, DateTime> lastMessTime = {};
 
-      var lastMessage = data['lastMessage'].toDate();
+    await Future.forEach(users, (user) async {
+      String otherUserID = user['uid'];
 
       if (lastMessageTime[otherUserID] == null) {
-        setState(() {
-          lastMessageTime[otherUserID] = lastMessage;
-        });
+        var snapshot = await DatabaseMethods.getChat(_auth.currentUser!.uid, otherUserID);
+        if (snapshot.data() != null) {
+          Map<String, dynamic> data = snapshot.data() as Map<String, dynamic>;
+
+          var lastMessage = data['lastMessage'].toDate();
+
+          lastMessTime[otherUserID] = lastMessage;
+        }
       }
-    }
+    });
+
+    setState(() {
+      lastMessageTime = lastMessTime;
+      loadedLastMessageTime = 1;
+    });
   }
 
   String formatDate(date) {
-    var year = DateFormat(DateFormat.YEAR, 'it_IT').format(date.toUtc());
+    var year = DateFormat(DateFormat.YEAR, 'it_IT').format(date.toLocal());
     var currentYear = DateFormat(DateFormat.YEAR, 'it_IT').format(DateTime.now());
 
-    var monthDay = DateFormat(DateFormat.MONTH_DAY, 'it_IT').format(date.toUtc());
+    var monthDay = DateFormat(DateFormat.MONTH_DAY, 'it_IT').format(date.toLocal());
     var currentMonthDay = DateFormat(DateFormat.MONTH_DAY, 'it_IT').format(DateTime.now());
 
     String formatedDate = '';
     if (year == currentYear) {
       if (monthDay == currentMonthDay) {
-        formatedDate = DateFormat(DateFormat.HOUR24_MINUTE, 'it_IT').format(date.toUtc());
+        formatedDate = DateFormat(DateFormat.HOUR24_MINUTE, 'it_IT').format(date.toLocal());
       }
       else {
-        formatedDate = DateFormat(DateFormat.MONTH_DAY, 'it_IT').format(date.toUtc()) + ' ' + DateFormat(DateFormat.HOUR24_MINUTE, 'it_IT').format(date.toUtc());
+        formatedDate = DateFormat(DateFormat.MONTH_DAY, 'it_IT').format(date.toLocal()) + ' ' + DateFormat(DateFormat.HOUR24_MINUTE, 'it_IT').format(date.toLocal());
       }
     }
     else {
-      formatedDate = DateFormat(DateFormat.YEAR_MONTH_DAY, 'it_IT').format(date.toUtc()) + ' ' + DateFormat(DateFormat.HOUR24_MINUTE, 'it_IT').format(date.toUtc());
+      formatedDate = DateFormat(DateFormat.YEAR_MONTH_DAY, 'it_IT').format(date.toLocal()) + ' ' + DateFormat(DateFormat.HOUR24_MINUTE, 'it_IT').format(date.toLocal());
     }
 
     return formatedDate;
   }
 
-  getUnreadMessagesCount(String userID, String otherUserID) async {
-    if (unreadMessagesCount[otherUserID] != null) return;
+  getUnreadMessagesCount(List users) async {
+    Map<String, int> unreadMessCount = {};
 
-    var p = await DatabaseMethods.getUnreadMessagesCount(userID, otherUserID);
-    if (p.count! > 0 && p.count! != unreadMessagesCount[otherUserID]) {
-      setState(() {
-        unreadMessagesCount[otherUserID] = p.count!;
-      });
-    }
+    await Future.forEach(users, (user) async {
+      String otherUserID = user['uid'];
+      if (unreadMessagesCount[otherUserID] == null) {
+        var p = await DatabaseMethods.getUnreadMessagesCount(_auth.currentUser!.uid, otherUserID);
+        if (p.count! > 0 && p.count! != unreadMessagesCount[otherUserID]) {
+          unreadMessCount[otherUserID] = p.count!;
+        }
+      }
+    });
+
+    setState(() {
+      unreadMessagesCount = unreadMessCount;
+      loadedUnreadMessagesCount = 1;
+    });
   }
 
   Future<String> getIdAzienda() async {
