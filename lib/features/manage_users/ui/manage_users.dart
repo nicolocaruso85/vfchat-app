@@ -24,6 +24,15 @@ class ManageUsersScreen extends StatefulWidget {
 class _ManageUsersScreenState extends State<ManageUsersScreen> {
   final FirebaseAuth _auth = FirebaseAuth.instance;
 
+  late final Future<String> idAzienda;
+
+  @override
+  void initState() {
+    super.initState();
+
+    idAzienda = getIdAzienda();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -42,7 +51,7 @@ class _ManageUsersScreenState extends State<ManageUsersScreen> {
       body: Padding(
         padding: const EdgeInsets.all(10),
         child: FutureBuilder<String>(
-          future: getIdAzienda(),
+          future: idAzienda,
           builder: (context, AsyncSnapshot<String> snapshot) {
             return StreamBuilder<QuerySnapshot>(
               stream: FirebaseFirestore.instance.collection('users')
@@ -151,11 +160,6 @@ class _ManageUsersScreenState extends State<ManageUsersScreen> {
         ),
       ),
     );
-  }
-
-  @override
-  void initState() {
-    super.initState();
   }
 
   Future showUserOptions(context, data) async {

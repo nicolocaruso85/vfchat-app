@@ -82,6 +82,7 @@ class DatabaseMethods {
   static Stream<QuerySnapshot<Map<String, dynamic>>> getUsers(idAzienda) {
     return _fireStore
         .collection('users')
+        .where('isApproved', isEqualTo: true)
         .where('azienda', isEqualTo: FirebaseFirestore.instance.collection('aziende').doc(idAzienda))
         .snapshots();
   }

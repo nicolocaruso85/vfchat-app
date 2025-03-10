@@ -56,6 +56,8 @@ class _GroupInfoScreenState extends State<GroupInfoScreen> {
 
   ValueNotifier<bool> userLoaded = ValueNotifier(false);
 
+  late final Future<String> idAzienda;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -126,6 +128,8 @@ class _GroupInfoScreenState extends State<GroupInfoScreen> {
   @override
   void initState() {
     super.initState();
+
+    idAzienda = getIdAzienda();
 
     _loadGroupDetails();
   }
@@ -482,12 +486,12 @@ class _GroupInfoScreenState extends State<GroupInfoScreen> {
 
   Widget selectUsersList() {
     return FutureBuilder<String>(
-      future: getIdAzienda(),
+      future: idAzienda,
       builder: (context, AsyncSnapshot<String> snapshot) {
-        String? idAzienda = snapshot.data;
+        String? idAziend = snapshot.data;
 
         return StreamBuilder(
-          stream: DatabaseMethods.getUsers(idAzienda),
+          stream: DatabaseMethods.getUsers(idAziend),
           builder: (context, snapshot) {
             if (snapshot.connectionState == ConnectionState.waiting) {
               return Expanded(
@@ -502,7 +506,7 @@ class _GroupInfoScreenState extends State<GroupInfoScreen> {
                   userIds.add(user['uid']);
                 }
               });
-              checkUserPermissions(snapshot.data!.docs, userIds, idAzienda);
+              checkUserPermissions(snapshot.data!.docs, userIds, idAziend);
             }
 
             return Expanded(

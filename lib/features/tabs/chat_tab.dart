@@ -48,12 +48,7 @@ class _ChatsTabState extends State<ChatsTab> {
       builder: (context, AsyncSnapshot<String> snapshot) {
         if (snapshot.data == null) return Column();
 
-        String idAzienda = snapshot.data!;
-
-        _stream = FirebaseFirestore.instance.collection('users')
-          .where('isApproved', isEqualTo: true)
-          .where('azienda', isEqualTo: FirebaseFirestore.instance.collection('aziende').doc(idAzienda))
-          .snapshots();
+        _stream = DatabaseMethods.getUsers(snapshot.data!);
 
         return StreamBuilder<QuerySnapshot>(
           stream: _stream,

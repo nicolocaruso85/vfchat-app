@@ -34,7 +34,11 @@ class _NewGroupScreenState extends State<NewGroupScreen> {
 
   var selectedUsers = [];
 
-  bool userLoaded = false;
+  int userLoaded = -1;
+
+  late final Future<String> idAzienda;
+
+  Stream<QuerySnapshot>? _stream;
 
   @override
   Widget build(BuildContext context) {
@@ -63,16 +67,22 @@ class _NewGroupScreenState extends State<NewGroupScreen> {
   @override
   void initState() {
     super.initState();
+
+    idAzienda = getIdAzienda();
   }
 
   Widget selectUsersList() {
     return FutureBuilder<String>(
-      future: getIdAzienda(),
+      future: idAzienda,
       builder: (context, AsyncSnapshot<String> snapshot) {
-        String? idAzienda = snapshot.data;
+        if (snapshot.data == null) return Column();
+
+        String? idAziend = snapshot.data;
+
+        _stream = DatabaseMethods.getUsers(idAziend);
 
         return StreamBuilder(
-          stream: DatabaseMethods.getUsers(idAzienda),
+          stream: _stream,
           builder: (context, snapshot) {
             if (snapshot.connectionState == ConnectionState.waiting) {
               return Expanded(
@@ -80,14 +90,25 @@ class _NewGroupScreenState extends State<NewGroupScreen> {
               );
             }
 
-            if (!userLoaded) {
-              List<String> userIds = [];
-              snapshot.data!.docs.forEach((var user) {
-                if (user['uid'] != _auth.currentUser!.uid) {
-                  userIds.add(user['uid']);
-                }
-              });
-              checkUserPermissions(snapshot.data!.docs, userIds, idAzienda);
+            print('userLoaded');
+            print(userLoaded);
+
+            if (userLoaded <= 0) {
+              if (userLoaded == -1) {
+                List<String> userIds = [];
+                snapshot.data!.docs.forEach((var user) {
+                  if (user['uid'] != _auth.currentUser!.uid) {
+                    userIds.add(user['uid']);
+                  }
+                });
+                checkUserPermissions(snapshot.data!.docs, userIds, idAziend);
+
+                userLoaded = 0;
+              }
+
+              return Expanded(
+                child: const Center(child: CircularProgressIndicator()),
+              );
             }
 
             return Expanded(
@@ -204,32 +225,27 @@ class _NewGroupScreenState extends State<NewGroupScreen> {
         'user_ids': userIDs,
       },
       onSuccess: (data) {
-        print(data);
         if (data != null && data.containsKey('success')) {
-          print(data['success']);
-
           if (data['success'] == 1) {
             List<dynamic> ids = data['user_ids'];
 
-            setState(() {
-              userLoaded = true;
+            items = [];
+            users.forEach((var user) {
+              if (ids.contains(user['uid'])) {
+                items.add(new ListItem(id: user['uid'], title: user['name']));
+              }
+            });
 
-              items = [];
-              users.forEach((var user) {
-                if (ids.contains(user['uid'])) {
-                  items.add(new ListItem(id: user['uid'], title: user['name']));
-                }
-              });
+            setState(() {
+              userLoaded = 1;
             });
           }
         }
       },
       onError: (data) => debugPrint(data.message),
       apiResponse: (data) {
-        print(data);
       },
       isCacheHit: (isHit) => debugPrint('Is Cache Hit: $isHit'),
-      shouldUpdate: true,
       expiryTime: DateTime.now().add(const Duration(minutes: 1)),
     );
   }
