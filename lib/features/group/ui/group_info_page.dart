@@ -43,7 +43,8 @@ class _GroupInfoScreenState extends State<GroupInfoScreen> {
   String? creatorName;
   String? creatorID;
 
-  List membersList = [];
+  List<DocumentSnapshot> membersList = [];
+  List<String> membersUidList = [];
 
   late TextEditingController nameController = TextEditingController();
   late TextEditingController descriptionController = TextEditingController();
@@ -57,6 +58,8 @@ class _GroupInfoScreenState extends State<GroupInfoScreen> {
   ValueNotifier<bool> userLoaded = ValueNotifier(false);
 
   late final Future<String> idAzienda;
+
+  bool shouldUpdate = false;
 
   @override
   Widget build(BuildContext context) {
@@ -177,7 +180,6 @@ class _GroupInfoScreenState extends State<GroupInfoScreen> {
             await storageRef!.putFile(File(file.path));
 
             String url = await storageRef!.getDownloadURL();
-            print(url);
 
             await DatabaseMethods.updateGroupDetails(
               groupDetails!.id,
@@ -409,7 +411,7 @@ class _GroupInfoScreenState extends State<GroupInfoScreen> {
           textStyle: TextStyles.font15DarkBlue500Weight,
           onPressed: () async {
             if (formKey.currentState!.validate()) {
-              DatabaseMethods.updateGroupDetails(
+              await DatabaseMethods.updateGroupDetails(
                 widget.groupID,
                 {
                   'name': nameController.text,
@@ -463,6 +465,13 @@ class _GroupInfoScreenState extends State<GroupInfoScreen> {
                 child: Scaffold(
                   appBar: AppBar(
                     title: Text(context.tr('addGroupUsers')),
+                    leading: BackButton(
+                      onPressed: () {
+                        selectedUsers = [];
+                        userLoaded.value = false;
+                        Navigator.of(context).pop();
+                      },
+                    ),
                   ),
                   backgroundColor: ColorsManager.backgroundDefaultColor,
                   body: Padding(
@@ -502,7 +511,7 @@ class _GroupInfoScreenState extends State<GroupInfoScreen> {
             if (!userLoaded.value) {
               List<String> userIds = [];
               snapshot.data!.docs.forEach((var user) {
-                if (user['uid'] != _auth.currentUser!.uid) {
+                if (user['uid'] != _auth.currentUser!.uid && !membersUidList.contains(user['uid'])) {
                   userIds.add(user['uid']);
                 }
               });
@@ -513,6 +522,10 @@ class _GroupInfoScreenState extends State<GroupInfoScreen> {
               child: ValueListenableBuilder<bool>(
                 valueListenable: userLoaded,
                 builder: (context, value, _) {
+                  if (!userLoaded.value) {
+                    return const Center(child: CircularProgressIndicator());
+                  }
+
                   return MultiSelectListWidget(
                     key: ValueKey(userLoaded.value),
                     searchHint: context.tr('search'),
@@ -553,7 +566,7 @@ class _GroupInfoScreenState extends State<GroupInfoScreen> {
           users.add(FirebaseFirestore.instance.collection('users').doc(selectedUser.id));
         });
 
-        DatabaseMethods.updateGroupDetails(
+        await DatabaseMethods.updateGroupDetails(
           widget.groupID,
           {
             'users': users,
@@ -571,6 +584,12 @@ class _GroupInfoScreenState extends State<GroupInfoScreen> {
           title: context.tr('addGroupUsers'),
           desc: context.tr('addGroupUsersDone'),
           btnOkOnPress: () async {
+            setState(() {
+              userLoaded.value = false;
+            });
+
+            shouldUpdate = true;
+
             Navigator.of(context).pop();
           }
         ).show();
@@ -584,6 +603,7 @@ class _GroupInfoScreenState extends State<GroupInfoScreen> {
 
   Future<void> _loadGroupDetails() async {
     membersList = [];
+    membersUidList = [];
 
     DocumentSnapshot details = await DatabaseMethods.getGroup(widget.groupID);
     DocumentSnapshot creatorDetails = await details?['creatorId'].get();
@@ -593,6 +613,7 @@ class _GroupInfoScreenState extends State<GroupInfoScreen> {
 
       setState(() {
         membersList.add(u);
+        membersUidList.add(u['uid']);
       });
     });
 
@@ -626,7 +647,13 @@ class _GroupInfoScreenState extends State<GroupInfoScreen> {
                 }
               });
 
-              DatabaseMethods.updateGroupDetails(widget.groupID, {'users': uList});
+              await DatabaseMethods.updateGroupDetails(widget.groupID, {'users': uList});
+
+              setState(() {
+                userLoaded.value = false;
+              });
+
+              shouldUpdate = true;
 
               _loadGroupDetails();
             },
@@ -648,8 +675,6 @@ class _GroupInfoScreenState extends State<GroupInfoScreen> {
   }
 
   checkUserPermissions(users, userIDs, idAzienda) async {
-    print(dotenv.env['SITE_URL']! + '/check-permission/' + _auth.currentUser!.uid + '/' + idAzienda + '/gruppo');
-
     await KingCache.cacheViaRest(
       dotenv.env['SITE_URL']! + '/check-permission/' + _auth.currentUser!.uid + '/' + idAzienda + '/gruppo',
       method: HttpMethod.post,
@@ -657,10 +682,7 @@ class _GroupInfoScreenState extends State<GroupInfoScreen> {
         'user_ids': userIDs,
       },
       onSuccess: (data) {
-        print(data);
         if (data != null && data.containsKey('success')) {
-          print(data['success']);
-
           if (data['success'] == 1) {
             List<dynamic> ids = data['user_ids'];
 
@@ -673,18 +695,22 @@ class _GroupInfoScreenState extends State<GroupInfoScreen> {
               });
             });
 
-            setState(() {
-              userLoaded.value = true;
-            });
+            if (shouldUpdate) {
+              shouldUpdate = false;
+            }
+            else {
+              setState(() {
+                userLoaded.value = true;
+              });
+            }
           }
         }
       },
       onError: (data) => debugPrint(data.message),
       apiResponse: (data) {
-        print(data);
       },
       isCacheHit: (isHit) => debugPrint('Is Cache Hit: $isHit'),
-      shouldUpdate: true,
+      shouldUpdate: shouldUpdate,
       expiryTime: DateTime.now().add(const Duration(minutes: 1)),
     );
   }
