@@ -117,9 +117,20 @@ class _ChatScreenState extends State<ChatScreen> {
                     return;
                   }
 
+                  Map<String, dynamic> notification = {
+                    'senderID': _auth.currentUser!.uid,
+                    'message': message,
+                    'type': 'direct_message',
+                    'time': FieldValue.serverTimestamp(),
+                  };
+
                   await DatabaseMethods.sendMessage(
                     message,
                     widget.receivedUserID,
+                  );
+                  await DatabaseMethods.sendNotification(
+                    widget.receivedUserID,
+                    notification,
                   );
                   await _chatService.sendPushMessage(
                     widget.receivedMToken,

@@ -18,4 +18,5 @@ class Routes {
   static const otherUserProfileScreen = '/otherUserProfileScreen';
   static const groupScreen = '/groupScreen';
   static const groupInfoScreen = '/groupInfoScreen';
+  static const notificationsScreen = '/notificationsScreen';
 }

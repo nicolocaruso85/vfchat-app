@@ -234,4 +234,12 @@ class DatabaseMethods {
         .doc(messageId)
         .update({'isViewed': true});
   }
+
+  static Future<void> sendNotification(String uid, Map<String, dynamic> notification) async {
+    await _fireStore
+        .collection('notifications')
+        .doc(uid)
+        .collection('notifications')
+        .add(notification);
+  }
 }
