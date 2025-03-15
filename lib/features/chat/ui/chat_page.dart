@@ -118,7 +118,7 @@ class _ChatScreenState extends State<ChatScreen> {
                   }
 
                   Map<String, dynamic> notification = {
-                    'senderID': _auth.currentUser!.uid,
+                    'senderID': FirebaseFirestore.instance.collection('users').doc(_auth.currentUser!.uid),
                     'message': message,
                     'type': 'direct_message',
                     'time': FieldValue.serverTimestamp(),

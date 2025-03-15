@@ -72,9 +72,21 @@ class _GroupScreenState extends State<GroupScreen> {
               ),
               CustomMessageBar(
                 onSend: (message) async {
+                  Map<String, dynamic> notification = {
+                    'senderID': FirebaseFirestore.instance.collection('users').doc(_auth.currentUser!.uid),
+                    'message': message,
+                    'type': 'group_message',
+                    'groupID': FirebaseFirestore.instance.collection('groups').doc(widget.groupID),
+                    'time': FieldValue.serverTimestamp(),
+                  };
+
                   await DatabaseMethods.sendGroupMessage(
                     message,
                     widget.groupID,
+                  );
+                  await DatabaseMethods.sendGroupNotification(
+                    widget.groupID,
+                    notification,
                   );
                   await _chatService.sendGroupPushMessage(
                     widget.groupID,

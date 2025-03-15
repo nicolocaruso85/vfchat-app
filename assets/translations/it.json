@@ -103,5 +103,13 @@
     "editGroupDone": "Gruppo modificato con successo",
     "add": "Aggiungi",
     "addGroupUsers": "Aggiungi membri",
-    "addGroupUsersDone": "Membri aggiunti con successo al gruppo"
+    "addGroupUsersDone": "Membri aggiunti con successo al gruppo",
+    "notifications": "Notifiche",
+    "today": "Oggi",
+    "yesterday": "Ieri",
+    "thisWeek": "Questa settimana",
+    "thisMonth": "Questo mese",
+    "messageFromUser": "Nuovo messaggio da",
+    "withText": "con il testo",
+    "inGroup": "nel gruppo"
 }

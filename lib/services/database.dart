@@ -141,6 +141,22 @@ class DatabaseMethods {
         .get();
   }
 
+  static Future<QuerySnapshot> getUserNotifications(limit, lastDocument) {
+    var query = _fireStore
+        .collection('notifications')
+        .doc(_auth.currentUser!.uid)
+        .collection('notifications')
+        .limit(limit)
+        .orderBy('time', descending: true);
+
+    if (lastDocument != null) {
+      return query.startAfterDocument(lastDocument).get();
+    }
+    else {
+      return query.get();
+    }
+  }
+
   static Future<void> sendGroupMessage(String message, String groupID) async {
     final currentUserID = _auth.currentUser!.uid;
     final currentUserName = _auth.currentUser!.displayName;
@@ -241,5 +257,17 @@ class DatabaseMethods {
         .doc(uid)
         .collection('notifications')
         .add(notification);
+  }
+
+  static Future<void> sendGroupNotification(String groupID, Map<String, dynamic> notification) async {
+    DocumentSnapshot group = await getGroup(groupID);
+
+    group['users'].forEach((user) async {
+      await _fireStore
+          .collection('notifications')
+          .doc(user.id)
+          .collection('notifications')
+          .add(notification);
+    });
   }
 }

@@ -16,6 +16,7 @@ import '../features/settings/ui/settings_screen.dart';
 import '../features/signup/ui/sign_up_sceen.dart';
 import '../features/update/ui/update.dart';
 import '../features/manage_users/ui/manage_users.dart';
+import '../features/notifications/ui/notifications.dart';
 import '../features/add_user/ui/add_user.dart';
 import '../features/edit_user/ui/edit_user.dart';
 import '../features/user_profile/ui/user_profile.dart';
@@ -68,6 +69,11 @@ class AppRoute {
             ),
           );
         }
+
+      case Routes.notificationsScreen:
+        return MaterialPageRoute(
+          builder: (context) => const NotificationsScreen(),
+        );
 
       case Routes.forgetScreen:
         return MaterialPageRoute(

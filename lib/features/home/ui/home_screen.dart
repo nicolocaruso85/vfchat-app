@@ -246,6 +246,15 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
           ),
         ),
         PopupMenuItem(
+          onTap: () {
+            context.pushNamed(Routes.notificationsScreen);
+          },
+          child: Text(
+            context.tr('notifications'),
+            style: const TextStyle(color: Colors.white),
+          ),
+        ),
+        PopupMenuItem(
           onTap: () async {
             try {
               await GoogleSignIn().disconnect();
