@@ -127,6 +127,15 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
           time: d['time'].toDate(),
         ));
       }
+      else if (d['type'] == 'add_group') {
+        DocumentSnapshot user = await d['senderID'].get();
+        DocumentSnapshot group = await d['groupID'].get();
+
+        results.add(Notification(
+          message: user['name'] + ' ' + context.tr('addToGroup') + ' ' + group['name'],
+          time: d['time'].toDate(),
+        ));
+      }
       else {
         DocumentSnapshot user = await d['senderID'].get();
 

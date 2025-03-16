@@ -128,7 +128,7 @@ class _ChatScreenState extends State<ChatScreen> {
                     message,
                     widget.receivedUserID,
                   );
-                  await DatabaseMethods.sendNotification(
+                  DatabaseMethods.sendNotification(
                     widget.receivedUserID,
                     notification,
                   );

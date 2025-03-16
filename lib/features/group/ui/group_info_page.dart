@@ -564,6 +564,18 @@ class _GroupInfoScreenState extends State<GroupInfoScreen> {
         });
         selectedUsers.forEach((selectedUser) {
           users.add(FirebaseFirestore.instance.collection('users').doc(selectedUser.id));
+
+          Map<String, dynamic> notification = {
+            'senderID': FirebaseFirestore.instance.collection('users').doc(_auth.currentUser!.uid),
+            'groupID': FirebaseFirestore.instance.collection('groups').doc(widget.groupID),
+            'type': 'add_group',
+            'time': FieldValue.serverTimestamp(),
+          };
+
+          DatabaseMethods.sendNotification(
+            selectedUser.id,
+            notification,
+          );
         });
 
         await DatabaseMethods.updateGroupDetails(

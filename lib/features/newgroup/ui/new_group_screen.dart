@@ -191,6 +191,20 @@ class _NewGroupScreenState extends State<NewGroupScreen> {
               'groupPic': '',
               'creatorId': FirebaseFirestore.instance.collection('users').doc(_auth.currentUser!.uid),
               'createdDate': FieldValue.serverTimestamp(),
+            }).then((group) {
+              selectedUsers.forEach((selectedUser) {
+                Map<String, dynamic> notification = {
+                  'senderID': FirebaseFirestore.instance.collection('users').doc(_auth.currentUser!.uid),
+                  'groupID': FirebaseFirestore.instance.collection('groups').doc(group.id),
+                  'type': 'add_group',
+                  'time': FieldValue.serverTimestamp(),
+                };
+
+                DatabaseMethods.sendNotification(
+                  selectedUser.id,
+                  notification,
+                );
+              });
             });
 
           AwesomeDialog(
