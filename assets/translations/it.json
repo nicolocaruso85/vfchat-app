@@ -112,5 +112,8 @@
     "messageFromUser": "Nuovo messaggio da",
     "withText": "con il testo",
     "inGroup": "nel gruppo",
-    "addToGroup": "ti ha aggiunto al gruppo"
+    "addToGroup": "ti ha aggiunto al gruppo",
+    "newMessage": "Nuovo Messaggio",
+    "createGroup": "Crea Gruppo",
+    "startCall": "Avvia Chiamata"
 }

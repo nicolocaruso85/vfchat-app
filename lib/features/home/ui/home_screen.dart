@@ -50,25 +50,25 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
               child: const Icon(Icons.message),
               backgroundColor: Colors.red,
               foregroundColor: Colors.white,
-              label: 'Nuovo Messaggio',
+              label: context.tr('newMessage'),
               onTap: () {
-
+                showSearchModal();
               },
             ),
             SpeedDialChild(
               child: const Icon(Icons.group),
               backgroundColor: Colors.red,
               foregroundColor: Colors.white,
-              label: 'Crea Gruppo',
+              label: context.tr('createGroup'),
               onTap: () {
-
+                context.pushNamed(Routes.newGroupScreen);
               },
             ),
             SpeedDialChild(
               child: const Icon(Icons.video_call_outlined),
               backgroundColor: Colors.red,
               foregroundColor: Colors.white,
-              label: 'Avvia Chiamata',
+              label: context.tr('startCall'),
               onTap: () {
 
               },
@@ -113,46 +113,7 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
               icon: const Icon(Icons.search),
               color: Colors.white,
               onPressed: () {
-                showCupertinoModalBottomSheet(
-                  context: context,
-                  expand: true,
-                  builder: (context) => Material(
-                    child: Scaffold(
-                      backgroundColor: ColorsManager.backgroundDefaultColor,
-                      body: Padding(
-                        padding: EdgeInsets.symmetric(horizontal: 5, vertical: 12),
-                        child: Column(
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            SearchBar(
-                              controller: controller,
-                              autoFocus: true,
-                              hintText: context.tr('search'),
-                              padding: const WidgetStatePropertyAll<EdgeInsets>(EdgeInsets.symmetric(horizontal: 16.0)),
-                              onChanged: (value) {
-                                userSearchEvent.broadcast(Value(value));
-                                groupSearchEvent.broadcast(Value(value));
-                              },
-                              trailing: [
-                                IconButton(
-                                  icon: const Icon(Icons.close),
-                                  onPressed: () {
-                                    userSearchEvent.unsubscribeAll();
-                                    groupSearchEvent.unsubscribeAll();
-                                    Navigator.of(context).pop();
-                                  },
-                                ),
-                              ],
-                            ),
-                            Gap(20),
-                            SearchUsers(userSearchEvent: userSearchEvent),
-                            SearchGroups(groupSearchEvent: groupSearchEvent),
-                          ],
-                        ),
-                      ),
-                    ),
-                  ),
-                );
+                showSearchModal();
               },
             ),
             _buildPopMenu(),
@@ -297,5 +258,48 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
     } else {
       context.pushReplacementNamed(Routes.homeScreen);
     }
+  }
+
+  showSearchModal() {
+    showCupertinoModalBottomSheet(
+      context: context,
+      expand: true,
+      builder: (context) => Material(
+        child: Scaffold(
+          backgroundColor: ColorsManager.backgroundDefaultColor,
+          body: Padding(
+            padding: EdgeInsets.symmetric(horizontal: 5, vertical: 12),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                SearchBar(
+                  controller: controller,
+                  autoFocus: true,
+                  hintText: context.tr('search'),
+                  padding: const WidgetStatePropertyAll<EdgeInsets>(EdgeInsets.symmetric(horizontal: 16.0)),
+                  onChanged: (value) {
+                    userSearchEvent.broadcast(Value(value));
+                    groupSearchEvent.broadcast(Value(value));
+                  },
+                  trailing: [
+                    IconButton(
+                      icon: const Icon(Icons.close),
+                      onPressed: () {
+                        userSearchEvent.unsubscribeAll();
+                        groupSearchEvent.unsubscribeAll();
+                        Navigator.of(context).pop();
+                      },
+                    ),
+                  ],
+                ),
+                Gap(20),
+                SearchUsers(userSearchEvent: userSearchEvent),
+                SearchGroups(groupSearchEvent: groupSearchEvent),
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
   }
 }
