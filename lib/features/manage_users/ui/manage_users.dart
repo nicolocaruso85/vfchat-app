@@ -195,7 +195,7 @@ class _ManageUsersScreenState extends State<ManageUsersScreen> {
                     );
 
                     await DatabaseMethods.addUserUpdatesByUid(
-                      _auth.currentUser!.uid,
+                      data['uid'],
                       {
                         'isApproved': true,
                         'azienda': azienda,
