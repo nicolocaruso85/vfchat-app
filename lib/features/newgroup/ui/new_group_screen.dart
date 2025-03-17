@@ -142,6 +142,7 @@ class _NewGroupScreenState extends State<NewGroupScreen> {
         AppTextFormField(
           hint: context.tr('name'),
           textInputAction: TextInputAction.next,
+          maxLines: 1,
           validator: (value) {
             if (value == null || value.isEmpty || value.startsWith(' ')) {
               return context.tr('pleaseEnterValid', args: ['Nome']);

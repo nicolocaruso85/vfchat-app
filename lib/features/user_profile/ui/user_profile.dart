@@ -156,6 +156,7 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
         AppTextFormField(
           hint: context.tr('name'),
           textInputAction: TextInputAction.next,
+          maxLines: 1,
           validator: (value) {
             if (value == null || value.isEmpty || value.startsWith(' ')) {
               return context.tr('pleaseEnterValid', args: ['Name']);
@@ -240,6 +241,7 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
         AppTextFormField(
           hint: context.tr('email'),
           textInputAction: TextInputAction.next,
+          maxLines: 1,
           validator: (value) {
             if (value == null ||
                 value.isEmpty ||

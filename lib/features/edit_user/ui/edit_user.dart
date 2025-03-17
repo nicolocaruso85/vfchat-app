@@ -319,6 +319,7 @@ class _EditUserScreenState extends State<EditUserScreen> {
       children: [
         AppTextFormField(
           hint: context.tr('name'),
+          maxLines: 1,
           validator: (value) {
             if (value == null || value.isEmpty || value.startsWith(' ')) {
               return context.tr('pleaseEnterValid', args: ['Name']);
@@ -401,6 +402,7 @@ class _EditUserScreenState extends State<EditUserScreen> {
       children: [
         AppTextFormField(
           hint: context.tr('email'),
+          maxLines: 1,
           validator: (value) {
             if (value == null ||
                 value.isEmpty ||

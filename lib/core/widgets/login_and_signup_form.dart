@@ -95,6 +95,7 @@ class _EmailAndPasswordState extends State<EmailAndPassword> {
         AppTextFormField(
           hint: context.tr('email'),
           textInputAction: TextInputAction.next,
+          maxLines: 1,
           validator: (value) {
             if (value == null ||
                 value.isEmpty ||
@@ -230,6 +231,7 @@ class _EmailAndPasswordState extends State<EmailAndPassword> {
         Gap(18.h),
         AppTextFormField(
           hint: context.tr('codiceAzienda'),
+          maxLines: 1,
           validator: (value) {
             if (value == null || value.isEmpty) {
               return context.tr('pleaseEnterValid', args: ['Codice Azienda']);
@@ -254,6 +256,7 @@ class _EmailAndPasswordState extends State<EmailAndPassword> {
         AppTextFormField(
           hint: context.tr('name'),
           textInputAction: TextInputAction.next,
+          maxLines: 1,
           validator: (value) {
             if (value == null || value.isEmpty || value.startsWith(' ')) {
               return context.tr('pleaseEnterValid', args: ['Nome']);

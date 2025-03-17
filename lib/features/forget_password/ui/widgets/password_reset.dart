@@ -44,6 +44,7 @@ class _PasswordResetState extends State<PasswordReset> {
   AppTextFormField emailField() {
     return AppTextFormField(
       hint: context.tr('email'),
+      maxLines: 1,
       validator: (value) {
         if (value == null || value.isEmpty || !AppRegex.isEmailValid(value)) {
           return context.tr('pleaseEnterValid', args: ['Email']);
