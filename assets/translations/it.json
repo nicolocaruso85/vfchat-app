@@ -115,5 +115,7 @@
     "addToGroup": "ti ha aggiunto al gruppo",
     "newMessage": "Nuovo Messaggio",
     "createGroup": "Crea Gruppo",
-    "startCall": "Avvia Chiamata"
+    "startCall": "Avvia Chiamata",
+    "leaveGroup": "Abbandona il gruppo",
+    "confirmLeaveGroup": "Sei sicuro di voler abbandonare questo gruppo?"
 }

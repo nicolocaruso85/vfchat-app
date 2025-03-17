@@ -23,6 +23,7 @@ import '../../../themes/styles.dart';
 import '../../../core/widgets/app_text_form_field.dart';
 import '../../../core/widgets/app_button.dart';
 import '../../../services/database.dart';
+import '../../../router/routes.dart';
 
 class GroupInfoScreen extends StatefulWidget {
   final String groupID;
@@ -119,7 +120,8 @@ class _GroupInfoScreenState extends State<GroupInfoScreen> {
                 createdByField(),
                 createdDateField(),
                 membersField(),
-                addUsersButton(),
+                if (creatorID == _auth.currentUser!.uid) addUsersButton(),
+                if (creatorID != _auth.currentUser!.uid) leaveGroupButton(),
               ],
             ),
           ),
@@ -452,6 +454,46 @@ class _GroupInfoScreenState extends State<GroupInfoScreen> {
     );
   }
 
+  Column leaveGroupButton() {
+    return Column(
+      children: [
+        AppButton(
+          buttonText: context.tr('leaveGroup'),
+          backgroundColor: Colors.red.shade700,
+          textStyle: TextStyles.font15DarkBlue500Weight,
+          onPressed: () async {
+            AwesomeDialog(
+              context: context,
+              dialogType: DialogType.question,
+              animType: AnimType.rightSlide,
+              title: context.tr('leaveGroup'),
+              desc: context.tr('confirmLeaveGroup'),
+              btnOkText: context.tr('yes'),
+              btnOkOnPress: () async {
+                List uList = [];
+
+                var users = membersList;
+                users.forEach((u) {
+                  if (u['uid'] != _auth.currentUser!.uid) {
+                    uList.add(FirebaseFirestore.instance.collection('users').doc(u['uid']));
+                  }
+                });
+
+                await DatabaseMethods.updateGroupDetails(widget.groupID, {'users': uList});
+
+                Navigator.pushNamedAndRemoveUntil(context, Routes.homeScreen, (route) => false);
+              },
+              btnCancelText: context.tr('no'),
+              btnCancelOnPress: () {
+                Navigator.pop(context);
+              },
+            ).show();
+          },
+        ),
+      ],
+    );
+  }
+
   Column addUsersButton() {
     return Column(
       children: [
@@ -578,12 +620,7 @@ class _GroupInfoScreenState extends State<GroupInfoScreen> {
           );
         });
 
-        await DatabaseMethods.updateGroupDetails(
-          widget.groupID,
-          {
-            'users': users,
-          },
-        );
+        await DatabaseMethods.updateGroupDetails(widget.groupID, {'users': users});
 
         _loadGroupDetails();
 
