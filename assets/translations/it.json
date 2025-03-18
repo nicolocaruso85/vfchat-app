@@ -117,5 +117,6 @@
     "createGroup": "Crea Gruppo",
     "startCall": "Avvia Chiamata",
     "leaveGroup": "Abbandona il gruppo",
-    "confirmLeaveGroup": "Sei sicuro di voler abbandonare questo gruppo?"
+    "confirmLeaveGroup": "Sei sicuro di voler abbandonare questo gruppo?",
+    "telephone": "Telefono"
 }

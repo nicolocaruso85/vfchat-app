@@ -52,6 +52,7 @@ class _OtherUserProfileScreenState extends State<OtherUserProfileScreen> {
                 profileImageField(),
                 nameField(),
                 emailField(),
+                telephoneField(),
                 aziendaField(),
                 ruoliField(),
                 gruppiField(),
@@ -102,6 +103,26 @@ class _OtherUserProfileScreenState extends State<OtherUserProfileScreen> {
           ),
           Text(
             (userDetails != null) ? (userDetails?['email']) : '',
+            style: TextStyles.font16White600Weight,
+          ),
+          Gap(8.h),
+        ],
+      ),
+    );
+  }
+
+  SizedBox telephoneField() {
+    return SizedBox(
+      width: MediaQuery.of(context).size.width,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            context.tr('telephone'),
+            style: TextStyles.font15Green500Weight,
+          ),
+          Text(
+            (userDetails != null) ? (userDetails?['telephone']) : '',
             style: TextStyles.font16White600Weight,
           ),
           Gap(8.h),

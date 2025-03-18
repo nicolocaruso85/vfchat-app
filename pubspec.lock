@@ -1163,6 +1163,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "0.19.0"
+  intl_mobile_field:
+    dependency: "direct main"
+    description:
+      name: intl_mobile_field
+      sha256: f1a004c1e05d88da01d199812b94249e3dfbaa39ee017037a4ec8886b264854a
+      url: "https://pub.dev"
+    source: hosted
+    version: "1.1.1"
   io:
     dependency: transitive
     description:

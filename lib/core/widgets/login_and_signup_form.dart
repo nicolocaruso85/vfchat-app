@@ -7,6 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:gap/gap.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+import 'package:intl_mobile_field/intl_mobile_field.dart';
 
 import '../../../helpers/app_regex.dart';
 import '../../../themes/styles.dart';
@@ -45,10 +46,15 @@ class _EmailAndPasswordState extends State<EmailAndPassword> {
 
   late TextEditingController nameController = TextEditingController();
   late TextEditingController emailController = TextEditingController();
+  late TextEditingController telephoneController =
+      TextEditingController();
   late TextEditingController passwordController = TextEditingController();
   late TextEditingController passwordConfirmationController =
       TextEditingController();
   late TextEditingController codiceAziendaController = TextEditingController();
+
+  String? telephone;
+  String? dialCode;
 
   final formKey = GlobalKey<FormState>();
 
@@ -60,6 +66,7 @@ class _EmailAndPasswordState extends State<EmailAndPassword> {
         children: [
           if (widget.isSignUpPage == true) nameField(),
           if (widget.isPasswordPage == null) emailField(),
+          if (widget.isSignUpPage == true) telephoneField(),
           passwordField(),
           Gap(18.h),
           if (widget.isSignUpPage == true || widget.isPasswordPage == true)
@@ -104,6 +111,65 @@ class _EmailAndPasswordState extends State<EmailAndPassword> {
             }
           },
           controller: emailController,
+        ),
+        Gap(18.h),
+      ],
+    );
+  }
+
+  Column telephoneField() {
+    return Column(
+      children: [
+        IntlMobileField(
+          controller: telephoneController,
+          decoration: InputDecoration(
+            labelText: context.tr('telephone'),
+            border: OutlineInputBorder(
+              borderSide: const BorderSide(
+                color: Colors.transparent,
+              ),
+              borderRadius: BorderRadius.circular(30),
+            ),
+            focusedBorder: OutlineInputBorder(
+              borderSide: const BorderSide(
+                color: Colors.transparent,
+              ),
+              borderRadius: BorderRadius.circular(30),
+            ),
+            errorBorder: OutlineInputBorder(
+              borderSide: BorderSide(
+                color: ColorsManager.coralRed,
+                width: 1.3.w,
+              ),
+              borderRadius: BorderRadius.circular(30),
+            ),
+            focusedErrorBorder: OutlineInputBorder(
+              borderSide: BorderSide(
+                color: ColorsManager.coralRed,
+                width: 1.3.w,
+              ),
+              borderRadius: BorderRadius.circular(30),
+            ),
+          ),
+          fillColor: const Color(0xff273443),
+          style: TextStyles.font18White500Weight,
+          favorite: const ['IT'],
+          initialCountryCode: 'IT',
+          disableLengthCounter: true,
+          languageCode: 'it',
+          onChanged: (phone) {
+            telephone = phone.number;
+          },
+          onCountryChanged: (country) {
+            dialCode = country.dialCode;
+          },
+          validator: (value) {
+            if (value == null) {
+              return context.tr('pleaseEnterValid', args: ['Telefono']);
+            }
+          },
+          searchText: context.tr('search'),
+          invalidNumberMessage: context.tr('pleaseEnterValid', args: ['Telefono']),
         ),
         Gap(18.h),
       ],

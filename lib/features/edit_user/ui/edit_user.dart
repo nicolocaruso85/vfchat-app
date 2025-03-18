@@ -7,6 +7,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:gap/gap.dart';
 import 'package:firebase_admin/firebase_admin.dart';
 import 'package:multi_select_flutter/multi_select_flutter.dart';
+import 'package:intl_mobile_field/intl_mobile_field.dart';
 
 import '../../../themes/colors.dart';
 import '../../../themes/styles.dart';
@@ -57,9 +58,13 @@ class _EditUserScreenState extends State<EditUserScreen> {
 
   late TextEditingController nameController = TextEditingController();
   late TextEditingController emailController = TextEditingController();
+  late TextEditingController telephoneController =
+      TextEditingController();
   late TextEditingController passwordController = TextEditingController();
   late TextEditingController passwordConfirmationController =
       TextEditingController();
+
+  String? dialCode;
 
   final _multiSelectKeyRoles = GlobalKey<FormFieldState>();
   final _multiSelectKeyGroups = GlobalKey<FormFieldState>();
@@ -84,6 +89,7 @@ class _EditUserScreenState extends State<EditUserScreen> {
               children: [
                 nameField(),
                 emailField(),
+                telephoneField(),
                 passwordField(),
                 passwordConfirmationField(),
                 rolesField(),
@@ -248,6 +254,7 @@ class _EditUserScreenState extends State<EditUserScreen> {
         if (formKey.currentState!.validate()) {
           var name = nameController.text;
           var email = emailController.text;
+          var telephone = telephoneController.text;
           var password = passwordController.text;
 
           if (name != userDetails?['name']) {
@@ -284,6 +291,7 @@ class _EditUserScreenState extends State<EditUserScreen> {
             {
               'name': name,
               'email': email,
+              'telephone': telephone,
               'ruoli': ruoli,
               'gruppi': gruppi,
             },
@@ -292,8 +300,9 @@ class _EditUserScreenState extends State<EditUserScreen> {
           await DatabaseMethods.addUserUpdatesByUid(
             widget.uid,
             {
-              'name': nameController.text,
-              'email': emailController.text,
+              'name': name,
+              'email': email,
+              'telephone': telephone,
               'ruoli': ruoli,
               'gruppi': gruppi,
             },
@@ -417,6 +426,64 @@ class _EditUserScreenState extends State<EditUserScreen> {
     );
   }
 
+  Column telephoneField() {
+    return Column(
+      children: [
+        IntlMobileField(
+          controller: telephoneController,
+          decoration: InputDecoration(
+            labelText: context.tr('telephone'),
+            border: OutlineInputBorder(
+              borderSide: const BorderSide(
+                color: Colors.transparent,
+              ),
+              borderRadius: BorderRadius.circular(30),
+            ),
+            focusedBorder: OutlineInputBorder(
+              borderSide: const BorderSide(
+                color: Colors.transparent,
+              ),
+              borderRadius: BorderRadius.circular(30),
+            ),
+            errorBorder: OutlineInputBorder(
+              borderSide: BorderSide(
+                color: ColorsManager.coralRed,
+                width: 1.3.w,
+              ),
+              borderRadius: BorderRadius.circular(30),
+            ),
+            focusedErrorBorder: OutlineInputBorder(
+              borderSide: BorderSide(
+                color: ColorsManager.coralRed,
+                width: 1.3.w,
+              ),
+              borderRadius: BorderRadius.circular(30),
+            ),
+          ),
+          fillColor: const Color(0xff273443),
+          style: TextStyles.font18White500Weight,
+          favorite: const ['IT'],
+          initialCountryCode: 'IT',
+          disableLengthCounter: true,
+          languageCode: 'it',
+          onChanged: (phone) {
+          },
+          onCountryChanged: (country) {
+            dialCode = country.dialCode;
+          },
+          validator: (value) {
+            if (value == null) {
+              return context.tr('pleaseEnterValid', args: ['Telefono']);
+            }
+          },
+          searchText: context.tr('search'),
+          invalidNumberMessage: context.tr('pleaseEnterValid', args: ['Telefono']),
+        ),
+        Gap(18.h),
+      ],
+    );
+  }
+
   Future<void> _loadUserDetails() async {
     DocumentSnapshot details = await DatabaseMethods.getUserDetails(widget.uid);
     DocumentSnapshot a = await DatabaseMethods.getAzienda(details!['azienda'].id);
@@ -425,6 +492,7 @@ class _EditUserScreenState extends State<EditUserScreen> {
       userDetails = details;
       nameController.text = userDetails?['name'];
       emailController.text = userDetails?['email'];
+      telephoneController.text = userDetails?['telephone'];
 
       azienda = a;
     });
