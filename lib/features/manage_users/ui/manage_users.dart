@@ -24,13 +24,14 @@ class ManageUsersScreen extends StatefulWidget {
 class _ManageUsersScreenState extends State<ManageUsersScreen> {
   final FirebaseAuth _auth = FirebaseAuth.instance;
 
-  late final Future<String> idAzienda;
+  late final Future<DocumentSnapshot> azienda;
 
   @override
   void initState() {
     super.initState();
 
-    idAzienda = getIdAzienda();
+    azienda = getAzienda();
+    print(azienda);
   }
 
   @override
@@ -50,14 +51,18 @@ class _ManageUsersScreenState extends State<ManageUsersScreen> {
       ),
       body: Padding(
         padding: const EdgeInsets.all(10),
-        child: FutureBuilder<String>(
-          future: idAzienda,
-          builder: (context, AsyncSnapshot<String> snapshot) {
+        child: FutureBuilder<DocumentSnapshot>(
+          future: azienda,
+          builder: (context, AsyncSnapshot<DocumentSnapshot> snapshot) {
+            if (snapshot.data == null) {
+              return const Center(child: CircularProgressIndicator());
+            }
+
             return StreamBuilder<QuerySnapshot>(
               stream: FirebaseFirestore.instance.collection('users')
                 .where(Filter.or(
-                  Filter('azienda', isEqualTo: FirebaseFirestore.instance.collection('aziende').doc(snapshot.data)),
-                  Filter('codiceAzienda', isEqualTo: 'PS8N6ZHS')
+                  Filter('azienda', isEqualTo: FirebaseFirestore.instance.collection('aziende').doc(snapshot.data!.id)),
+                  Filter('codiceAzienda', isEqualTo: snapshot.data!['codice_azienda'])
                 ))
                 .snapshots(),
               builder: (context, snapshot) {
@@ -183,14 +188,13 @@ class _ManageUsersScreenState extends State<ManageUsersScreen> {
                   desc: context.tr('approveConfirmation'),
                   btnOkText: context.tr('yes'),
                   btnOkOnPress: () async {
-                    String idAzienda = await getIdAzienda();
-                    DocumentReference azienda = FirebaseFirestore.instance.collection('aziende').doc(idAzienda);
+                    DocumentReference aziendaRef = FirebaseFirestore.instance.collection('aziende').doc((await getAzienda()).id);
 
                     await DatabaseMethods.updateUserDetailsByUid(
                       data['uid'],
                       {
                         'isApproved': true,
-                        'azienda': azienda,
+                        'azienda': aziendaRef,
                       }
                     );
 
@@ -198,7 +202,7 @@ class _ManageUsersScreenState extends State<ManageUsersScreen> {
                       data['uid'],
                       {
                         'isApproved': true,
-                        'azienda': azienda,
+                        'azienda': aziendaRef,
                       },
                       SetOptions(merge: true),
                     );
@@ -234,8 +238,8 @@ class _ManageUsersScreenState extends State<ManageUsersScreen> {
     );
   }
 
-  Future<String> getIdAzienda() async {
+  Future<DocumentSnapshot> getAzienda() async {
     DocumentSnapshot userDetails = await DatabaseMethods.getCurrentUserDetails();
-    return userDetails['azienda'].id;
+    return await DatabaseMethods.getAzienda(userDetails['azienda'].id);
   }
 }
