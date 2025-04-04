@@ -36,7 +36,7 @@ class _NewGroupScreenState extends State<NewGroupScreen> {
 
   int userLoaded = -1;
 
-  late final Future<String> idAzienda;
+  late final Future<DocumentSnapshot> azienda;
 
   Stream<QuerySnapshot>? _stream;
 
@@ -68,18 +68,18 @@ class _NewGroupScreenState extends State<NewGroupScreen> {
   void initState() {
     super.initState();
 
-    idAzienda = getIdAzienda();
+    azienda = getAzienda();
   }
 
   Widget selectUsersList() {
-    return FutureBuilder<String>(
-      future: idAzienda,
-      builder: (context, AsyncSnapshot<String> snapshot) {
+    return FutureBuilder<DocumentSnapshot>(
+      future: azienda,
+      builder: (context, AsyncSnapshot<DocumentSnapshot> snapshot) {
         if (snapshot.data == null) return Column();
 
-        String? idAziend = snapshot.data;
+        DocumentSnapshot? az = snapshot.data;
 
-        _stream = DatabaseMethods.getUsers(idAziend);
+        _stream = DatabaseMethods.getUsers(az!.id);
 
         return StreamBuilder(
           stream: _stream,
@@ -101,7 +101,7 @@ class _NewGroupScreenState extends State<NewGroupScreen> {
                     userIds.add(user['uid']);
                   }
                 });
-                checkUserPermissions(snapshot.data!.docs, userIds, idAziend);
+                checkUserPermissions(snapshot.data!.docs, userIds, az);
 
                 userLoaded = 0;
               }
@@ -225,42 +225,65 @@ class _NewGroupScreenState extends State<NewGroupScreen> {
     );
   }
 
-  Future<String> getIdAzienda() async {
+  Future<DocumentSnapshot> getAzienda() async {
     DocumentSnapshot userDetails = await DatabaseMethods.getCurrentUserDetails();
-    return userDetails['azienda'].id;
+    return await DatabaseMethods.getAzienda(userDetails['azienda'].id);
   }
 
-  checkUserPermissions(users, userIDs, idAzienda) async {
-    print(dotenv.env['SITE_URL']! + '/check-permission/' + _auth.currentUser!.uid + '/' + idAzienda + '/gruppo');
+  checkUserPermissions(users, userIDs, azienda) async {
+    print(azienda!['api'] + 'check-permission/' + _auth.currentUser!.uid + '/gruppo');
 
     await KingCache.cacheViaRest(
-      dotenv.env['SITE_URL']! + '/check-permission/' + _auth.currentUser!.uid + '/' + idAzienda + '/gruppo',
-      method: HttpMethod.post,
-      formData: {
-        'user_ids': userIDs,
-      },
-      onSuccess: (data) {
-        if (data != null && data.containsKey('success')) {
-          if (data['success'] == 1) {
-            List<dynamic> ids = data['user_ids'];
+      azienda!['api'] + 'check-permission/csrf_token',
+      method: HttpMethod.get,
+      onSuccess: (data) async {
+        print(data);
 
-            items = [];
-            users.forEach((var user) {
-              if (ids.contains(user['uid'])) {
-                items.add(new ListItem(id: user['uid'], title: user['name']));
+        if (data != null && data.containsKey('csrf_token')) {
+          print(data['csrf_token']);
+
+          await KingCache.cacheViaRest(
+            azienda!['api'] + 'check-permission/' + _auth.currentUser!.uid + '/gruppo',
+            method: HttpMethod.post,
+            headers: {
+              'X-CSRF-TOKEN': data['csrf_token'],
+              'Content-Type': 'application/json',
+            },
+            formData: {
+              'user_ids': userIDs,
+            },
+            onSuccess: (data) {
+              if (data != null && data.containsKey('success')) {
+                if (data['success'] == 1) {
+                  List<dynamic> ids = data['user_ids'];
+
+                  items = [];
+                  users.forEach((var user) {
+                    if (ids.contains(user['uid'])) {
+                      items.add(new ListItem(id: user['uid'], title: user['name']));
+                    }
+                  });
+
+                  setState(() {
+                    userLoaded = 1;
+                  });
+                }
               }
-            });
-
-            setState(() {
-              userLoaded = 1;
-            });
-          }
+            },
+            onError: (data) => debugPrint(data.message),
+            apiResponse: (data) {
+            },
+            isCacheHit: (isHit) => debugPrint('Is Cache Hit: $isHit'),
+            shouldUpdate: true,
+            expiryTime: DateTime.now().add(const Duration(minutes: 1)),
+          );
         }
       },
       onError: (data) => debugPrint(data.message),
       apiResponse: (data) {
       },
       isCacheHit: (isHit) => debugPrint('Is Cache Hit: $isHit'),
+      shouldUpdate: true,
       expiryTime: DateTime.now().add(const Duration(minutes: 1)),
     );
   }

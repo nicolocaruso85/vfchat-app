@@ -84,7 +84,7 @@ class _ChatScreenState extends State<ChatScreen> {
                   bool permission = false;
 
                   await KingCache.cacheViaRest(
-                    dotenv.env['SITE_URL']! + '/check-permission/' + _auth.currentUser!.uid + '/' + widget.receivedUserID + '/' + azienda!.id + '/messaggi',
+                    azienda!['api'] + 'check-permission/' + _auth.currentUser!.uid + '/' + widget.receivedUserID + '/messaggi',
                     method: HttpMethod.get,
                     onSuccess: (data) {
                       print(data);
@@ -213,7 +213,7 @@ class _ChatScreenState extends State<ChatScreen> {
     bool permission = false;
 
     await KingCache.cacheViaRest(
-      dotenv.env['SITE_URL']! + '/check-permission/' + _auth.currentUser!.uid + '/' + widget.receivedUserID + '/' + azienda!.id + '/immagini',
+      azienda!['api'] + 'check-permission/' + _auth.currentUser!.uid + '/' + widget.receivedUserID + '/immagini',
       method: HttpMethod.get,
       onSuccess: (data) {
         print(data);

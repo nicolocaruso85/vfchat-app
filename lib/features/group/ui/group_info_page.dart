@@ -725,7 +725,7 @@ class _GroupInfoScreenState extends State<GroupInfoScreen> {
 
   checkUserPermissions(users, userIDs, idAzienda) async {
     await KingCache.cacheViaRest(
-      dotenv.env['SITE_URL']! + '/check-permission/' + _auth.currentUser!.uid + '/' + idAzienda + '/gruppo',
+      dotenv.env['SITE_URL']! + '/check-permission/' + _auth.currentUser!.uid + '/gruppo',
       method: HttpMethod.post,
       formData: {
         'user_ids': userIDs,

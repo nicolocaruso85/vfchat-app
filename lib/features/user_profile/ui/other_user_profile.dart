@@ -143,7 +143,7 @@ class _OtherUserProfileScreenState extends State<OtherUserProfileScreen> {
               style: TextStyles.font15Green500Weight,
             ),
             Text(
-              azienda?['nome'],
+              azienda?['name'],
               style: TextStyles.font16White600Weight,
             ),
             Gap(8.h),

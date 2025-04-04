@@ -509,6 +509,7 @@ class _EmailAndPasswordState extends State<EmailAndPassword> {
               {
                 'name': nameController.text,
                 'email': emailController.text,
+                'telephone': telephone,
                 'profilePic': '',
                 'uid': _auth.currentUser!.uid,
                 'mtoken': await getToken(),
@@ -526,6 +527,7 @@ class _EmailAndPasswordState extends State<EmailAndPassword> {
               {
                 'name': nameController.text,
                 'email': emailController.text,
+                'telephone': telephone,
                 'profilePic': '',
                 'uid': _auth.currentUser!.uid,
                 'mtoken': await getToken(),
