@@ -73,7 +73,7 @@ PODS:
   - Firebase/Storage (11.10.0):
     - Firebase/CoreOnly
     - FirebaseStorage (~> 11.10.0)
-  - firebase_analytics (11.4.4):
+  - firebase_analytics (11.4.5):
     - Firebase/Analytics (= 11.10.0)
     - firebase_core
     - Flutter
@@ -315,7 +315,7 @@ PODS:
     - Flutter
   - zego_callkit (1.0.0):
     - Flutter
-  - zego_express_engine (3.19.1):
+  - zego_express_engine (3.20.0):
     - Flutter
   - zego_uikit (0.0.1):
     - Flutter
@@ -541,7 +541,7 @@ SPEC CHECKSUMS:
   external_path_ios_mac: e3bd178849df0d853b97f9b2bb9080b622aa194d
   file_picker: b159e0c068aef54932bb15dc9fd1571818edaf49
   Firebase: 1fe1c0a7d9aaea32efe01fbea5f0ebd8d70e53a2
-  firebase_analytics: c801e78149635e788746a6ed1a49a34e2442cd9d
+  firebase_analytics: 4b8609ce8d2e0c8928472bec8d9753a8f1835eb6
   firebase_auth: e37065f3f80ff90580c13ad0e5a48e3bb8d2ad77
   firebase_core: 432718558359a8c08762151b5f49bb0f093eb6e0
   firebase_messaging: 3b99522baf7480dfb4b7683d2b34e842d577c362
@@ -605,7 +605,7 @@ SPEC CHECKSUMS:
   video_player_avfoundation: 7c6c11d8470e1675df7397027218274b6d2360b3
   wakelock_plus: 373cfe59b235a6dd5837d0fb88791d2f13a90d56
   zego_callkit: 72593f46ed01779c4cee6bc65d2e0e1cde86b42c
-  zego_express_engine: 828102bd0bc176d91663390152bcd78013f28d48
+  zego_express_engine: 7c54fc7c12e6ff850e20bc6745658a08e396bc03
   zego_uikit: 6ceebb00df6af92b2a7a16b15f98330035a5d911
   zego_uikit_prebuilt_call: 13173d7a3c6dcc1695cbdff15d19463acd1ca39c
   zego_uikit_signaling_plugin: 7fdfcd9f796b591c9cb8770609f4fa85178aa40e
