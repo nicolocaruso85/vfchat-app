@@ -58,7 +58,7 @@ class _GroupInfoScreenState extends State<GroupInfoScreen> {
 
   ValueNotifier<bool> userLoaded = ValueNotifier(false);
 
-  late final Future<String> idAzienda;
+  late final Future<DocumentSnapshot> azienda;
 
   bool shouldUpdate = false;
 
@@ -134,7 +134,7 @@ class _GroupInfoScreenState extends State<GroupInfoScreen> {
   void initState() {
     super.initState();
 
-    idAzienda = getIdAzienda();
+    azienda = getAzienda();
 
     _loadGroupDetails();
   }
@@ -536,13 +536,13 @@ class _GroupInfoScreenState extends State<GroupInfoScreen> {
   }
 
   Widget selectUsersList() {
-    return FutureBuilder<String>(
-      future: idAzienda,
-      builder: (context, AsyncSnapshot<String> snapshot) {
-        String? idAziend = snapshot.data;
+    return FutureBuilder<DocumentSnapshot>(
+      future: azienda,
+      builder: (context, AsyncSnapshot<DocumentSnapshot> snapshot) {
+        DocumentSnapshot? az = snapshot.data;
 
         return StreamBuilder(
-          stream: DatabaseMethods.getUsers(idAziend),
+          stream: DatabaseMethods.getUsers(az!.id),
           builder: (context, snapshot) {
             if (snapshot.connectionState == ConnectionState.waiting) {
               return Expanded(
@@ -557,7 +557,7 @@ class _GroupInfoScreenState extends State<GroupInfoScreen> {
                   userIds.add(user['uid']);
                 }
               });
-              checkUserPermissions(snapshot.data!.docs, userIds, idAziend);
+              checkUserPermissions(snapshot.data!.docs, userIds, az);
             }
 
             return Expanded(
@@ -718,48 +718,68 @@ class _GroupInfoScreenState extends State<GroupInfoScreen> {
     );
   }
 
-  Future<String> getIdAzienda() async {
+  Future<DocumentSnapshot> getAzienda() async {
     DocumentSnapshot userDetails = await DatabaseMethods.getCurrentUserDetails();
-    return userDetails['azienda'].id;
+    return await DatabaseMethods.getAzienda(userDetails['azienda'].id);
   }
 
-  checkUserPermissions(users, userIDs, idAzienda) async {
+  checkUserPermissions(users, userIDs, azienda) async {
+    print(azienda!['api'] + 'check-permission/' + _auth.currentUser!.uid + '/gruppo');
+
     await KingCache.cacheViaRest(
-      dotenv.env['SITE_URL']! + '/check-permission/' + _auth.currentUser!.uid + '/gruppo',
-      method: HttpMethod.post,
-      formData: {
-        'user_ids': userIDs,
-      },
-      onSuccess: (data) {
-        if (data != null && data.containsKey('success')) {
-          if (data['success'] == 1) {
-            List<dynamic> ids = data['user_ids'];
+      azienda!['api'] + 'check-permission/csrf_token',
+      method: HttpMethod.get,
+      onSuccess: (data) async {
+        print(data);
 
-            setState(() {
-              items = [];
-              users.forEach((var user) {
-                if (ids.contains(user['uid'])) {
-                  items.add(new ListItem(id: user['uid'], title: user['name']));
+        if (data != null && data.containsKey('csrf_token')) {
+          print(data['csrf_token']);
+
+          await KingCache.cacheViaRest(
+            azienda!['api'] + 'check-permission/' + _auth.currentUser!.uid + '/gruppo',
+            method: HttpMethod.post,
+            headers: {
+              'X-CSRF-TOKEN': data['csrf_token'],
+              'Content-Type': 'application/json',
+              'Cookie': 'exp_csrf_token=' + data['csrf_token'] + ';',
+            },
+            formData: {
+              'user_ids': userIDs,
+            },
+            onSuccess: (data) {
+              print(data);
+
+              if (data != null && data.containsKey('success')) {
+                if (data['success'] == 1) {
+                  List<dynamic> ids = data['user_ids'];
+
+                  items = [];
+                  users.forEach((var user) {
+                    if (ids.contains(user['uid'])) {
+                      items.add(new ListItem(id: user['uid'], title: user['name']));
+                    }
+                  });
+
+                  setState(() {
+                    userLoaded.value = true;
+                  });
                 }
-              });
-            });
-
-            if (shouldUpdate) {
-              shouldUpdate = false;
-            }
-            else {
-              setState(() {
-                userLoaded.value = true;
-              });
-            }
-          }
+              }
+            },
+            onError: (data) => debugPrint(data.message),
+            apiResponse: (data) {
+            },
+            isCacheHit: (isHit) => debugPrint('Is Cache Hit: $isHit'),
+            shouldUpdate: true,
+            expiryTime: DateTime.now().add(const Duration(minutes: 1)),
+          );
         }
       },
       onError: (data) => debugPrint(data.message),
       apiResponse: (data) {
       },
       isCacheHit: (isHit) => debugPrint('Is Cache Hit: $isHit'),
-      shouldUpdate: shouldUpdate,
+      shouldUpdate: true,
       expiryTime: DateTime.now().add(const Duration(minutes: 1)),
     );
   }

@@ -248,11 +248,14 @@ class _NewGroupScreenState extends State<NewGroupScreen> {
             headers: {
               'X-CSRF-TOKEN': data['csrf_token'],
               'Content-Type': 'application/json',
+              'Cookie': 'exp_csrf_token=' + data['csrf_token'] + ';',
             },
             formData: {
               'user_ids': userIDs,
             },
             onSuccess: (data) {
+              print(data);
+
               if (data != null && data.containsKey('success')) {
                 if (data['success'] == 1) {
                   List<dynamic> ids = data['user_ids'];
