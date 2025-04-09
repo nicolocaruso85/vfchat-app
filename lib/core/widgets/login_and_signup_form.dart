@@ -8,6 +8,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:gap/gap.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:intl_mobile_field/intl_mobile_field.dart';
+import 'package:searchable_listview/searchable_listview.dart';
 
 import '../../../helpers/app_regex.dart';
 import '../../../themes/styles.dart';
@@ -42,6 +43,8 @@ class _EmailAndPasswordState extends State<EmailAndPassword> {
 
   bool hasMinLength = false;
 
+  bool chooseNegozio = false;
+
   late final _auth = FirebaseAuth.instance;
 
   late TextEditingController nameController = TextEditingController();
@@ -58,26 +61,31 @@ class _EmailAndPasswordState extends State<EmailAndPassword> {
 
   final formKey = GlobalKey<FormState>();
 
+  DocumentSnapshot? azienda;
+
+  int? selectedNegozio;
+
   @override
   Widget build(BuildContext context) {
     return Form(
       key: formKey,
       child: Column(
         children: [
-          if (widget.isSignUpPage == true) nameField(),
-          if (widget.isPasswordPage == null) emailField(),
-          if (widget.isSignUpPage == true) telephoneField(),
-          passwordField(),
-          Gap(18.h),
-          if (widget.isSignUpPage == true || widget.isPasswordPage == true)
+          if (chooseNegozio == true) negozioField(),
+          if (widget.isSignUpPage == true && chooseNegozio == false) nameField(),
+          if (widget.isPasswordPage == null && chooseNegozio == false) emailField(),
+          if (widget.isSignUpPage == true && chooseNegozio == false) telephoneField(),
+          if (chooseNegozio == false) passwordField(),
+          if (chooseNegozio == false) Gap(18.h),
+          if ((widget.isSignUpPage == true || widget.isPasswordPage == true)  && chooseNegozio == false)
             passwordConfirmationField(),
-          if (widget.isSignUpPage == null && widget.isPasswordPage == null)
+          if ((widget.isSignUpPage == null && widget.isPasswordPage == null) && chooseNegozio == false)
             forgetPasswordTextButton(context),
-          Gap(10.h),
-          PasswordValidations(
+          if (chooseNegozio == false) Gap(10.h),
+          if ( chooseNegozio == false) PasswordValidations(
             hasMinLength: hasMinLength,
           ),
-          if (widget.isSignUpPage == true) codiceAziendaField(),
+          if (widget.isSignUpPage == true && chooseNegozio == false) codiceAziendaField(),
           Gap(20.h),
           loginOrSignUpOrPasswordButton(context),
         ],
@@ -280,8 +288,11 @@ class _EmailAndPasswordState extends State<EmailAndPassword> {
   }
 
   loginOrSignUpOrPasswordButton(BuildContext context) {
-    if (widget.isSignUpPage == true) {
+    if (chooseNegozio == true) {
       return signUpButton(context);
+    }
+    if (widget.isSignUpPage == true) {
+      return nextButton(context);
     }
     if (widget.isSignUpPage == null && widget.isPasswordPage == null) {
       return loginButton(context);
@@ -476,9 +487,68 @@ class _EmailAndPasswordState extends State<EmailAndPassword> {
     });
   }
 
-  AppButton signUpButton(BuildContext context) {
+  SizedBox negozioField() {
+    return SizedBox(
+      height: MediaQuery.of(context).size.height - 450,
+      child: Column(
+        children: [
+          Gap(10.h),
+          Text(
+            context.tr('chooseNegozio'),
+            style: TextStyles.font16White600Weight,
+          ),
+          Expanded(
+            child: SearchableList<dynamic>(
+              inputDecoration: InputDecoration(
+                labelText: context.tr('search'),
+                fillColor: Colors.white,
+                labelStyle: TextStyle(color: Colors.white),
+                focusedBorder: OutlineInputBorder(
+                  borderSide: const BorderSide(
+                    color: Colors.blue,
+                    width: 1.0,
+                  ),
+                  borderRadius: BorderRadius.circular(10.0),
+                ),
+              ),
+              textStyle: TextStyles.font16White600Weight,
+              filter: (search) {
+                return azienda!['negozi'].where((negozio) => negozio['nome'].toLowerCase().contains(search.toLowerCase())).toList();
+              },
+              lazyLoadingEnabled: false,
+              initialList: azienda!['negozi'],
+              itemBuilder: (dynamic negozio) {
+                return ListTile(
+                  tileColor: const Color(0xff111B21),
+                  title: Text(
+                    negozio['nome'],
+                    style: TextStyle(
+                      color: selectedNegozio == negozio['id'] ? Colors.red : Colors.white,
+                    ),
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                  titleTextStyle: TextStyle(
+                    fontWeight: FontWeight.bold,
+                    fontSize: 20.sp,
+                    height: 1.2.h,
+                  ),
+                  onTap: () {
+                    setState(() {
+                      selectedNegozio = negozio['id'];
+                    });
+                  },
+                );
+              },
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  AppButton nextButton(BuildContext context) {
     return AppButton(
-      buttonText: context.tr('createAccount'),
+      buttonText: context.tr('next'),
       textStyle: TextStyles.font15DarkBlue500Weight,
       onPressed: () async {
         String codiceAzienda = codiceAziendaController.text;
@@ -495,94 +565,125 @@ class _EmailAndPasswordState extends State<EmailAndPassword> {
 
             return;
           }
+
+          QuerySnapshot aziende = await DatabaseMethods.getAziendaByCodice(codiceAzienda);
+          setState(() {
+            azienda = aziende.docs[0];
+            print(azienda);
+          });
         }
 
         if (formKey.currentState!.validate()) {
-          try {
-            await _auth.createUserWithEmailAndPassword(
-              email: emailController.text,
-              password: passwordController.text,
-            );
-            await _auth.currentUser!.updateDisplayName(nameController.text);
-            await _auth.currentUser!.sendEmailVerification();
-            await DatabaseMethods.addUserDetails(
-              {
-                'name': nameController.text,
-                'email': emailController.text,
-                'telephone': telephone,
-                'profilePic': '',
-                'uid': _auth.currentUser!.uid,
-                'mtoken': await getToken(),
-                'isOnline': false,
-                'isAdmin': false,
-                'isApproved': false,
-                'ruoli': [],
-                'gruppi': [],
-                'codiceAzienda': codiceAziendaController.text.toUpperCase(),
-              },
-            );
+          setState(() {
+            chooseNegozio = true;
+          });
+        }
+      },
+    );
+  }
 
-            await DatabaseMethods.addUserUpdatesByUid(
-              _auth.currentUser!.uid,
-              {
-                'name': nameController.text,
-                'email': emailController.text,
-                'telephone': telephone,
-                'profilePic': '',
-                'uid': _auth.currentUser!.uid,
-                'mtoken': await getToken(),
-                'isOnline': false,
-                'isAdmin': false,
-                'isApproved': false,
-                'ruoli': [],
-                'gruppi': [],
-                'codiceAzienda': codiceAziendaController.text.toUpperCase(),
-              },
-            );
+  AppButton signUpButton(BuildContext context) {
+    return AppButton(
+      buttonText: context.tr('createAccount'),
+      textStyle: TextStyles.font15DarkBlue500Weight,
+      onPressed: () async {
+        if (selectedNegozio == null) {
+          AwesomeDialog(
+            context: context,
+            dialogType: DialogType.error,
+            animType: AnimType.rightSlide,
+            title: context.tr('error'),
+            desc: context.tr('chooseNegozio'),
+          ).show();
+          return;
+        }
 
-            await _auth.signOut();
-            if (!context.mounted) return;
-            await AwesomeDialog(
-              context: context,
-              dialogType: DialogType.success,
-              animType: AnimType.rightSlide,
-              title: context.tr('success'),
-              desc: context.tr('verifyYourEmail'),
-            ).show();
+        try {
+          await _auth.createUserWithEmailAndPassword(
+            email: emailController.text,
+            password: passwordController.text,
+          );
+          await _auth.currentUser!.updateDisplayName(nameController.text);
+          await _auth.currentUser!.sendEmailVerification();
+          await DatabaseMethods.addUserDetails(
+            {
+              'name': nameController.text,
+              'email': emailController.text,
+              'telephone': telephone,
+              'profilePic': '',
+              'uid': _auth.currentUser!.uid,
+              'mtoken': await getToken(),
+              'isOnline': false,
+              'isAdmin': false,
+              'isApproved': false,
+              'ruoli': [],
+              'gruppi': [],
+              'idSede': selectedNegozio,
+              'codiceAzienda': codiceAziendaController.text.toUpperCase(),
+            },
+          );
 
-            if (!context.mounted) return;
+          await DatabaseMethods.addUserUpdatesByUid(
+            _auth.currentUser!.uid,
+            {
+              'name': nameController.text,
+              'email': emailController.text,
+              'telephone': telephone,
+              'profilePic': '',
+              'uid': _auth.currentUser!.uid,
+              'mtoken': await getToken(),
+              'isOnline': false,
+              'isAdmin': false,
+              'isApproved': false,
+              'ruoli': [],
+              'gruppi': [],
+              'idSede': selectedNegozio,
+              'codiceAzienda': codiceAziendaController.text.toUpperCase(),
+            },
+          );
 
-            context.pushNamedAndRemoveUntil(
-              Routes.loginScreen,
-              predicate: (route) => false,
-            );
-          } on FirebaseAuthException catch (e) {
-            if (e.code == 'email-already-in-use') {
-              AwesomeDialog(
-                context: context,
-                dialogType: DialogType.error,
-                animType: AnimType.rightSlide,
-                title: context.tr('error'),
-                desc: context.tr('emailAlreadyExists'),
-              ).show();
-            } else {
-              AwesomeDialog(
-                context: context,
-                dialogType: DialogType.error,
-                animType: AnimType.rightSlide,
-                title: context.tr('error'),
-                desc: e.message,
-              ).show();
-            }
-          } catch (e) {
+          await _auth.signOut();
+          if (!context.mounted) return;
+          await AwesomeDialog(
+            context: context,
+            dialogType: DialogType.success,
+            animType: AnimType.rightSlide,
+            title: context.tr('success'),
+            desc: context.tr('verifyYourEmail'),
+          ).show();
+
+          if (!context.mounted) return;
+
+          context.pushNamedAndRemoveUntil(
+            Routes.loginScreen,
+            predicate: (route) => false,
+          );
+        } on FirebaseAuthException catch (e) {
+          if (e.code == 'email-already-in-use') {
             AwesomeDialog(
               context: context,
               dialogType: DialogType.error,
               animType: AnimType.rightSlide,
               title: context.tr('error'),
-              desc: e.toString(),
+              desc: context.tr('emailAlreadyExists'),
+            ).show();
+          } else {
+            AwesomeDialog(
+              context: context,
+              dialogType: DialogType.error,
+              animType: AnimType.rightSlide,
+              title: context.tr('error'),
+              desc: e.message,
             ).show();
           }
+        } catch (e) {
+          AwesomeDialog(
+            context: context,
+            dialogType: DialogType.error,
+            animType: AnimType.rightSlide,
+            title: context.tr('error'),
+            desc: e.toString(),
+          ).show();
         }
       },
     );

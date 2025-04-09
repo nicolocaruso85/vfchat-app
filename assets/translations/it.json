@@ -118,5 +118,8 @@
     "startCall": "Avvia Chiamata",
     "leaveGroup": "Abbandona il gruppo",
     "confirmLeaveGroup": "Sei sicuro di voler abbandonare questo gruppo?",
-    "telephone": "Telefono"
+    "telephone": "Telefono",
+    "previous": "Indietro",
+    "next": "Avanti",
+    "chooseNegozio": "Seleziona un negozio"
 }

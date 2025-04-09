@@ -104,6 +104,13 @@ class DatabaseMethods {
         .get();
   }
 
+  static Future<QuerySnapshot> getAziendaByCodice(String codiceAzienda) {
+    return _fireStore
+        .collection('aziende')
+        .where('codice_azienda', isEqualTo: codiceAzienda.toUpperCase())
+        .get();
+  }
+
   // Get Messages from firestore
   static Stream<QuerySnapshot> getMessages(String userID, String otherUserID) {
     List<String> sortedIDs = [userID, otherUserID];
