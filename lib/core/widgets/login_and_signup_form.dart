@@ -87,6 +87,7 @@ class _EmailAndPasswordState extends State<EmailAndPassword> {
           ),
           if (widget.isSignUpPage == true && chooseNegozio == false) codiceAziendaField(),
           Gap(20.h),
+          if (chooseNegozio == true) previousButton(context),
           loginOrSignUpOrPasswordButton(context),
         ],
       ),
@@ -491,7 +492,7 @@ class _EmailAndPasswordState extends State<EmailAndPassword> {
     List<dynamic> negozi = azienda!['negozi'];
 
     return SizedBox(
-      height: MediaQuery.of(context).size.height - 450,
+      height: MediaQuery.of(context).size.height - 510,
       child: Column(
         children: [
           Gap(5.h),
@@ -546,6 +547,25 @@ class _EmailAndPasswordState extends State<EmailAndPassword> {
           ),
         ],
       ),
+    );
+  }
+
+  Column previousButton(BuildContext context) {
+    return Column(
+      children: [
+        AppButton(
+          buttonText: context.tr('previous'),
+          backgroundColor: Colors.red.shade700,
+          textStyle: TextStyles.font15DarkBlue500Weight,
+          onPressed: () async {
+            setState(() {
+              chooseNegozio = false;
+              selectedNegozio = null;
+            });
+          },
+        ),
+        Gap(10.h),
+      ],
     );
   }
 
