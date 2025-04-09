@@ -297,9 +297,12 @@ class _EditUserScreenState extends State<EditUserScreen> {
             },
           );
 
+          DocumentReference aziendaRef = await DatabaseMethods.getAziendaReference(azienda!.id);
+
           await DatabaseMethods.addUserUpdatesByUid(
             widget.uid,
             {
+              'azienda': aziendaRef,
               'name': name,
               'email': email,
               'telephone': telephone,

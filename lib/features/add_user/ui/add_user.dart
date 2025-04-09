@@ -230,7 +230,7 @@ class _AddUserScreenState extends State<AddUserScreen> {
       onPressed: () async {
         if (formKey.currentState!.validate()) {
           DocumentSnapshot userDetails = await DatabaseMethods.getCurrentUserDetails();
-          DocumentReference azienda = await DatabaseMethods.getAziendaReference(userDetails['azienda'].id);
+          DocumentReference aziendaRef = await DatabaseMethods.getAziendaReference(userDetails['azienda'].id);
 
           UserRecord user = await FirebaseAdmin.instance.app()!.auth().createUser(
             email: emailController.text,
@@ -258,7 +258,7 @@ class _AddUserScreenState extends State<AddUserScreen> {
               'isAdmin': false,
               'ruoli': ruoli,
               'gruppi': gruppi,
-              'azienda': azienda,
+              'azienda': aziendaRef,
             },
           );
 
@@ -273,7 +273,7 @@ class _AddUserScreenState extends State<AddUserScreen> {
               'isAdmin': false,
               'ruoli': ruoli,
               'gruppi': gruppi,
-              'azienda': azienda,
+              'azienda': aziendaRef,
             },
           );
 

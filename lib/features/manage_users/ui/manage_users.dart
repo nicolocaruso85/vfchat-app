@@ -188,7 +188,7 @@ class _ManageUsersScreenState extends State<ManageUsersScreen> {
                   desc: context.tr('approveConfirmation'),
                   btnOkText: context.tr('yes'),
                   btnOkOnPress: () async {
-                    DocumentReference aziendaRef = FirebaseFirestore.instance.collection('aziende').doc((await getAzienda()).id);
+                    DocumentReference aziendaRef = await DatabaseMethods.getAziendaReference((await getAzienda()).id);
 
                     await DatabaseMethods.updateUserDetailsByUid(
                       data['uid'],

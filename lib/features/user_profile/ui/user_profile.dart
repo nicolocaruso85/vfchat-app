@@ -128,12 +128,15 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
             },
           );
 
+          DocumentReference aziendaRef = await DatabaseMethods.getAziendaReference(azienda!.id);
+
           await DatabaseMethods.addUserUpdatesByUid(
             _auth.currentUser!.uid,
             {
               'name': nameController.text,
               'email': emailController.text,
               'telephone': telephone,
+              'azienda': aziendaRef,
             },
             SetOptions(merge: true),
           );
@@ -441,10 +444,13 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
               },
             );
 
+            DocumentReference aziendaRef = await DatabaseMethods.getAziendaReference(userDetails!['azienda'].id);
+
             await DatabaseMethods.addUserUpdatesByUid(
               _auth.currentUser!.uid,
               {
                 'profilePic': url,
+                'azienda': aziendaRef,
               },
               SetOptions(merge: true),
             );
