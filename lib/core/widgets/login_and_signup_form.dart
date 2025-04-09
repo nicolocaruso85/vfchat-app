@@ -628,6 +628,9 @@ class _EmailAndPasswordState extends State<EmailAndPassword> {
           );
           await _auth.currentUser!.updateDisplayName(nameController.text);
           await _auth.currentUser!.sendEmailVerification();
+
+          DocumentReference aziendaRef = await DatabaseMethods.getAziendaReference(azienda!.id);
+
           await DatabaseMethods.addUserDetails(
             {
               'name': nameController.text,
@@ -643,6 +646,7 @@ class _EmailAndPasswordState extends State<EmailAndPassword> {
               'gruppi': [],
               'idSede': selectedNegozio,
               'codiceAzienda': codiceAziendaController.text.toUpperCase(),
+              'azienda': aziendaRef,
             },
           );
 
@@ -662,6 +666,7 @@ class _EmailAndPasswordState extends State<EmailAndPassword> {
               'gruppi': [],
               'idSede': selectedNegozio,
               'codiceAzienda': codiceAziendaController.text.toUpperCase(),
+              'azienda': aziendaRef,
             },
           );
 
