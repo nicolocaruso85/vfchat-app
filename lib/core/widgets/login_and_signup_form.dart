@@ -488,15 +488,18 @@ class _EmailAndPasswordState extends State<EmailAndPassword> {
   }
 
   SizedBox negozioField() {
+    List<dynamic> negozi = azienda!['negozi'];
+
     return SizedBox(
       height: MediaQuery.of(context).size.height - 450,
       child: Column(
         children: [
-          Gap(10.h),
+          Gap(5.h),
           Text(
             context.tr('chooseNegozio'),
             style: TextStyles.font16White600Weight,
           ),
+          Gap(5.h),
           Expanded(
             child: SearchableList<dynamic>(
               inputDecoration: InputDecoration(
@@ -513,10 +516,10 @@ class _EmailAndPasswordState extends State<EmailAndPassword> {
               ),
               textStyle: TextStyles.font16White600Weight,
               filter: (search) {
-                return azienda!['negozi'].where((negozio) => negozio['nome'].toLowerCase().contains(search.toLowerCase())).toList();
+                return negozi.where((negozio) => negozio['nome'].toLowerCase().contains(search.toLowerCase())).toList();
               },
               lazyLoadingEnabled: false,
-              initialList: azienda!['negozi'],
+              initialList: negozi,
               itemBuilder: (dynamic negozio) {
                 return ListTile(
                   tileColor: const Color(0xff111B21),
