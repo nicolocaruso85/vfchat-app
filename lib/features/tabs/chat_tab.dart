@@ -77,11 +77,11 @@ class _ChatsTabState extends State<ChatsTab> {
             }
 
             Map<int, dynamic> tempUsers = {};
-            items.forEachIndexed((index, user) {
+            users.forEachIndexed((index, user) {
               if (lastMessageTime[user['uid']] != null) {
                 tempUsers[lastMessageTime[user['uid']]!.microsecondsSinceEpoch * -1] = user;
               }
-              else {
+              else if (items.contains(user['uid'])) {
                 tempUsers[index * -1] = user;
               }
             });
@@ -91,11 +91,11 @@ class _ChatsTabState extends State<ChatsTab> {
             if (loadedUnreadMessagesCount <= 0 || loadedLastMessageTime <= 0) {
               if (loadedUnreadMessagesCount == -1) {
                 loadedUnreadMessagesCount = 0;
-                getUnreadMessagesCount(sortedUsers);
+                getUnreadMessagesCount(users);
               }
               if (loadedLastMessageTime == -1) {
                 loadedLastMessageTime = 0;
-                getLastMessageTime(sortedUsers);
+                getLastMessageTime(users);
               }
 
               return const Center(child: CircularProgressIndicator());
@@ -314,16 +314,9 @@ class _ChatsTabState extends State<ChatsTab> {
 
               if (data != null && data.containsKey('success')) {
                 if (data['success'] == 1) {
-                  List<dynamic> ids = data['user_ids'];
-
-                  items = [];
-                  users.forEach((DocumentSnapshot user) {
-                    if (ids.contains(user['uid'])) {
-                      items.add(user);
-                    }
-                  });
-
                   setState(() {
+                    items = data['user_ids'];
+
                     loadingCheckUsersPermissions = 1;
                   });
                 }
