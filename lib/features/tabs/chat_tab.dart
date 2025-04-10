@@ -8,6 +8,7 @@ import 'package:intl/intl.dart';
 import 'package:gap/gap.dart';
 import 'package:collection/collection.dart';
 import 'package:auto_animated_list/auto_animated_list.dart';
+import 'package:king_cache/king_cache.dart';
 
 import '../../../services/database.dart';
 import '../../helpers/extensions.dart';
@@ -31,24 +32,29 @@ class _ChatsTabState extends State<ChatsTab> {
 
   int loadedUnreadMessagesCount = -1;
   int loadedLastMessageTime = -1;
+  int loadingCheckUsersPermissions = -1;
 
-  late final Future<String> idAzienda;
+  List<dynamic> items = [];
+
+  late final Future<DocumentSnapshot> azienda;
 
   @override
   void initState() {
     super.initState();
 
-    idAzienda = getIdAzienda();
+    azienda = getAzienda();
   }
 
   @override
   Widget build(BuildContext context) {
-    return FutureBuilder<String>(
-      future: idAzienda,
-      builder: (context, AsyncSnapshot<String> snapshot) {
+    return FutureBuilder<DocumentSnapshot>(
+      future: azienda,
+      builder: (context, AsyncSnapshot<DocumentSnapshot> snapshot) {
         if (snapshot.data == null) return Column();
 
-        _stream = DatabaseMethods.getUsers(snapshot.data!);
+        DocumentSnapshot az = snapshot.data!;
+
+        _stream = DatabaseMethods.getUsers(az.id);
 
         return StreamBuilder<QuerySnapshot>(
           stream: _stream,
@@ -61,8 +67,17 @@ class _ChatsTabState extends State<ChatsTab> {
             }
 
             var users = snapshot.data!.docs;
+            if (loadingCheckUsersPermissions == -1) {
+              checkUserPermissions(users, az);
+              loadingCheckUsersPermissions = 0;
+            }
+
+            if (loadingCheckUsersPermissions <= 0) {
+              return const Center(child: CircularProgressIndicator());
+            }
+
             Map<int, dynamic> tempUsers = {};
-            users.forEachIndexed((index, user) {
+            items.forEachIndexed((index, user) {
               if (lastMessageTime[user['uid']] != null) {
                 tempUsers[lastMessageTime[user['uid']]!.microsecondsSinceEpoch * -1] = user;
               }
@@ -266,8 +281,68 @@ class _ChatsTabState extends State<ChatsTab> {
     });
   }
 
-  Future<String> getIdAzienda() async {
+  Future<DocumentSnapshot> getAzienda() async {
     DocumentSnapshot userDetails = await DatabaseMethods.getCurrentUserDetails();
-    return userDetails['azienda'].id;
+    return await DatabaseMethods.getAzienda(userDetails['azienda'].id);
+  }
+
+  checkUserPermissions(users, azienda) async {
+    print(azienda!['api'] + 'check-permission/' + _auth.currentUser!.uid + '/gruppo');
+
+    await KingCache.cacheViaRest(
+      azienda!['api'] + 'check-permission/csrf_token',
+      method: HttpMethod.get,
+      onSuccess: (data) async {
+        print(data);
+
+        if (data != null && data.containsKey('csrf_token')) {
+          print(data['csrf_token']);
+
+          await KingCache.cacheViaRest(
+            azienda!['api'] + 'check-permission/' + _auth.currentUser!.uid + '/gruppo',
+            method: HttpMethod.post,
+            headers: {
+              'X-CSRF-TOKEN': data['csrf_token'],
+              'Content-Type': 'application/json',
+              'Cookie': 'exp_csrf_token=' + data['csrf_token'] + ';',
+            },
+            formData: {
+              'user_ids': [],
+            },
+            onSuccess: (data) {
+              print(data);
+
+              if (data != null && data.containsKey('success')) {
+                if (data['success'] == 1) {
+                  List<dynamic> ids = data['user_ids'];
+
+                  items = [];
+                  users.forEach((DocumentSnapshot user) {
+                    if (ids.contains(user['uid'])) {
+                      items.add(user);
+                    }
+                  });
+
+                  setState(() {
+                    loadingCheckUsersPermissions = 1;
+                  });
+                }
+              }
+            },
+            onError: (data) => debugPrint(data.message),
+            apiResponse: (data) {
+            },
+            isCacheHit: (isHit) => debugPrint('Is Cache Hit: $isHit'),
+            shouldUpdate: true,
+            expiryTime: DateTime.now().add(const Duration(minutes: 1)),
+          );
+        }
+      },
+      onError: (data) => debugPrint(data.message),
+      apiResponse: (data) {
+      },
+      isCacheHit: (isHit) => debugPrint('Is Cache Hit: $isHit'),
+      expiryTime: DateTime.now().add(const Duration(minutes: 1)),
+    );
   }
 }
