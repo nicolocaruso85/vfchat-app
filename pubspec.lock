@@ -220,10 +220,10 @@ packages:
     dependency: "direct main"
     description:
       name: chewie
-      sha256: df6711bc3ba165ad19cb496e350250be5673327f79c61c9cc8a15088ed8007ed
+      sha256: "4d9554a8f87cc2dc6575dfd5ad20a4375015a29edd567fd6733febe6365e2566"
       url: "https://pub.dev"
     source: hosted
-    version: "1.11.1"
+    version: "1.11.3"
   clock:
     dependency: transitive
     description:
@@ -744,10 +744,10 @@ packages:
     dependency: "direct main"
     description:
       name: flutter_local_notifications
-      sha256: d59eeafd6df92174b1d5f68fc9d66634c97ce2e7cfe2293476236547bb19bbbd
+      sha256: "33b3e0269ae9d51669957a923f2376bee96299b09915d856395af8c4238aebfa"
       url: "https://pub.dev"
     source: hosted
-    version: "19.0.0"
+    version: "19.1.0"
   flutter_local_notifications_linux:
     dependency: transitive
     description:
@@ -861,10 +861,10 @@ packages:
     dependency: "direct main"
     description:
       name: flutter_svg
-      sha256: c200fd79c918a40c5cd50ea0877fa13f81bdaf6f0a5d3dbcc2a13e3285d6aa1b
+      sha256: d44bf546b13025ec7353091516f6881f1d4c633993cb109c3916c3a0159dadf1
       url: "https://pub.dev"
     source: hosted
-    version: "2.0.17"
+    version: "2.1.0"
   flutter_test:
     dependency: "direct dev"
     description: flutter
@@ -1167,10 +1167,10 @@ packages:
     dependency: "direct main"
     description:
       name: intl_mobile_field
-      sha256: f1a004c1e05d88da01d199812b94249e3dfbaa39ee017037a4ec8886b264854a
+      sha256: bc0cdc2f962d5b45aa6f9c1da1212a8b6b3e336ec2f62faefcaa406a96bd0c13
       url: "https://pub.dev"
     source: hosted
-    version: "1.1.1"
+    version: "2.0.0"
   io:
     dependency: transitive
     description:
@@ -1743,10 +1743,10 @@ packages:
     dependency: "direct main"
     description:
       name: searchable_listview
-      sha256: "83d0a7673938f729078b554e47ccb66927645f798f5a2a1c0b2f85d52f1823b7"
+      sha256: ab64227070d762b8c8a8915415b966de0b764caa1fe35e800e9f92d947592baf
       url: "https://pub.dev"
     source: hosted
-    version: "2.16.0"
+    version: "2.17.0"
   selectable_search_list:
     dependency: "direct main"
     description:

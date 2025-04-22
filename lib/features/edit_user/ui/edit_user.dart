@@ -8,6 +8,7 @@ import 'package:gap/gap.dart';
 import 'package:firebase_admin/firebase_admin.dart';
 import 'package:multi_select_flutter/multi_select_flutter.dart';
 import 'package:intl_mobile_field/intl_mobile_field.dart';
+import 'package:intl_mobile_field/flags_drop_down.dart';
 
 import '../../../themes/colors.dart';
 import '../../../themes/styles.dart';
@@ -435,7 +436,7 @@ class _EditUserScreenState extends State<EditUserScreen> {
         IntlMobileField(
           controller: telephoneController,
           decoration: InputDecoration(
-            labelText: context.tr('telephone'),
+            hintText: context.tr('telephone'),
             border: OutlineInputBorder(
               borderSide: const BorderSide(
                 color: Colors.transparent,
@@ -465,21 +466,22 @@ class _EditUserScreenState extends State<EditUserScreen> {
           ),
           fillColor: const Color(0xff273443),
           style: TextStyles.font18White500Weight,
-          favorite: const ['IT'],
-          initialCountryCode: 'IT',
+          prefixIcon: FlagsDropDown(
+            favorite: const ['IT'],
+            initialCountryCode: 'IT',
+            languageCode: 'it',
+            onCountryChanged: (country) {
+              dialCode = country.dialCode;
+            },
+          ),
           disableLengthCounter: true,
-          languageCode: 'it',
           onChanged: (phone) {
-          },
-          onCountryChanged: (country) {
-            dialCode = country.dialCode;
           },
           validator: (value) {
             if (value == null) {
               return context.tr('pleaseEnterValid', args: ['Telefono']);
             }
           },
-          searchText: context.tr('search'),
           invalidNumberMessage: context.tr('pleaseEnterValid', args: ['Telefono']),
         ),
         Gap(18.h),

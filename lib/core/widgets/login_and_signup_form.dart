@@ -8,6 +8,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:gap/gap.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:intl_mobile_field/intl_mobile_field.dart';
+import 'package:intl_mobile_field/flags_drop_down.dart';
 import 'package:searchable_listview/searchable_listview.dart';
 
 import '../../../helpers/app_regex.dart';
@@ -132,7 +133,7 @@ class _EmailAndPasswordState extends State<EmailAndPassword> {
         IntlMobileField(
           controller: telephoneController,
           decoration: InputDecoration(
-            labelText: context.tr('telephone'),
+            hintText: context.tr('telephone'),
             border: OutlineInputBorder(
               borderSide: const BorderSide(
                 color: Colors.transparent,
@@ -162,22 +163,23 @@ class _EmailAndPasswordState extends State<EmailAndPassword> {
           ),
           fillColor: const Color(0xff273443),
           style: TextStyles.font18White500Weight,
-          favorite: const ['IT'],
-          initialCountryCode: 'IT',
+          prefixIcon: FlagsDropDown(
+            favorite: const ['IT'],
+            initialCountryCode: 'IT',
+            languageCode: 'it',
+            onCountryChanged: (country) {
+              dialCode = country.dialCode;
+            },
+          ),
           disableLengthCounter: true,
-          languageCode: 'it',
           onChanged: (phone) {
             telephone = phone.number;
-          },
-          onCountryChanged: (country) {
-            dialCode = country.dialCode;
           },
           validator: (value) {
             if (value == null) {
               return context.tr('pleaseEnterValid', args: ['Telefono']);
             }
           },
-          searchText: context.tr('search'),
           invalidNumberMessage: context.tr('pleaseEnterValid', args: ['Telefono']),
         ),
         Gap(18.h),
