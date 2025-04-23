@@ -82,12 +82,12 @@ class _ChatScreenState extends State<ChatScreen> {
               CustomMessageBar(
                 onSend: (message) async {
                   bool permission = false;
+                  bool error = false;
 
                   await KingCache.cacheViaRest(
                     azienda!['api'] + 'check-permission/' + _auth.currentUser!.uid + '/' + widget.receivedUserID + '/messaggi',
                     method: HttpMethod.get,
                     onSuccess: (data) {
-                      print(data);
                       if (data != null && data.containsKey('success')) {
                         print(data['success']);
 
@@ -96,7 +96,10 @@ class _ChatScreenState extends State<ChatScreen> {
                         }
                       }
                     },
-                    onError: (data) => debugPrint(data.message),
+                    onError: (data) {
+                      print(data);
+                      error = true;
+                    },
                     apiResponse: (data) {
                       print(data);
                     },
@@ -105,6 +108,17 @@ class _ChatScreenState extends State<ChatScreen> {
                     expiryTime: DateTime.now().add(const Duration(minutes: 1)),
                   );
 
+                  if (error == true) {
+                    AwesomeDialog(
+                      context: context,
+                      dialogType: DialogType.error,
+                      animType: AnimType.rightSlide,
+                      title: context.tr('error'),
+                      desc: context.tr('connectionErrorMessage'),
+                    ).show();
+
+                    return;
+                  }
                   if (permission == false) {
                     AwesomeDialog(
                       context: context,
@@ -211,6 +225,7 @@ class _ChatScreenState extends State<ChatScreen> {
 
   Future showImageOptions() async {
     bool permission = false;
+    bool error = false;
 
     await KingCache.cacheViaRest(
       azienda!['api'] + 'check-permission/' + _auth.currentUser!.uid + '/' + widget.receivedUserID + '/immagini',
@@ -226,7 +241,10 @@ class _ChatScreenState extends State<ChatScreen> {
           }
         }
       },
-      onError: (data) => debugPrint(data.message),
+      onError: (data) {
+        print(data);
+        error = true;
+      },
       apiResponse: (data) {
         print(data);
       },
@@ -235,6 +253,17 @@ class _ChatScreenState extends State<ChatScreen> {
       expiryTime: DateTime.now().add(const Duration(minutes: 1)),
     );
 
+    if (error == true) {
+      AwesomeDialog(
+        context: context,
+        dialogType: DialogType.error,
+        animType: AnimType.rightSlide,
+        title: context.tr('error'),
+        desc: context.tr('connectionErrorMessage'),
+      ).show();
+
+      return;
+    }
     if (permission == false) {
       AwesomeDialog(
         context: context,

@@ -121,5 +121,6 @@
     "telephone": "Telefono",
     "previous": "Indietro",
     "next": "Avanti",
-    "chooseNegozio": "Seleziona un negozio"
+    "chooseNegozio": "Seleziona un negozio",
+    "connectionErrorMessage": "Si è verificato un errore, controlla la tua connessione ad internet"
 }
