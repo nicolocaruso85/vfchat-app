@@ -13,6 +13,7 @@ import 'package:king_cache/king_cache.dart';
 import '../../../services/database.dart';
 import '../../helpers/extensions.dart';
 import '../../router/routes.dart';
+import '../../themes/colors.dart';
 import '../../themes/styles.dart';
 
 class ChatsTab extends StatefulWidget {
@@ -47,179 +48,199 @@ class _ChatsTabState extends State<ChatsTab> {
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: EdgeInsets.symmetric(
-        horizontal: 20,
+    return Container(
+      decoration: BoxDecoration(
+        gradient: LinearGradient(
+          colors: [Color(0xffdbdbdb), Colors.white],
+          stops: [0.25, 1],
+          begin: Alignment.bottomCenter,
+          end: Alignment.topCenter,
+        ),
       ),
-      child: FutureBuilder<DocumentSnapshot>(
-        future: azienda,
-        builder: (context, AsyncSnapshot<DocumentSnapshot> snapshot) {
-          if (snapshot.data == null) return Column();
+      child: Padding(
+        padding: EdgeInsets.symmetric(
+          horizontal: 20,
+        ),
+        child: FutureBuilder<DocumentSnapshot>(
+          future: azienda,
+          builder: (context, AsyncSnapshot<DocumentSnapshot> snapshot) {
+            if (snapshot.data == null) return Column();
 
-          DocumentSnapshot az = snapshot.data!;
+            DocumentSnapshot az = snapshot.data!;
 
-          _stream = DatabaseMethods.getUsers(az.id);
+            _stream = DatabaseMethods.getUsers(az.id);
 
-          return StreamBuilder<QuerySnapshot>(
-            stream: _stream,
-            builder: (context, snapshot) {
-              if (snapshot.hasError) {
-                return Text(context.tr('somethingWentWrong'));
-              }
-              if (snapshot.connectionState == ConnectionState.waiting) {
-                return const Center(child: CircularProgressIndicator());
-              }
-
-              var users = snapshot.data!.docs;
-              if (loadingCheckUsersPermissions == -1) {
-                checkUserPermissions(users, az);
-                loadingCheckUsersPermissions = 0;
-              }
-
-              if (loadingCheckUsersPermissions <= 0) {
-                return const Center(child: CircularProgressIndicator());
-              }
-
-              Map<int, dynamic> tempUsers = {};
-              users.forEachIndexed((index, user) {
-                if (lastMessageTime[user['uid']] != null) {
-                  tempUsers[lastMessageTime[user['uid']]!.microsecondsSinceEpoch * -1] = user;
+            return StreamBuilder<QuerySnapshot>(
+              stream: _stream,
+              builder: (context, snapshot) {
+                if (snapshot.hasError) {
+                  return Text(context.tr('somethingWentWrong'));
                 }
-                else if (items.contains(user['uid'])) {
-                  tempUsers[index * -1] = user;
-                }
-              });
-
-              List sortedUsers = Map.fromEntries(tempUsers.entries.toList()..sort((e1, e2) => e1.key.compareTo(e2.key))).values.toList();
-
-              if (loadedUnreadMessagesCount <= 0 || loadedLastMessageTime <= 0) {
-                if (loadedUnreadMessagesCount == -1) {
-                  loadedUnreadMessagesCount = 0;
-                  getUnreadMessagesCount(users);
-                }
-                if (loadedLastMessageTime == -1) {
-                  loadedLastMessageTime = 0;
-                  getLastMessageTime(users);
+                if (snapshot.connectionState == ConnectionState.waiting) {
+                  return const Center(child: CircularProgressIndicator());
                 }
 
-                return const Center(child: CircularProgressIndicator());
-              }
+                var users = snapshot.data!.docs;
+                if (loadingCheckUsersPermissions == -1) {
+                  checkUserPermissions(users, az);
+                  loadingCheckUsersPermissions = 0;
+                }
 
-              return AutoAnimatedList(
-                items: sortedUsers,
-                itemBuilder: (context, doc, index, animation) {
-                  Map<String, dynamic> data = doc.data() as Map<String, dynamic>;
+                if (loadingCheckUsersPermissions <= 0) {
+                  return const Center(child: CircularProgressIndicator());
+                }
 
-                  if (_auth.currentUser!.email != data['email']) {
-                    return SizeFadeTransition(
-                      animation: animation,
-                      child: ListTile(
-                        contentPadding: EdgeInsets.symmetric(horizontal: 0),
-                        leading: data['profilePic'] != null && data['profilePic'] != ''
-                            ? Hero(
-                                tag: data['profilePic'],
-                                child: ClipOval(
-                                  child: CachedNetworkImage(
-                                    imageUrl: data['profilePic'],
-                                    placeholder: (context, url) =>
-                                        Image.asset('assets/images/loading.gif'),
-                                    errorWidget: (context, url, error) =>
-                                        const Icon(Icons.error_outline_rounded),
-                                    width: 50.w,
-                                    height: 50.h,
-                                    fit: BoxFit.cover,
-                                  ),
-                                ),
-                              )
-                            : Image.asset(
-                                'assets/images/user.png',
-                                height: 50.h,
-                                width: 50.w,
-                                fit: BoxFit.cover,
+                Map<int, dynamic> tempUsers = {};
+                users.forEachIndexed((index, user) {
+                  if (lastMessageTime[user['uid']] != null) {
+                    tempUsers[lastMessageTime[user['uid']]!.microsecondsSinceEpoch * -1] = user;
+                  }
+                  else if (items.contains(user['uid'])) {
+                    tempUsers[index * -1] = user;
+                  }
+                });
+
+                List sortedUsers = Map.fromEntries(tempUsers.entries.toList()..sort((e1, e2) => e1.key.compareTo(e2.key))).values.toList();
+
+                if (loadedUnreadMessagesCount <= 0 || loadedLastMessageTime <= 0) {
+                  if (loadedUnreadMessagesCount == -1) {
+                    loadedUnreadMessagesCount = 0;
+                    getUnreadMessagesCount(users);
+                  }
+                  if (loadedLastMessageTime == -1) {
+                    loadedLastMessageTime = 0;
+                    getLastMessageTime(users);
+                  }
+
+                  return const Center(child: CircularProgressIndicator());
+                }
+
+                return AutoAnimatedList(
+                  items: sortedUsers,
+                  itemBuilder: (context, doc, index, animation) {
+                    Map<String, dynamic> data = doc.data() as Map<String, dynamic>;
+
+                    if (_auth.currentUser!.email != data['email']) {
+                      return SizeFadeTransition(
+                        animation: animation,
+                        child: Container(
+                          decoration: BoxDecoration(
+                            border: Border(
+                              bottom: BorderSide(
+                                color: Color(0xffdedede),
+                                width: 1.0,
                               ),
-                        title: Text(
-                          data['name'],
-                          style: TextStyles.font18Black800Weight,
-                          overflow: TextOverflow.ellipsis,
-                        ),
-                        subtitle: Text(
-                          data['isOnline']
-                              ? context.tr('online')
-                              : context.tr('offline'),
-                          style: const TextStyle(
-                            color: Color(0xff828282),
+                            ),
                           ),
-                          overflow: TextOverflow.ellipsis,
-                          maxLines: 1,
-                        ),
-                        trailing: Column(
-                           mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            lastMessageTime[data['uid']] != null ?
-                              Text(
-                                formatDate(lastMessageTime[data['uid']]!),
-                                style: const TextStyle(
-                                  color: Colors.white,
-                                ),
-                              ) : Column(),
-                            unreadMessagesCount[data['uid']] != null ?
-                              Column(
-                                children: [
-                                  Gap(5.h),
-                                  CircleAvatar(
-                                    backgroundColor: Colors.red,
-                                    maxRadius: 10,
-                                    child: Center(
-                                      child: Text(
-                                        unreadMessagesCount[data['uid']].toString(),
-                                        style: TextStyles.font12White500Weight,
+                          child: ListTile(
+                            contentPadding: EdgeInsets.symmetric(
+                              horizontal: 0,
+                              vertical: 20,
+                            ),
+                            leading: data['profilePic'] != null && data['profilePic'] != ''
+                                ? Hero(
+                                    tag: data['profilePic'],
+                                    child: ClipOval(
+                                      child: CachedNetworkImage(
+                                        imageUrl: data['profilePic'],
+                                        placeholder: (context, url) =>
+                                            Image.asset('assets/images/loading.gif'),
+                                        errorWidget: (context, url, error) =>
+                                            const Icon(Icons.error_outline_rounded),
+                                        width: 100,
+                                        height: 100,
+                                        fit: BoxFit.cover,
                                       ),
                                     ),
+                                  )
+                                : Image.asset(
+                                    'assets/images/user.png',
+                                    height: 100,
+                                    width: 100,
+                                    fit: BoxFit.cover,
                                   ),
-                                ],
-                              ) : Column(),
-                          ],
-                        ),
-                        isThreeLine: true,
-                        titleAlignment: ListTileTitleAlignment.center,
-                        enableFeedback: true,
-                        dense: false,
-                        titleTextStyle: TextStyle(
-                          fontWeight: FontWeight.bold,
-                          fontSize: 20.sp,
-                          height: 1.2.h,
-                        ),
-                        subtitleTextStyle: TextStyle(
-                          height: 2.h,
-                        ),
-                        horizontalTitleGap: 5,
-                        shape: Border(
-                          bottom: BorderSide(
-                            color: Color(0x0ffcdcdcd),
-                            width: 1,
+                            title: Text(
+                              data['name'],
+                              style: TextStyles.font18Black800Weight,
+                              overflow: TextOverflow.ellipsis,
+                            ),
+                            subtitle: Text(
+                              data['isOnline']
+                                  ? context.tr('online')
+                                  : context.tr('offline'),
+                              style: TextStyle(
+                                fontSize: 14.sp,
+                                color: Color(0xff828282),
+                              ),
+                              overflow: TextOverflow.ellipsis,
+                              maxLines: 1,
+                            ),
+                            trailing: Column(
+                               mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                lastMessageTime[data['uid']] != null ?
+                                  Text(
+                                    formatDate(lastMessageTime[data['uid']]!),
+                                    style: TextStyle(
+                                      fontSize: 14.sp,
+                                      color: Color(0xff828282),
+                                    ),
+                                  ) : Column(),
+                                unreadMessagesCount[data['uid']] != null ?
+                                  Column(
+                                    children: [
+                                      Gap(5.h),
+                                      CircleAvatar(
+                                        backgroundColor: ColorsManager.redPrimary,
+                                        maxRadius: 10,
+                                        child: Center(
+                                          child: Text(
+                                            unreadMessagesCount[data['uid']].toString(),
+                                            style: TextStyles.font12White500Weight,
+                                          ),
+                                        ),
+                                      ),
+                                    ],
+                                  ) : Column(),
+                              ],
+                            ),
+                            isThreeLine: true,
+                            titleAlignment: ListTileTitleAlignment.center,
+                            enableFeedback: true,
+                            dense: false,
+                            visualDensity: VisualDensity(vertical: 4),
+                            titleTextStyle: TextStyle(
+                              fontWeight: FontWeight.bold,
+                              fontSize: 20.sp,
+                              height: 1.2.h,
+                            ),
+                            subtitleTextStyle: TextStyle(
+                              height: 1.2.h,
+                            ),
+                            horizontalTitleGap: 2,
+                            onTap: () {
+                              context.pushNamed(Routes.chatScreen, arguments: data)
+                                .then((_) {
+                                  setState(() {
+                                    loadedLastMessageTime = -1;
+                                    loadedUnreadMessagesCount = -1;
+                                    lastMessageTime = {};
+                                    unreadMessagesCount = {};
+                                  });
+                                });
+                            },
                           ),
                         ),
-                        onTap: () {
-                          context.pushNamed(Routes.chatScreen, arguments: data)
-                            .then((_) {
-                              setState(() {
-                                loadedLastMessageTime = -1;
-                                loadedUnreadMessagesCount = -1;
-                                lastMessageTime = {};
-                                unreadMessagesCount = {};
-                              });
-                            });
-                        },
-                      ),
-                    );
-                  } else {
-                    return const SizedBox.shrink();
-                  }
-                },
-              );
-            },
-          );
-        },
+                      );
+                    } else {
+                      return const SizedBox.shrink();
+                    }
+                  },
+                );
+              },
+            );
+          },
+        ),
       ),
     );
   }

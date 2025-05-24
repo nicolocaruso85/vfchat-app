@@ -72,92 +72,102 @@ class _ChatScreenState extends State<ChatScreen> {
             fit: BoxFit.cover,
           ),
         ),
-        child: Padding(
-          padding: EdgeInsets.only(left: 8.w, right: 8.w, bottom: 22),
-          child: Column(
-            children: [
-              Expanded(
-                child: _buildMessagesList(),
-              ),
-              CustomMessageBar(
-                onSend: (message) async {
-                  bool permission = false;
-                  bool error = false;
+        child: Container(
+          decoration: BoxDecoration(
+            gradient: LinearGradient(
+              colors: [Color(0xffdbdbdb), Colors.white],
+              stops: [0.25, 1],
+              begin: Alignment.bottomCenter,
+              end: Alignment.topCenter,
+            ),
+          ),
+          child: Padding(
+            padding: EdgeInsets.only(left: 8.w, right: 8.w, bottom: 22),
+            child: Column(
+              children: [
+                Expanded(
+                  child: _buildMessagesList(),
+                ),
+                CustomMessageBar(
+                  onSend: (message) async {
+                    bool permission = false;
+                    bool error = false;
 
-                  await KingCache.cacheViaRest(
-                    azienda!['api'] + 'check-permission/' + _auth.currentUser!.uid + '/' + widget.receivedUserID + '/messaggi',
-                    method: HttpMethod.get,
-                    onSuccess: (data) {
-                      if (data != null && data.containsKey('success')) {
-                        print(data['success']);
+                    await KingCache.cacheViaRest(
+                      azienda!['api'] + 'check-permission/' + _auth.currentUser!.uid + '/' + widget.receivedUserID + '/messaggi',
+                      method: HttpMethod.get,
+                      onSuccess: (data) {
+                        if (data != null && data.containsKey('success')) {
+                          print(data['success']);
 
-                        if (data['success'] == 1) {
-                          permission = true;
+                          if (data['success'] == 1) {
+                            permission = true;
+                          }
                         }
-                      }
-                    },
-                    onError: (data) {
-                      print(data);
-                      error = true;
-                    },
-                    apiResponse: (data) {
-                      print(data);
-                    },
-                    isCacheHit: (isHit) => debugPrint('Is Cache Hit: $isHit'),
-                    shouldUpdate: true,
-                    expiryTime: DateTime.now().add(const Duration(minutes: 1)),
-                  );
+                      },
+                      onError: (data) {
+                        print(data);
+                        error = true;
+                      },
+                      apiResponse: (data) {
+                        print(data);
+                      },
+                      isCacheHit: (isHit) => debugPrint('Is Cache Hit: $isHit'),
+                      shouldUpdate: true,
+                      expiryTime: DateTime.now().add(const Duration(minutes: 1)),
+                    );
 
-                  if (error == true) {
-                    AwesomeDialog(
-                      context: context,
-                      dialogType: DialogType.error,
-                      animType: AnimType.rightSlide,
-                      title: context.tr('error'),
-                      desc: context.tr('connectionErrorMessage'),
-                    ).show();
+                    if (error == true) {
+                      AwesomeDialog(
+                        context: context,
+                        dialogType: DialogType.error,
+                        animType: AnimType.rightSlide,
+                        title: context.tr('error'),
+                        desc: context.tr('connectionErrorMessage'),
+                      ).show();
 
-                    return;
-                  }
-                  if (permission == false) {
-                    AwesomeDialog(
-                      context: context,
-                      dialogType: DialogType.error,
-                      animType: AnimType.rightSlide,
-                      title: context.tr('error'),
-                      desc: context.tr('noPermissionMessage'),
-                    ).show();
+                      return;
+                    }
+                    if (permission == false) {
+                      AwesomeDialog(
+                        context: context,
+                        dialogType: DialogType.error,
+                        animType: AnimType.rightSlide,
+                        title: context.tr('error'),
+                        desc: context.tr('noPermissionMessage'),
+                      ).show();
 
-                    return;
-                  }
+                      return;
+                    }
 
-                  Map<String, dynamic> notification = {
-                    'senderID': FirebaseFirestore.instance.collection('users').doc(_auth.currentUser!.uid),
-                    'message': message,
-                    'type': 'direct_message',
-                    'time': FieldValue.serverTimestamp(),
-                  };
+                    Map<String, dynamic> notification = {
+                      'senderID': FirebaseFirestore.instance.collection('users').doc(_auth.currentUser!.uid),
+                      'message': message,
+                      'type': 'direct_message',
+                      'time': FieldValue.serverTimestamp(),
+                    };
 
-                  await DatabaseMethods.sendMessage(
-                    message,
-                    widget.receivedUserID,
-                  );
-                  DatabaseMethods.sendNotification(
-                    widget.receivedUserID,
-                    notification,
-                  );
-                  await _chatService.sendPushMessage(
-                    widget.receivedMToken,
-                    token!,
-                    message,
-                    _auth.currentUser!.displayName!,
-                    _auth.currentUser!.uid,
-                    _auth.currentUser!.photoURL,
-                  );
-                },
-                onShowOptions: showImageOptions,
-              ),
-            ],
+                    await DatabaseMethods.sendMessage(
+                      message,
+                      widget.receivedUserID,
+                    );
+                    DatabaseMethods.sendNotification(
+                      widget.receivedUserID,
+                      notification,
+                    );
+                    await _chatService.sendPushMessage(
+                      widget.receivedMToken,
+                      token!,
+                      message,
+                      _auth.currentUser!.displayName!,
+                      _auth.currentUser!.uid,
+                      _auth.currentUser!.photoURL,
+                    );
+                  },
+                  onShowOptions: showImageOptions,
+                ),
+              ],
+            ),
           ),
         ),
       ),
@@ -301,6 +311,13 @@ class _ChatScreenState extends State<ChatScreen> {
 
   AppBar _buildAppBar(BuildContext context) {
     return AppBar(
+      forceMaterialTransparency: true,
+      shape: Border(
+        bottom: BorderSide(
+          color: Color(0xffc2c2c2),
+          width: 1.0,
+        )
+      ),
       leadingWidth: 105.w,
       leading: InkWell(
         borderRadius: BorderRadius.circular(50),

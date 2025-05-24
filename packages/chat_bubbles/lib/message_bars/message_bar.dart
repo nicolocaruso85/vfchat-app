@@ -145,7 +145,7 @@ class MessageBar extends StatelessWidget {
                       hintMaxLines: 1,
                       hintStyle: messageBarHintStyle,
                       contentPadding: contentPadding,
-                      fillColor: Colors.white,
+                      fillColor: Colors.transparent,
                       filled: true,
                       enabledBorder: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(30.0),

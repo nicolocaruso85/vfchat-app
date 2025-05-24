@@ -90,27 +90,29 @@ class _EmailAndPasswordState extends State<EmailAndPassword> {
           if (widget.isPasswordPage == null && chooseNegozio == false) emailField(),
           if (widget.isSignUpPage == true && chooseNegozio == false) telephoneField(),
           if (chooseNegozio == false) passwordField(),
-          if (chooseNegozio == false) Gap(5.h),
+          if (widget.isSignUpPage == null && chooseNegozio == false) Gap(5.h),
+          if (widget.isSignUpPage == true && chooseNegozio == false) Gap(18.h),
           if ((widget.isSignUpPage == true || widget.isPasswordPage == true) && chooseNegozio == false)
             passwordConfirmationField(),
           if ((widget.isSignUpPage == null && widget.isPasswordPage == null) && chooseNegozio == false)
             forgetPasswordTextButton(context),
-          if (chooseNegozio == false) Gap(10.h),
+          if (widget.isSignUpPage == null && chooseNegozio == false) Gap(10.h),
           if (widget.isSignUpPage == true && chooseNegozio == false) codiceAziendaField(),
           Gap(20.h),
           if (chooseNegozio == true) previousButton(context),
-          loginWithField(context),
+          if (widget.isSignUpPage == null && chooseNegozio == false) loginWithField(context),
           Gap(30.h),
-          Align(
-            alignment: Alignment.bottomCenter,
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                const DoNotHaveAccountText(),
-              ],
+          if (widget.isSignUpPage == null && chooseNegozio == false)
+            Align(
+              alignment: Alignment.bottomCenter,
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  const DoNotHaveAccountText(),
+                ],
+              ),
             ),
-          ),
-          Gap(15.h),
+          if (widget.isSignUpPage == null && chooseNegozio == false) Gap(15.h),
           loginOrSignUpOrPasswordButton(context),
         ],
       ),
@@ -156,34 +158,42 @@ class _EmailAndPasswordState extends State<EmailAndPassword> {
           controller: telephoneController,
           decoration: InputDecoration(
             hintText: context.tr('telephone'),
+            hintStyle: TextStyles.font18Grey400Weight,
+            contentPadding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 17.h),
             border: OutlineInputBorder(
               borderSide: const BorderSide(
-                color: Colors.transparent,
+                color: Color(0x77ffffff),
               ),
-              borderRadius: BorderRadius.circular(30),
+              borderRadius: BorderRadius.circular(50),
+            ),
+            enabledBorder: OutlineInputBorder(
+              borderSide: const BorderSide(
+                color: Color(0x77ffffff),
+              ),
+              borderRadius: BorderRadius.circular(50),
             ),
             focusedBorder: OutlineInputBorder(
               borderSide: const BorderSide(
-                color: Colors.transparent,
+                color: Color(0xddffffff),
               ),
-              borderRadius: BorderRadius.circular(30),
+              borderRadius: BorderRadius.circular(50),
             ),
             errorBorder: OutlineInputBorder(
               borderSide: BorderSide(
                 color: ColorsManager.coralRed,
                 width: 1.3.w,
               ),
-              borderRadius: BorderRadius.circular(30),
+              borderRadius: BorderRadius.circular(50),
             ),
             focusedErrorBorder: OutlineInputBorder(
               borderSide: BorderSide(
                 color: ColorsManager.coralRed,
                 width: 1.3.w,
               ),
-              borderRadius: BorderRadius.circular(30),
+              borderRadius: BorderRadius.circular(50),
             ),
           ),
-          fillColor: const Color(0xff273443),
+          fillColor: Colors.transparent,
           style: TextStyles.font18White500Weight,
           favorite: const ['IT'],
           initialCountryCode: 'IT',
@@ -192,6 +202,7 @@ class _EmailAndPasswordState extends State<EmailAndPassword> {
             dialCode = country.dialCode;
           },
           disableLengthCounter: true,
+          dropdownTextStyle: TextStyles.font18White500Weight,
           onChanged: (phone) {
             telephone = phone.number;
           },

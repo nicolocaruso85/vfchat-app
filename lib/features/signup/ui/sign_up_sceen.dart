@@ -77,18 +77,26 @@ class BuildSignupScreen extends StatelessWidget {
                               ),
                             ),
                           ),
-                          EmailAndPassword(
-                            isSignUpPage: true,
-                          ),
-                          Align(
-                            alignment: Alignment.bottomCenter,
-                            child: Column(
-                              mainAxisSize: MainAxisSize.min, // Ensure minimum height
-                              children: [
-                                const TermsAndConditionsText(),
-                                Gap(15.h),
-                                const AlreadyHaveAccountText(),
-                              ],
+                          Expanded(
+                            child: SingleChildScrollView(
+                              child: Column(
+                                children: [
+                                  EmailAndPassword(
+                                    isSignUpPage: true,
+                                  ),
+                                  Align(
+                                    alignment: Alignment.bottomCenter,
+                                    child: Column(
+                                      mainAxisSize: MainAxisSize.min, // Ensure minimum height
+                                      children: [
+                                        const TermsAndConditionsText(),
+                                        Gap(15.h),
+                                        const AlreadyHaveAccountText(),
+                                      ],
+                                    ),
+                                  ),
+                                ],
+                              ),
                             ),
                           ),
                         ],

@@ -73,9 +73,9 @@ class BubbleSpecialThree extends StatelessWidget {
     return Align(
       alignment: isSender ? Alignment.topRight : Alignment.topLeft,
       child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
+        padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 5),
         child: Column(
-          crossAxisAlignment: CrossAxisAlignment.end,
+          crossAxisAlignment: isSender ? CrossAxisAlignment.end : CrossAxisAlignment.start,
           children: [
             CustomPaint(
               painter: SpecialChatBubbleThree(
@@ -86,17 +86,13 @@ class BubbleSpecialThree extends StatelessWidget {
               child: Container(
                 constraints: constraints ??
                   BoxConstraints(
-                    maxWidth: MediaQuery.of(context).size.width * .7,
+                    maxWidth: MediaQuery.of(context).size.width * .6,
                 ),
-                margin: isSender
-                    ? stateTick
-                        ? const EdgeInsets.fromLTRB(7, 7, 14, 7)
-                        : const EdgeInsets.fromLTRB(7, 7, 17, 7)
-                    : const EdgeInsets.fromLTRB(17, 7, 7, 7),
+                margin: EdgeInsets.symmetric(horizontal: 10, vertical: 7),
                 child: Stack(
                   children: <Widget>[
                     Padding(
-                      padding: const EdgeInsets.only(left: 10, right: 0, top: 10, bottom: 10),
+                      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 7),
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.end,
                         children: [
@@ -135,10 +131,9 @@ class BubbleSpecialThree extends StatelessWidget {
             SizedBox(height: 5),
             Text(
               sendTime,
-              textAlign: TextAlign.right,
               style: const TextStyle(
                 color: Color(0xff828282),
-                fontSize: 12,
+                fontSize: 13,
               ),
             ),
           ],
@@ -170,145 +165,70 @@ class SpecialChatBubbleThree extends CustomPainter {
     var h = size.height;
     var w = size.width;
     if (alignment == Alignment.topRight) {
-      if (tail) {
-        var path = Path();
+      var path = Path();
 
-        /// starting point
-        path.moveTo(_radius, 0);
+      /// starting point
+      path.moveTo(_radius, 0);
 
-        /// top-left corner
-        path.quadraticBezierTo(0, 0, 0, _radius);
+      /// top-left corner
+      path.quadraticBezierTo(0, 0, 0, _radius);
 
-        /// left line
-        path.lineTo(0, h - _radius);
+      /// left line
+      path.lineTo(0, h - _radius);
 
-        /// bottom-left corner
-        path.quadraticBezierTo(0, h, _radius, h);
+      /// bottom-left corner
+      path.quadraticBezierTo(0, h, _radius, h);
 
-        /// bottom line
-        path.lineTo(w - _radius, h);
+      /// bottom line
+      path.lineTo(w - _radius, h);
 
-        /// bottom-right corner
-        path.quadraticBezierTo(w, h, w, h - _radius);
+      /// bottom-right corner
+      path.quadraticBezierTo(w, h, w, h - _radius);
 
-        /// right line
-        path.lineTo(w, 0);
+      /// right line
+      path.lineTo(w, 0);
 
-        /// top-right curve
-        //path.quadraticBezierTo(w - _radius, 0, w - _radius, 0);
+      /// top-right curve
+      //path.quadraticBezierTo(w - _radius, 0, w - _radius, 0);
 
-        canvas.clipPath(path);
-        canvas.drawRRect(
-            RRect.fromLTRBR(0, 0, w, h, Radius.zero),
-            Paint()
-              ..color = color
-              ..style = PaintingStyle.fill);
-      } else {
-        var path = Path();
-
-        /// starting point
-        path.moveTo(_radius * 2, 0);
-
-        /// top-left corner
-        path.quadraticBezierTo(0, 0, 0, _radius * 1.5);
-
-        /// left line
-        path.lineTo(0, h - _radius * 1.5);
-
-        /// bottom-left corner
-        path.quadraticBezierTo(0, h, _radius * 2, h);
-
-        /// bottom line
-        path.lineTo(w - _radius * 3, h);
-
-        /// bottom-right curve
-        path.quadraticBezierTo(w - _radius, h, w - _radius, h - _radius * 1.5);
-
-        /// right line
-        path.lineTo(w - _radius, _radius * 1.5);
-
-        /// top-right curve
-        path.quadraticBezierTo(w - _radius, 0, w - _radius * 3, 0);
-
-        canvas.clipPath(path);
-        canvas.drawRRect(
-            RRect.fromLTRBR(0, 0, w, h, Radius.zero),
-            Paint()
-              ..color = color
-              ..style = PaintingStyle.fill);
-      }
+      canvas.clipPath(path);
+      canvas.drawRRect(
+          RRect.fromLTRBR(0, 0, w, h, Radius.zero),
+          Paint()
+            ..color = color
+            ..style = PaintingStyle.fill);
     } else {
-      if (tail) {
-        var path = Path();
+      var path = Path();
 
-        /// starting point
-        path.moveTo(_radius * 3, 0);
+      /// starting point
+      path.moveTo(0, 0);
 
-        /// top-left corner
-        path.quadraticBezierTo(_radius, 0, _radius, _radius * 1.5);
+      /// top-left corner
+      //path.quadraticBezierTo(_radius, 0, _radius, _radius);
 
-        /// left line
-        path.lineTo(_radius, h - _radius * 1.5);
-        // bottom-right tail curve 1
-        path.quadraticBezierTo(_radius * .8, h, 0, h);
+      /// left line
+      path.lineTo(0, h - _radius);
 
-        /// bottom-right tail curve 2
-        path.quadraticBezierTo(
-            _radius * 1, h, _radius * 1.5, h - _radius * 0.6);
+      /// bottom-left bubble curve
+      path.quadraticBezierTo(0, h, _radius, h);
 
-        /// bottom-left bubble curve
-        path.quadraticBezierTo(_radius * 1.5, h, _radius * 3, h);
+      /// bottom line
+      path.lineTo(w - _radius * 2, h);
 
-        /// bottom line
-        path.lineTo(w - _radius * 2, h);
+      /// bottom-right curve
+      path.quadraticBezierTo(w, h, w, h - _radius);
 
-        /// bottom-right curve
-        path.quadraticBezierTo(w, h, w, h - _radius * 1.5);
+      /// right line
+      path.lineTo(w, _radius);
 
-        /// right line
-        path.lineTo(w, _radius * 1.5);
-
-        /// top-right curve
-        path.quadraticBezierTo(w, 0, w - _radius * 2, 0);
-        canvas.clipPath(path);
-        canvas.drawRRect(
-            RRect.fromLTRBR(0, 0, w, h, Radius.zero),
-            Paint()
-              ..color = color
-              ..style = PaintingStyle.fill);
-      } else {
-        var path = Path();
-
-        /// starting point
-        path.moveTo(_radius * 3, 0);
-
-        /// top-left corner
-        path.quadraticBezierTo(_radius, 0, _radius, _radius * 1.5);
-
-        /// left line
-        path.lineTo(_radius, h - _radius * 1.5);
-
-        /// bottom-left curve
-        path.quadraticBezierTo(_radius, h, _radius * 3, h);
-
-        /// bottom line
-        path.lineTo(w - _radius * 2, h);
-
-        /// bottom-right curve
-        path.quadraticBezierTo(w, h, w, h - _radius * 1.5);
-
-        /// right line
-        path.lineTo(w, _radius * 1.5);
-
-        /// top-right curve
-        path.quadraticBezierTo(w, 0, w - _radius * 2, 0);
-        canvas.clipPath(path);
-        canvas.drawRRect(
-            RRect.fromLTRBR(0, 0, w, h, Radius.zero),
-            Paint()
-              ..color = color
-              ..style = PaintingStyle.fill);
-      }
+      /// top-right curve
+      path.quadraticBezierTo(w, 0, w - _radius, 0);
+      canvas.clipPath(path);
+      canvas.drawRRect(
+          RRect.fromLTRBR(0, 0, w, h, Radius.zero),
+          Paint()
+            ..color = color
+            ..style = PaintingStyle.fill);
     }
   }
 

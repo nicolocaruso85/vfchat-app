@@ -12,7 +12,7 @@
     "language": "Lingua",
     "changeLanguage": "Cambia @:language",
     "enterEmailToResetPassword": "Inserisci la @:email per @:reset la @:password",
-    "app": "Chat aziendale",
+    "app": "LukUp",
     "settings": "Impostazioni",
     "unlockApp": "Blocca @:app",
     "unlockAppDesc": "Se abilitato dovrai usare l'impronta del dito o il face ID per aprire @:title.",

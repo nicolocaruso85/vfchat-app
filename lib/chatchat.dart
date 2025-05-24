@@ -35,7 +35,7 @@ class _ChatChatState extends State<ChatChat> {
           GestureType.onPanUpdateDownDirection,
         ],
         child: MaterialApp(
-          title: 'Chat aziendale',
+          title: 'LukUp',
           localizationsDelegates: context.localizationDelegates,
           supportedLocales: context.supportedLocales,
           locale: context.locale,
