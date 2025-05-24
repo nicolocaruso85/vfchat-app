@@ -121,7 +121,7 @@ class _AddUserScreenState extends State<AddUserScreen> {
       searchable: true,
       title: Text(context.tr('groups')),
       cancelText: Text(context.tr('cancel')),
-      selectedColor: ColorsManager.greenPrimary,
+      selectedColor: ColorsManager.redPrimary,
       selectedItemsTextStyle: TextStyle(
         color: Colors.white,
       ),
@@ -180,7 +180,7 @@ class _AddUserScreenState extends State<AddUserScreen> {
           searchable: true,
           title: Text(context.tr('roles')),
           cancelText: Text(context.tr('cancel')),
-          selectedColor: ColorsManager.greenPrimary,
+          selectedColor: ColorsManager.redPrimary,
           selectedItemsTextStyle: TextStyle(
             color: Colors.white,
           ),

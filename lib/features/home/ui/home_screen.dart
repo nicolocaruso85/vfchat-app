@@ -19,6 +19,7 @@ import '../../tabs/chat_tab.dart';
 import '../../tabs/groups_tab.dart';
 import '../../search/ui/search_groups.dart';
 import '../../search/ui/search_users.dart';
+import '../../../themes/styles.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -42,13 +43,13 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
       length: 3,
       child: Scaffold(
         floatingActionButton: SpeedDial(
-          icon: Icons.grid_view_rounded,
-          iconTheme: IconThemeData(color: Colors.black),
+          icon: Icons.add,
+          iconTheme: IconThemeData(color: Colors.white),
           renderOverlay: false,
           children: [
             SpeedDialChild(
               child: const Icon(Icons.message),
-              backgroundColor: Colors.red,
+              backgroundColor: Color(0xffd93d5c),
               foregroundColor: Colors.white,
               label: context.tr('newMessage'),
               onTap: () {
@@ -57,7 +58,7 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
             ),
             SpeedDialChild(
               child: const Icon(Icons.group),
-              backgroundColor: Colors.red,
+              backgroundColor: Color(0xffd93d5c),
               foregroundColor: Colors.white,
               label: context.tr('createGroup'),
               onTap: () {
@@ -66,7 +67,7 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
             ),
             SpeedDialChild(
               child: const Icon(Icons.video_call_outlined),
-              backgroundColor: Colors.red,
+              backgroundColor: Color(0xffd93d5c),
               foregroundColor: Colors.white,
               label: context.tr('startCall'),
               onTap: () {
@@ -76,14 +77,16 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
           ],
         ),
         appBar: AppBar(
-          title: Text(context.tr('title')),
+          title: Text(
+            context.tr('title'),
+            style: TextStyles.font24Red800Weight,
+          ),
           bottom: TabBar(
-            indicatorColor: ColorsManager.greenPrimary,
+            indicatorColor: ColorsManager.redPrimary,
             indicatorWeight: 3.5,
             indicatorSize: TabBarIndicatorSize.tab,
             dividerColor: Colors.transparent,
-            labelColor: ColorsManager.greenPrimary,
-            unselectedLabelColor: const Color(0xffffffff).withOpacity(0.5),
+            labelColor: ColorsManager.redPrimary,
             tabs: [
               Tab(text: context.tr('chats')),
               Tab(text: context.tr('groups')),
@@ -182,11 +185,11 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
 
   PopupMenuButton _buildPopMenu() {
     return PopupMenuButton(
-      color: const Color.fromARGB(255, 41, 52, 59),
+      color: Colors.white,
       icon: const Icon(Icons.more_vert),
       elevation: 8,
       position: PopupMenuPosition.under,
-      iconColor: Colors.white,
+      iconColor: ColorsManager.gray,
       itemBuilder: (context) => [
         PopupMenuItem(
           onTap: () {
@@ -194,7 +197,7 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
           },
           child: Text(
             context.tr('newGroup'),
-            style: const TextStyle(color: Colors.white),
+            style: const TextStyle(color: Colors.black),
           ),
         ),
         PopupMenuItem(
@@ -203,7 +206,7 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
           },
           child: Text(
             context.tr('settings'),
-            style: const TextStyle(color: Colors.white),
+            style: const TextStyle(color: Colors.black),
           ),
         ),
         PopupMenuItem(
@@ -212,7 +215,7 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
           },
           child: Text(
             context.tr('notifications'),
-            style: const TextStyle(color: Colors.white),
+            style: const TextStyle(color: Colors.black),
           ),
         ),
         PopupMenuItem(
@@ -240,7 +243,7 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
           },
           child: Text(
             context.tr('signOut'),
-            style: const TextStyle(color: Colors.white),
+            style: const TextStyle(color: Colors.black),
           ),
         ),
       ],

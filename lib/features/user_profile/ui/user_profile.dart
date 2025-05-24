@@ -298,14 +298,12 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
           ),
           fillColor: const Color(0xff273443),
           style: TextStyles.font18White500Weight,
-          prefixIcon: FlagsDropDown(
-            favorite: const ['IT'],
-            initialCountryCode: 'IT',
-            languageCode: 'it',
-            onCountryChanged: (country) {
-              dialCode = country.dialCode;
-            },
-          ),
+          favorite: const ['IT'],
+          initialCountryCode: 'IT',
+          languageCode: 'it',
+          onCountryChanged: (country) {
+            dialCode = country.dialCode;
+          },
           disableLengthCounter: true,
           onChanged: (phone) {
           },

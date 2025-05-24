@@ -41,17 +41,17 @@ class _ChatChatState extends State<ChatChat> {
           locale: context.locale,
           theme: ThemeData(
             useMaterial3: true,
-            primaryColor: ColorsManager.greenPrimary,
+            primaryColor: ColorsManager.redPrimary,
             textSelectionTheme: const TextSelectionThemeData(
-              cursorColor: ColorsManager.greenPrimary,
-              selectionHandleColor: ColorsManager.greenPrimary,
+              cursorColor: ColorsManager.redPrimary,
+              selectionHandleColor: ColorsManager.redPrimary,
               selectionColor: Color.fromARGB(209, 0, 168, 132),
             ),
             progressIndicatorTheme: const ProgressIndicatorThemeData(
-              color: ColorsManager.greenPrimary,
+              color: ColorsManager.redPrimary,
             ),
             floatingActionButtonTheme: const FloatingActionButtonThemeData(
-              backgroundColor: ColorsManager.greenPrimary,
+              backgroundColor: ColorsManager.redPrimary,
             ),
             scaffoldBackgroundColor: ColorsManager.backgroundDefaultColor,
             appBarTheme: const AppBarTheme(

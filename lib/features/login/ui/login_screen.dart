@@ -12,7 +12,6 @@ import '../../../core/widgets/no_internet.dart';
 import '../../../core/widgets/terms_and_conditions_text.dart';
 import '../../../services/google_sign_in.dart';
 import '../../../themes/styles.dart';
-import 'widgets/do_not_have_account.dart';
 
 class BuildLoginScreen extends StatelessWidget {
   const BuildLoginScreen({
@@ -22,45 +21,74 @@ class BuildLoginScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SafeArea(
-      child: Padding(
-        padding:
-            EdgeInsets.only(left: 30.w, right: 30.w, bottom: 15.h, top: 5.h),
-        child: Column(
-          children: [
-            Expanded(
-              child: SingleChildScrollView(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
+      bottom: false,
+      child: Column(
+        children: [
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Text(
-                      context.tr('login'),
-                      style: TextStyles.font24White600Weight,
+                      'Luk',
+                      style: TextStyles.font36Blue800Weight,
                     ),
-                    Gap(10.h),
                     Text(
-                      context.tr('loginToContinue'),
-                      style: TextStyles.font14Grey400Weight,
+                      'Up',
+                      style: TextStyles.font36Red800Weight,
                     ),
-                    Gap(10.h),
-                    EmailAndPassword(),
-                    Gap(10.h),
                   ],
                 ),
-              ),
+                Gap(20.h),
+                Expanded(
+                  child: Container(
+                    decoration: BoxDecoration(
+                      gradient: LinearGradient(
+                        colors: [Color(0xff3d2985), Color(0xffd93d5c)],
+                        stops: [0.45, 1],
+                        begin: Alignment.bottomCenter,
+                        end: Alignment.topCenter,
+                      ),
+                      borderRadius: BorderRadius.only(
+                        topLeft: Radius.circular(50),
+                        topRight: Radius.circular(50),
+                      ),
+                      boxShadow: [
+                        BoxShadow(
+                          color: Color(0xffcccccc),
+                          spreadRadius: 6,
+                          blurRadius: 10,
+                        ),
+                      ],
+                    ),
+                    child: Padding(
+                      padding: EdgeInsets.all(25),
+                      child: Column(
+                        children: [
+                          Container(
+                            width: 80.0,
+                            height: 10.0,
+                            child: Container(
+                              decoration: new BoxDecoration(
+                                color: Colors.white,
+                                shape: BoxShape.rectangle,
+                                borderRadius: BorderRadius.all(Radius.circular(8.0)),
+                              ),
+                            ),
+                          ),
+                          EmailAndPassword(),
+                          Gap(10.h),
+                        ],
+                      ),
+                    ),
+                  ),
+                ),
+              ],
             ),
-            Align(
-              alignment: Alignment.bottomCenter,
-              child: Column(
-                mainAxisSize: MainAxisSize.min, // Ensure minimum height
-                children: [
-                  const TermsAndConditionsText(),
-                  Gap(15.h),
-                  const DoNotHaveAccountText(),
-                ],
-              ),
-            ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }

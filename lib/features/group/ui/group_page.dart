@@ -474,7 +474,7 @@ class _GroupScreenState extends State<GroupScreen> {
           canPop: false,
           child: Center(
             child: CircularProgressIndicator(
-              color: ColorsManager.greenPrimary,
+              color: ColorsManager.redPrimary,
             ),
           ),
         );

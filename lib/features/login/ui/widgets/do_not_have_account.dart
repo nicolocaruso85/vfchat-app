@@ -19,12 +19,8 @@ class DoNotHaveAccountText extends StatelessWidget {
         text: TextSpan(
           children: [
             TextSpan(
-              text: context.tr('doNotHaveAccount'),
-              style: TextStyles.font13MediumLightShadeOfGray400Weight,
-            ),
-            TextSpan(
               text: ' ${context.tr('signUp')}',
-              style: TextStyles.font13Green500Weight,
+              style: TextStyles.font20White600Weight,
             ),
           ],
         ),

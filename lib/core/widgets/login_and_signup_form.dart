@@ -20,6 +20,7 @@ import '../../themes/colors.dart';
 import 'app_button.dart';
 import 'app_text_form_field.dart';
 import 'password_validations.dart';
+import '../../features/login/ui/widgets/do_not_have_account.dart';
 
 // ignore: must_be_immutable
 class EmailAndPassword extends StatefulWidget {
@@ -72,23 +73,44 @@ class _EmailAndPasswordState extends State<EmailAndPassword> {
       key: formKey,
       child: Column(
         children: [
+          Gap(50.h),
+          if (widget.isSignUpPage == null)
+            Text(
+              context.tr('welcome'),
+              style: TextStyles.font28White800Weight,
+            ),
+          if (widget.isSignUpPage == true)
+            Text(
+              context.tr('joinUs'),
+              style: TextStyles.font28White800Weight,
+            ),
+          Gap(30.h),
           if (chooseNegozio == true) negozioField(),
           if (widget.isSignUpPage == true && chooseNegozio == false) nameField(),
           if (widget.isPasswordPage == null && chooseNegozio == false) emailField(),
           if (widget.isSignUpPage == true && chooseNegozio == false) telephoneField(),
           if (chooseNegozio == false) passwordField(),
-          if (chooseNegozio == false) Gap(18.h),
-          if ((widget.isSignUpPage == true || widget.isPasswordPage == true)  && chooseNegozio == false)
+          if (chooseNegozio == false) Gap(5.h),
+          if ((widget.isSignUpPage == true || widget.isPasswordPage == true) && chooseNegozio == false)
             passwordConfirmationField(),
           if ((widget.isSignUpPage == null && widget.isPasswordPage == null) && chooseNegozio == false)
             forgetPasswordTextButton(context),
           if (chooseNegozio == false) Gap(10.h),
-          if ( chooseNegozio == false) PasswordValidations(
-            hasMinLength: hasMinLength,
-          ),
           if (widget.isSignUpPage == true && chooseNegozio == false) codiceAziendaField(),
           Gap(20.h),
           if (chooseNegozio == true) previousButton(context),
+          loginWithField(context),
+          Gap(30.h),
+          Align(
+            alignment: Alignment.bottomCenter,
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                const DoNotHaveAccountText(),
+              ],
+            ),
+          ),
+          Gap(15.h),
           loginOrSignUpOrPasswordButton(context),
         ],
       ),
@@ -163,14 +185,12 @@ class _EmailAndPasswordState extends State<EmailAndPassword> {
           ),
           fillColor: const Color(0xff273443),
           style: TextStyles.font18White500Weight,
-          prefixIcon: FlagsDropDown(
-            favorite: const ['IT'],
-            initialCountryCode: 'IT',
-            languageCode: 'it',
-            onCountryChanged: (country) {
-              dialCode = country.dialCode;
-            },
-          ),
+          favorite: const ['IT'],
+          initialCountryCode: 'IT',
+          languageCode: 'it',
+          onCountryChanged: (country) {
+            dialCode = country.dialCode;
+          },
           disableLengthCounter: true,
           onChanged: (phone) {
             telephone = phone.number;
@@ -196,7 +216,7 @@ class _EmailAndPasswordState extends State<EmailAndPassword> {
         alignment: Alignment.centerRight,
         child: Text(
           context.tr('forgetPassword'),
-          style: TextStyles.font15Green500Weight,
+          style: TextStyles.font16White600Weight,
         ),
       ),
     );
@@ -215,8 +235,9 @@ class _EmailAndPasswordState extends State<EmailAndPassword> {
 
   AppButton loginButton(BuildContext context) {
     return AppButton(
-      buttonText: context.tr('login'),
-      textStyle: TextStyles.font15DarkBlue500Weight,
+      buttonText: context.tr('login2'),
+      textStyle: TextStyles.font20White600Weight,
+      verticalPadding: 0,
       onPressed: () async {
         if (formKey.currentState!.validate()) {
           try {
@@ -549,6 +570,50 @@ class _EmailAndPasswordState extends State<EmailAndPassword> {
           ),
         ],
       ),
+    );
+  }
+
+  Column loginWithField(BuildContext context) {
+    return Column(
+      children: [
+        Row(
+          children: [
+            Expanded(
+              child: Container(
+                width: double.infinity,
+                height: 2.0,
+                child: Container(
+                  decoration: new BoxDecoration(
+                    color: Colors.white,
+                    shape: BoxShape.rectangle,
+                  ),
+                ),
+              ),
+            ),
+            Padding(
+              padding: EdgeInsets.symmetric(
+                horizontal: 15,
+              ),
+              child: Text(
+                context.tr('loginWith'),
+                style: TextStyles.font12White500Weight,
+              ),
+            ),
+            Expanded(
+              child: Container(
+                width: double.infinity,
+                height: 2.0,
+                child: Container(
+                  decoration: new BoxDecoration(
+                    color: Colors.white,
+                    shape: BoxShape.rectangle,
+                  ),
+                ),
+              ),
+            ),
+          ],
+        ),
+      ],
     );
   }
 

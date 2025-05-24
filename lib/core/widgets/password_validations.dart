@@ -23,7 +23,7 @@ class PasswordValidations extends StatelessWidget {
           context.tr('passwordValidation'),
           style: TextStyles.font14DarkBlue500Weight.copyWith(
             decoration: hasMinLength ? TextDecoration.lineThrough : null,
-            decorationColor: ColorsManager.greenPrimary,
+            decorationColor: ColorsManager.redPrimary,
             decorationThickness: 2,
             color: hasMinLength
                 ? ColorsManager.mediumLightShadeOfGray

@@ -39,7 +39,7 @@ class AppButton extends StatelessWidget {
           ),
         ),
         backgroundColor: WidgetStatePropertyAll(
-          backgroundColor ?? ColorsManager.greenPrimary,
+          backgroundColor ?? ColorsManager.redPrimary,
         ),
         padding: WidgetStateProperty.all<EdgeInsets>(
           EdgeInsets.symmetric(

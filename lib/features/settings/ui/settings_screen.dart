@@ -10,6 +10,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../../core/widgets/modal_fit.dart';
 import '../../../services/database.dart';
+import '../../../themes/colors.dart';
 import '../../../themes/styles.dart';
 import '../../../router/routes.dart';
 
@@ -35,7 +36,13 @@ class _SettingsScreenState extends State<SettingsScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(context.tr('settings')),
+        title: Text(
+          context.tr('settings'),
+          style: TextStyles.font18Black500Weight,
+        ),
+        iconTheme: IconThemeData(
+          color: ColorsManager.redPrimary,
+        ),
       ),
       body: Padding(
         padding: const EdgeInsets.all(10),

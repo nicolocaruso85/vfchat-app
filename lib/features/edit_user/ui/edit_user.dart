@@ -137,7 +137,7 @@ class _EditUserScreenState extends State<EditUserScreen> {
       searchable: true,
       title: Text(context.tr('groups')),
       cancelText: Text(context.tr('cancel')),
-      selectedColor: ColorsManager.greenPrimary,
+      selectedColor: ColorsManager.redPrimary,
       selectedItemsTextStyle: TextStyle(
         color: Colors.white,
       ),
@@ -204,7 +204,7 @@ class _EditUserScreenState extends State<EditUserScreen> {
           searchable: true,
           title: Text(context.tr('roles')),
           cancelText: Text(context.tr('cancel')),
-          selectedColor: ColorsManager.greenPrimary,
+          selectedColor: ColorsManager.redPrimary,
           selectedItemsTextStyle: TextStyle(
             color: Colors.white,
           ),
@@ -466,14 +466,12 @@ class _EditUserScreenState extends State<EditUserScreen> {
           ),
           fillColor: const Color(0xff273443),
           style: TextStyles.font18White500Weight,
-          prefixIcon: FlagsDropDown(
-            favorite: const ['IT'],
-            initialCountryCode: 'IT',
-            languageCode: 'it',
-            onCountryChanged: (country) {
-              dialCode = country.dialCode;
-            },
-          ),
+          favorite: const ['IT'],
+          initialCountryCode: 'IT',
+          languageCode: 'it',
+          onCountryChanged: (country) {
+            dialCode = country.dialCode;
+          },
           disableLengthCounter: true,
           onChanged: (phone) {
           },

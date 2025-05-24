@@ -35,8 +35,12 @@ class _OtherUserProfileScreenState extends State<OtherUserProfileScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        iconTheme: IconThemeData(
+          color: ColorsManager.redPrimary,
+        ),
         title: Text(
-          (userDetails != null) ? userDetails!['name'] : ''
+          (userDetails != null) ? userDetails!['name'] : '',
+          style: TextStyles.font18Black500Weight,
         ),
       ),
       body: Padding(
@@ -83,7 +87,7 @@ class _OtherUserProfileScreenState extends State<OtherUserProfileScreen> {
           ),
           Text(
             (userDetails != null) ? (userDetails?['name']) : '',
-            style: TextStyles.font16White600Weight,
+            style: TextStyles.font16Black600Weight,
           ),
           Gap(8.h),
         ],
@@ -103,7 +107,7 @@ class _OtherUserProfileScreenState extends State<OtherUserProfileScreen> {
           ),
           Text(
             (userDetails != null) ? (userDetails?['email']) : '',
-            style: TextStyles.font16White600Weight,
+            style: TextStyles.font16Black600Weight,
           ),
           Gap(8.h),
         ],
@@ -123,7 +127,7 @@ class _OtherUserProfileScreenState extends State<OtherUserProfileScreen> {
           ),
           Text(
             (userDetails != null) ? (userDetails?['telephone']) : '',
-            style: TextStyles.font16White600Weight,
+            style: TextStyles.font16Black600Weight,
           ),
           Gap(8.h),
         ],
@@ -144,7 +148,7 @@ class _OtherUserProfileScreenState extends State<OtherUserProfileScreen> {
             ),
             Text(
               azienda?['name'],
-              style: TextStyles.font16White600Weight,
+              style: TextStyles.font16Black600Weight,
             ),
             Gap(8.h),
           ],
@@ -174,7 +178,7 @@ class _OtherUserProfileScreenState extends State<OtherUserProfileScreen> {
             ),
             Text(
               roles.join(', '),
-              style: TextStyles.font16White600Weight,
+              style: TextStyles.font16Black600Weight,
             ),
             Gap(8.h),
           ],
@@ -204,7 +208,7 @@ class _OtherUserProfileScreenState extends State<OtherUserProfileScreen> {
             ),
             Text(
               groups.join(', '),
-              style: TextStyles.font16White600Weight,
+              style: TextStyles.font16Black600Weight,
             ),
             Gap(8.h),
           ],

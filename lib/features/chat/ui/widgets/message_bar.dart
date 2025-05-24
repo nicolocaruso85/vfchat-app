@@ -17,10 +17,7 @@ class CustomMessageBar extends StatelessWidget {
     return MessageBar(
       messageBarHintText: context.tr('message'),
       messageBarHintStyle: TextStyles.font14Grey400Weight,
-      messageBarTextStyle: TextStyles.font18White500Weight.copyWith(
-        fontSize: 16.sp,
-        fontWeight: FontWeight.w400,
-      ),
+      messageBarTextStyle: TextStyles.font16Black400Weight,
       messageBarColor: Colors.transparent,
       contentPadding: EdgeInsets.symmetric(
         horizontal: 10.w,
@@ -31,19 +28,19 @@ class CustomMessageBar extends StatelessWidget {
         WidgetsBinding.instance.focusManager.primaryFocus?.unfocus();
         await onSend(message);
       },
-      sendButtonColor: ColorsManager.greenPrimary,
+      sendButtonColor: ColorsManager.purplePrimary,
       actions: [
         Padding(
           padding: EdgeInsets.only(right: 4.w),
           child: Container(
             decoration: const BoxDecoration(
-              color: Color(0xff00a884),
+              color: ColorsManager.purplePrimary,
               shape: BoxShape.circle,
             ),
             child: IconButton(
               icon: const Icon(
                 Icons.camera_alt,
-                color: Colors.black,
+                color: Colors.white,
                 size: 28,
               ),
               onPressed: onShowOptions,

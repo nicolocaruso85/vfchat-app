@@ -74,68 +74,74 @@ class BubbleSpecialThree extends StatelessWidget {
       alignment: isSender ? Alignment.topRight : Alignment.topLeft,
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
-        child: CustomPaint(
-          painter: SpecialChatBubbleThree(
-            color: color,
-            alignment: isSender ? Alignment.topRight : Alignment.topLeft,
-            tail: tail,
-          ),
-          child: Container(
-            constraints: constraints ??
-              BoxConstraints(
-                maxWidth: MediaQuery.of(context).size.width * .7,
-            ),
-            margin: isSender
-                ? stateTick
-                    ? const EdgeInsets.fromLTRB(7, 7, 14, 7)
-                    : const EdgeInsets.fromLTRB(7, 7, 17, 7)
-                : const EdgeInsets.fromLTRB(17, 7, 7, 7),
-            child: Stack(
-              children: <Widget>[
-                Padding(
-                  padding: const EdgeInsets.only(left: 4, right: 4),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.end,
-                    children: [
-                      Text(
-                        text,
-                        style: const TextStyle(
-                          color: Colors.white,
-                          fontSize: 16,
-                        ),
-                        textAlign: textAlign,
-                      ),
-                      const SizedBox(
-                        height: 3,
-                      ),
-                      Padding(
-                        padding: stateTick
-                          ? const EdgeInsets.only(right: 20)
-                          : const EdgeInsets.only(right: 4),
-                        child: Text(
-                          sendTime,
-                          textAlign: TextAlign.right,
-                          style: const TextStyle(
-                            color: Colors.white,
-                            fontSize: 10,
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.end,
+          children: [
+            CustomPaint(
+              painter: SpecialChatBubbleThree(
+                color: color,
+                alignment: isSender ? Alignment.topRight : Alignment.topLeft,
+                tail: tail,
+              ),
+              child: Container(
+                constraints: constraints ??
+                  BoxConstraints(
+                    maxWidth: MediaQuery.of(context).size.width * .7,
                 ),
-                stateIcon != null && stateTick
-                    ? Positioned(
-                        bottom: 0,
-                        right: 0,
-                        child: stateIcon,
-                      )
-                    : const SizedBox(
-                        width: 1,
+                margin: isSender
+                    ? stateTick
+                        ? const EdgeInsets.fromLTRB(7, 7, 14, 7)
+                        : const EdgeInsets.fromLTRB(7, 7, 17, 7)
+                    : const EdgeInsets.fromLTRB(17, 7, 7, 7),
+                child: Stack(
+                  children: <Widget>[
+                    Padding(
+                      padding: const EdgeInsets.only(left: 10, right: 0, top: 10, bottom: 10),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.end,
+                        children: [
+                          Text(
+                            text,
+                            style: const TextStyle(
+                              color: Colors.white,
+                              fontSize: 16,
+                            ),
+                            textAlign: textAlign,
+                          ),
+                          const SizedBox(
+                            height: 3,
+                          ),
+                          Padding(
+                            padding: stateTick
+                              ? const EdgeInsets.only(right: 20)
+                              : const EdgeInsets.only(right: 4),
+                          ),
+                        ],
                       ),
-              ],
+                    ),
+                    stateIcon != null && stateTick
+                        ? Positioned(
+                            bottom: 0,
+                            right: 0,
+                            child: stateIcon,
+                          )
+                        : const SizedBox(
+                            width: 1,
+                          ),
+                  ],
+                ),
+              ),
             ),
-          ),
+            SizedBox(height: 5),
+            Text(
+              sendTime,
+              textAlign: TextAlign.right,
+              style: const TextStyle(
+                color: Color(0xff828282),
+                fontSize: 12,
+              ),
+            ),
+          ],
         ),
       ),
     );
@@ -157,7 +163,7 @@ class SpecialChatBubbleThree extends CustomPainter {
     required this.tail,
   });
 
-  final double _radius = 10.0;
+  final double _radius = 15.0;
 
   @override
   void paint(Canvas canvas, Size size) {
@@ -168,36 +174,28 @@ class SpecialChatBubbleThree extends CustomPainter {
         var path = Path();
 
         /// starting point
-        path.moveTo(_radius * 2, 0);
+        path.moveTo(_radius, 0);
 
         /// top-left corner
-        path.quadraticBezierTo(0, 0, 0, _radius * 1.5);
+        path.quadraticBezierTo(0, 0, 0, _radius);
 
         /// left line
-        path.lineTo(0, h - _radius * 1.5);
+        path.lineTo(0, h - _radius);
 
         /// bottom-left corner
-        path.quadraticBezierTo(0, h, _radius * 2, h);
+        path.quadraticBezierTo(0, h, _radius, h);
 
         /// bottom line
-        path.lineTo(w - _radius * 3, h);
+        path.lineTo(w - _radius, h);
 
-        /// bottom-right bubble curve
-        path.quadraticBezierTo(
-            w - _radius * 1.5, h, w - _radius * 1.5, h - _radius * 0.6);
-
-        /// bottom-right tail curve 1
-        path.quadraticBezierTo(w - _radius * 1, h, w, h);
-
-        /// bottom-right tail curve 2
-        path.quadraticBezierTo(
-            w - _radius * 0.8, h, w - _radius, h - _radius * 1.5);
+        /// bottom-right corner
+        path.quadraticBezierTo(w, h, w, h - _radius);
 
         /// right line
-        path.lineTo(w - _radius, _radius * 1.5);
+        path.lineTo(w, 0);
 
         /// top-right curve
-        path.quadraticBezierTo(w - _radius, 0, w - _radius * 3, 0);
+        //path.quadraticBezierTo(w - _radius, 0, w - _radius, 0);
 
         canvas.clipPath(path);
         canvas.drawRRect(

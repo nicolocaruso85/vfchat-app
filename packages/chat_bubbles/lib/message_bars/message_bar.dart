@@ -145,18 +145,18 @@ class MessageBar extends StatelessWidget {
                       hintMaxLines: 1,
                       hintStyle: messageBarHintStyle,
                       contentPadding: contentPadding,
-                      fillColor: const Color(0xff273443),
+                      fillColor: Colors.white,
                       filled: true,
                       enabledBorder: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(30.0),
                         borderSide: const BorderSide(
-                          color: Colors.transparent,
+                          color: Color(0xff858585),
                         ),
                       ),
                       focusedBorder: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(30.0),
                         borderSide: const BorderSide(
-                          color: Colors.black26,
+                          color: Color(0xff858585),
                           width: 0.2,
                         ),
                       ),
@@ -167,13 +167,13 @@ class MessageBar extends StatelessWidget {
                   padding: paddingTextAndSendButton,
                   child: Container(
                     decoration: const BoxDecoration(
-                      color: Color(0xff00a884),
+                      color: Color(0xff3d2985),
                       shape: BoxShape.circle,
                     ),
                     child: IconButton(
                       icon: const Icon(
                         Icons.send,
-                        color: Colors.black,
+                        color: Colors.white,
                         size: 28,
                       ),
                       onPressed: () {

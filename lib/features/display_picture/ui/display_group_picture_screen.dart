@@ -46,13 +46,13 @@ class _DisplayGroupPictureScreenState extends State<DisplayGroupPictureScreen> {
       floatingActionButton: SpeedDial(
         animatedIcon: AnimatedIcons.menu_close,
         animatedIconTheme: IconThemeData(size: 22.0.sp, color: Colors.white),
-        backgroundColor: ColorsManager.greenPrimary,
+        backgroundColor: ColorsManager.redPrimary,
         visible: true,
         curve: Curves.bounceIn,
         children: [
           SpeedDialChild(
             child: const Icon(Icons.save_alt_rounded, color: Colors.white),
-            backgroundColor: ColorsManager.greenPrimary,
+            backgroundColor: ColorsManager.redPrimary,
             onTap: () async {
               _showLoadingDialog();
               final String filename = widget.image.name;
@@ -77,7 +77,7 @@ class _DisplayGroupPictureScreenState extends State<DisplayGroupPictureScreen> {
           if (widget.groupID != '')
             SpeedDialChild(
               child: const Icon(Icons.send_rounded, color: Colors.white),
-              backgroundColor: ColorsManager.greenPrimary,
+              backgroundColor: ColorsManager.redPrimary,
               onTap: () async {
                 _showLoadingDialog();
                 storageRef =
@@ -135,7 +135,7 @@ class _DisplayGroupPictureScreenState extends State<DisplayGroupPictureScreen> {
           canPop: false,
           child: Center(
             child: CircularProgressIndicator(
-              color: ColorsManager.greenPrimary,
+              color: ColorsManager.redPrimary,
             ),
           ),
         );

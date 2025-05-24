@@ -301,14 +301,18 @@ class _ChatScreenState extends State<ChatScreen> {
 
   AppBar _buildAppBar(BuildContext context) {
     return AppBar(
-      leadingWidth: 85.w,
+      leadingWidth: 105.w,
       leading: InkWell(
         borderRadius: BorderRadius.circular(50),
         onTap: () => Navigator.pop(context),
         child: Row(
           children: [
             Gap(10.w),
-            Icon(Icons.arrow_back_ios, size: 25.sp),
+            Icon(
+              Icons.arrow_back_ios,
+              size: 25.sp,
+              color: ColorsManager.redPrimary,
+            ),
             widget.receivedUserProfilePic != null &&
                     widget.receivedUserProfilePic != ''
                 ? Hero(
@@ -318,15 +322,15 @@ class _ChatScreenState extends State<ChatScreen> {
                         placeholder: 'assets/images/loading.gif',
                         image: widget.receivedUserProfilePic!,
                         fit: BoxFit.cover,
-                        width: 50.w,
-                        height: 50.h,
+                        width: 70.w,
+                        height: 70.h,
                       ),
                     ),
                   )
                 : Image.asset(
                     'assets/images/user.png',
-                    height: 50.h,
-                    width: 50.w,
+                    height: 70.h,
+                    width: 70.w,
                     fit: BoxFit.cover,
                   ),
           ],
@@ -345,7 +349,7 @@ class _ChatScreenState extends State<ChatScreen> {
           children: [
             Text(
               widget.receivedUserName,
-              style: TextStyles.font18White500Weight,
+              style: TextStyles.font18Black500Weight,
             ),
             Text(
               widget.active
@@ -353,7 +357,7 @@ class _ChatScreenState extends State<ChatScreen> {
                   : context.tr('offline'),
               style: TextStyle(
                 fontSize: 13.sp,
-                color: const Color.fromARGB(255, 179, 178, 178),
+                color: Color(0xff828282),
               ),
             ),
           ],
@@ -454,8 +458,8 @@ class _ChatScreenState extends State<ChatScreen> {
         if (isNewDay)
           DateChip(
             date: data['timestamp'].toDate(),
-            dateColor: ColorsManager.gray400,
-            color: const Color(0xff273443),
+            dateColor: Color(0xff828282),
+            color: Colors.transparent,
           ),
         if (message.contains(message.isContainsLink) &&
             message.contains('firebasestorage'))
@@ -525,8 +529,8 @@ class _ChatScreenState extends State<ChatScreen> {
     return BubbleSpecialThree(
       text: message,
       color: data['senderID'] == _auth.currentUser!.uid
-          ? const Color.fromARGB(255, 0, 107, 84)
-          : const Color(0xff273443),
+          ? ColorsManager.redPrimary
+          : ColorsManager.purplePrimary,
       textAlign: TextAlign.left,
       sendTime: DateFormat("H:mm").format(
         data['timestamp'].toDate(),
@@ -594,7 +598,7 @@ class _ChatScreenState extends State<ChatScreen> {
           canPop: false,
           child: Center(
             child: CircularProgressIndicator(
-              color: ColorsManager.greenPrimary,
+              color: ColorsManager.redPrimary,
             ),
           ),
         );

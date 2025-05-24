@@ -45,29 +45,29 @@ class AppTextFormField extends StatelessWidget {
       decoration: InputDecoration(
         hintText: hint,
         hintFadeDuration: const Duration(milliseconds: 500),
-        hintStyle: TextStyles.font14Grey400Weight,
+        hintStyle: TextStyles.font18Grey400Weight,
         isDense: isDense ?? true,
         filled: true,
-        fillColor: const Color(0xff273443),
+        fillColor: Colors.transparent,
         contentPadding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 17.h),
         enabledBorder: OutlineInputBorder(
           borderSide: const BorderSide(
-            color: Colors.transparent,
+            color: Color(0x77ffffff),
           ),
-          borderRadius: BorderRadius.circular(30),
+          borderRadius: BorderRadius.circular(50),
         ),
         focusedBorder: OutlineInputBorder(
           borderSide: const BorderSide(
-            color: Colors.transparent,
+            color: Color(0xddffffff),
           ),
-          borderRadius: BorderRadius.circular(30),
+          borderRadius: BorderRadius.circular(50),
         ),
         errorBorder: OutlineInputBorder(
           borderSide: BorderSide(
             color: ColorsManager.coralRed,
             width: 1.3.w,
           ),
-          borderRadius: BorderRadius.circular(30),
+          borderRadius: BorderRadius.circular(50),
         ),
         focusedErrorBorder: OutlineInputBorder(
           borderSide: BorderSide(
@@ -77,6 +77,7 @@ class AppTextFormField extends StatelessWidget {
           borderRadius: BorderRadius.circular(30),
         ),
         suffixIcon: suffixIcon,
+        errorStyle: TextStyle(color: Colors.white),
       ),
       obscureText: isObscureText ?? false,
       style: TextStyles.font18White500Weight,

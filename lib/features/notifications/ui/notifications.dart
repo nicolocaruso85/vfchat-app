@@ -5,6 +5,7 @@ import 'package:infinite_grouped_list/infinite_grouped_list.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 import '../../../services/database.dart';
+import '../../../themes/colors.dart';
 import '../../../themes/styles.dart';
 
 class Notification {
@@ -35,7 +36,13 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(context.tr('notifications')),
+        title: Text(
+          context.tr('notifications'),
+          style: TextStyles.font18Black500Weight,
+        ),
+        iconTheme: IconThemeData(
+          color: ColorsManager.redPrimary,
+        ),
       ),
       body: Padding(
         padding: const EdgeInsets.all(10),
