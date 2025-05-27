@@ -4,12 +4,14 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:gap/gap.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:intl_mobile_field/intl_mobile_field.dart';
 import 'package:intl_mobile_field/flags_drop_down.dart';
 import 'package:searchable_listview/searchable_listview.dart';
+import 'package:sign_in_with_apple/sign_in_with_apple.dart';
 
 import '../../../helpers/app_regex.dart';
 import '../../../themes/styles.dart';
@@ -73,7 +75,7 @@ class _EmailAndPasswordState extends State<EmailAndPassword> {
       key: formKey,
       child: Column(
         children: [
-          Gap(50.h),
+          Gap(40.h),
           if (widget.isSignUpPage == null)
             Text(
               context.tr('welcome'),
@@ -619,6 +621,50 @@ class _EmailAndPasswordState extends State<EmailAndPassword> {
                     color: Colors.white,
                     shape: BoxShape.rectangle,
                   ),
+                ),
+              ),
+            ),
+          ],
+        ),
+        Gap(10.h),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            SizedBox(
+              width: 90,
+              height: 60,
+              child: SignInWithAppleButton(
+                height: 80,
+                text: '',
+                style: SignInWithAppleButtonStyle.white,
+                onPressed: () async {
+                  final credential = await SignInWithApple.getAppleIDCredential(
+                    scopes: [
+                      AppleIDAuthorizationScopes.email,
+                      AppleIDAuthorizationScopes.fullName,
+                    ],
+                  );
+
+                  print(credential);
+
+                  // Now send the credential (especially `credential.authorizationCode`) to your server to create a session
+                  // after they have been validated with Apple (see `Integration` section for more information on how to do this)
+                },
+              ),
+            ),
+            Gap(15.w),
+            SizedBox(
+              width: 90,
+              height: 60,
+              child: CupertinoButton(
+                padding: EdgeInsets.all(8),
+                borderRadius: const BorderRadius.all(Radius.circular(8)),
+                color: Colors.white,
+                onPressed: () {
+                },
+                child: Image.asset(
+                  'assets/images/google.png',
+                  fit: BoxFit.cover,
                 ),
               ),
             ),

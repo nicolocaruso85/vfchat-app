@@ -42,6 +42,13 @@ class _OtherUserProfileScreenState extends State<OtherUserProfileScreen> {
           (userDetails != null) ? userDetails!['name'] : '',
           style: TextStyles.font18Black500Weight,
         ),
+        forceMaterialTransparency: true,
+        shape: Border(
+          bottom: BorderSide(
+            color: Color(0xffc2c2c2),
+            width: 1.0,
+          )
+        ),
       ),
       body: Padding(
         padding: EdgeInsets.symmetric(

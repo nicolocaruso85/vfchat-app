@@ -57,7 +57,8 @@ class _PasswordResetState extends State<PasswordReset> {
   AppButton resetButton(BuildContext context) {
     return AppButton(
       buttonText: context.tr('reset'),
-      textStyle: TextStyles.font15DarkBlue500Weight,
+      textStyle: TextStyles.font20White600Weight,
+      verticalPadding: 0,
       onPressed: () async {
         if (formKey.currentState!.validate()) {
           try {

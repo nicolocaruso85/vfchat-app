@@ -109,6 +109,11 @@ class TextStyles {
     fontWeight: FontWeight.w600,
     color: Colors.white,
   );
+  static TextStyle font14White400Weight = TextStyle(
+    fontSize: 14.sp,
+    fontWeight: FontWeight.w400,
+    color: Colors.white,
+  );
 
   static TextStyle font16Black600Weight = TextStyle(
     fontSize: 16.sp,
@@ -123,6 +128,11 @@ class TextStyles {
   static TextStyle font18Black500Weight = TextStyle(
     fontSize: 18.sp,
     fontWeight: FontWeight.w500,
+    color: Colors.black,
+  );
+  static TextStyle font18Black600Weight = TextStyle(
+    fontSize: 18.sp,
+    fontWeight: FontWeight.w600,
     color: Colors.black,
   );
   static TextStyle font18Black800Weight = TextStyle(

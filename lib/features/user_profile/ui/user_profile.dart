@@ -60,7 +60,20 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(context.tr('userProfile')),
+        iconTheme: IconThemeData(
+          color: ColorsManager.redPrimary,
+        ),
+        title: Text(
+          context.tr('userProfile'),
+          style: TextStyles.font18Black500Weight,
+        ),
+        forceMaterialTransparency: true,
+        shape: Border(
+          bottom: BorderSide(
+            color: Color(0xffc2c2c2),
+            width: 1.0,
+          )
+        ),
       ),
       body: Padding(
         padding: EdgeInsets.symmetric(
@@ -101,7 +114,8 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
   modifyButton(BuildContext context) {
     return AppButton(
       buttonText: context.tr('edit'),
-      textStyle: TextStyles.font15DarkBlue500Weight,
+      textStyle: TextStyles.font20White600Weight,
+      verticalPadding: 0,
       onPressed: () async {
         if (formKey.currentState!.validate()) {
           var name = nameController.text;
@@ -163,6 +177,7 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
           hint: context.tr('name'),
           textInputAction: TextInputAction.next,
           maxLines: 1,
+          isDark: true,
           validator: (value) {
             if (value == null || value.isEmpty || value.startsWith(' ')) {
               return context.tr('pleaseEnterValid', args: ['Name']);
@@ -182,6 +197,7 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
           controller: passwordConfirmationController,
           hint: context.tr('confirmPassword'),
           isObscureText: isObscureText,
+          isDark: true,
           suffixIcon: GestureDetector(
             onTap: () {
               setState(() {
@@ -217,6 +233,7 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
           hint: context.tr('password'),
           textInputAction: TextInputAction.next,
           isObscureText: isObscureText,
+          isDark: true,
           suffixIcon: GestureDetector(
             onTap: () {
               setState(() {
@@ -248,6 +265,7 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
           hint: context.tr('email'),
           textInputAction: TextInputAction.next,
           maxLines: 1,
+          isDark: true,
           validator: (value) {
             if (value == null ||
                 value.isEmpty ||
@@ -269,35 +287,43 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
           controller: telephoneController,
           decoration: InputDecoration(
             hintText: context.tr('telephone'),
+            hintStyle: TextStyles.font18Grey400Weight,
+            contentPadding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 17.h),
             border: OutlineInputBorder(
               borderSide: const BorderSide(
-                color: Colors.transparent,
+                color: Color(0x77000000),
               ),
-              borderRadius: BorderRadius.circular(30),
+              borderRadius: BorderRadius.circular(50),
+            ),
+            enabledBorder: OutlineInputBorder(
+              borderSide: const BorderSide(
+                color: Color(0x77000000),
+              ),
+              borderRadius: BorderRadius.circular(50),
             ),
             focusedBorder: OutlineInputBorder(
               borderSide: const BorderSide(
-                color: Colors.transparent,
+                color: Color(0xddffffff),
               ),
-              borderRadius: BorderRadius.circular(30),
+              borderRadius: BorderRadius.circular(50),
             ),
             errorBorder: OutlineInputBorder(
               borderSide: BorderSide(
                 color: ColorsManager.coralRed,
                 width: 1.3.w,
               ),
-              borderRadius: BorderRadius.circular(30),
+              borderRadius: BorderRadius.circular(50),
             ),
             focusedErrorBorder: OutlineInputBorder(
               borderSide: BorderSide(
                 color: ColorsManager.coralRed,
                 width: 1.3.w,
               ),
-              borderRadius: BorderRadius.circular(30),
+              borderRadius: BorderRadius.circular(50),
             ),
           ),
-          fillColor: const Color(0xff273443),
-          style: TextStyles.font18White500Weight,
+          fillColor: Colors.transparent,
+          style: TextStyles.font18Black500Weight,
           favorite: const ['IT'],
           initialCountryCode: 'IT',
           languageCode: 'it',
@@ -305,6 +331,7 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
             dialCode = country.dialCode;
           },
           disableLengthCounter: true,
+          dropdownTextStyle: TextStyles.font18Black500Weight,
           onChanged: (phone) {
           },
           validator: (value) {
@@ -329,7 +356,7 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
           ),
           Text(
             azienda?['name'],
-            style: TextStyles.font16White600Weight,
+            style: TextStyles.font16Black600Weight,
           ),
           Gap(6.h),
         ],
@@ -355,7 +382,7 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
           ),
           Text(
             roles.join(', '),
-            style: TextStyles.font16White600Weight,
+            style: TextStyles.font16Black600Weight,
           ),
           Gap(6.h),
         ],

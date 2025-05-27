@@ -43,6 +43,13 @@ class _SettingsScreenState extends State<SettingsScreen> {
         iconTheme: IconThemeData(
           color: ColorsManager.redPrimary,
         ),
+        forceMaterialTransparency: true,
+        shape: Border(
+          bottom: BorderSide(
+            color: Color(0xffc2c2c2),
+            width: 1.0,
+          )
+        ),
       ),
       body: Padding(
         padding: const EdgeInsets.all(10),
@@ -51,9 +58,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
             ListTile(
               title: Text(
                 context.tr('userProfile'),
-                style: TextStyles.font24White600Weight.copyWith(
-                  fontSize: 18.sp,
-                ),
+                style: TextStyles.font18Black600Weight,
               ),
               onTap: () {
                 Navigator.pushNamed(context, Routes.userProfileScreen);
@@ -63,20 +68,16 @@ class _SettingsScreenState extends State<SettingsScreen> {
               ListTile(
                 title: Text(
                   context.tr('manageUsers'),
-                  style: TextStyles.font24White600Weight.copyWith(
-                    fontSize: 18.sp,
-                  ),
+                  style: TextStyles.font18Black600Weight,
                 ),
                 onTap: () {
                   Navigator.pushNamed(context, Routes.manageUsersScreen);
                 },
               ),
-            ListTile(
+            /*ListTile(
               title: Text(
                 context.tr('changeLanguage'),
-                style: TextStyles.font24White600Weight.copyWith(
-                  fontSize: 18.sp,
-                ),
+                style: TextStyles.font18Black600Weight,
               ),
               onTap: () => showCupertinoModalBottomSheet(
                 expand: false,
@@ -84,13 +85,11 @@ class _SettingsScreenState extends State<SettingsScreen> {
                 backgroundColor: Colors.transparent,
                 builder: (context) => const ModalFit(),
               ),
-            ),
+            ),*/
             ListTile(
               title: Text(
                 context.tr('unlockApp'),
-                style: TextStyles.font24White600Weight.copyWith(
-                  fontSize: 18.sp,
-                ),
+                style: TextStyles.font18Black600Weight,
               ),
               subtitle: Text(
                 context.tr('unlockAppDesc'),

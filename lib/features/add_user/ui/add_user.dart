@@ -7,6 +7,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:gap/gap.dart';
 import 'package:firebase_admin/firebase_admin.dart';
 import 'package:multi_select_flutter/multi_select_flutter.dart';
+import 'package:intl_mobile_field/intl_mobile_field.dart';
 
 import '../../../themes/colors.dart';
 import '../../../themes/styles.dart';
@@ -54,9 +55,13 @@ class _AddUserScreenState extends State<AddUserScreen> {
 
   late TextEditingController nameController = TextEditingController();
   late TextEditingController emailController = TextEditingController();
+  late TextEditingController telephoneController =
+      TextEditingController();
   late TextEditingController passwordController = TextEditingController();
   late TextEditingController passwordConfirmationController =
       TextEditingController();
+
+  String? dialCode;
 
   final _multiSelectKeyRoles = GlobalKey<FormFieldState>();
   final _multiSelectKeyGroups = GlobalKey<FormFieldState>();
@@ -67,7 +72,20 @@ class _AddUserScreenState extends State<AddUserScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(context.tr('addUser')),
+        iconTheme: IconThemeData(
+          color: ColorsManager.redPrimary,
+        ),
+        title: Text(
+          context.tr('addUser'),
+          style: TextStyles.font18Black500Weight,
+        ),
+        forceMaterialTransparency: true,
+        shape: Border(
+          bottom: BorderSide(
+            color: Color(0xffc2c2c2),
+            width: 1.0,
+          )
+        ),
       ),
       body: Padding(
         padding: EdgeInsets.symmetric(
@@ -81,6 +99,7 @@ class _AddUserScreenState extends State<AddUserScreen> {
               children: [
                 nameField(),
                 emailField(),
+                telephoneField(),
                 passwordField(),
                 passwordConfirmationField(),
                 rolesField(),
@@ -226,7 +245,8 @@ class _AddUserScreenState extends State<AddUserScreen> {
   addButton(BuildContext context) {
     return AppButton(
       buttonText: context.tr('create'),
-      textStyle: TextStyles.font15DarkBlue500Weight,
+      textStyle: TextStyles.font20White600Weight,
+      verticalPadding: 0,
       onPressed: () async {
         if (formKey.currentState!.validate()) {
           DocumentSnapshot userDetails = await DatabaseMethods.getCurrentUserDetails();
@@ -252,6 +272,7 @@ class _AddUserScreenState extends State<AddUserScreen> {
             {
               'name': nameController.text,
               'email': emailController.text,
+              'telephone': telephoneController.text,
               'profilePic': '',
               'uid': user.uid,
               'isOnline': false,
@@ -267,6 +288,7 @@ class _AddUserScreenState extends State<AddUserScreen> {
             {
               'name': nameController.text,
               'email': emailController.text,
+              'telephone': telephoneController.text,
               'profilePic': '',
               'uid': user.uid,
               'isOnline': false,
@@ -296,6 +318,7 @@ class _AddUserScreenState extends State<AddUserScreen> {
       children: [
         AppTextFormField(
           hint: context.tr('name'),
+          isDark: true,
           validator: (value) {
             if (value == null || value.isEmpty || value.startsWith(' ')) {
               return context.tr('pleaseEnterValid', args: ['Name']);
@@ -315,6 +338,7 @@ class _AddUserScreenState extends State<AddUserScreen> {
           controller: passwordConfirmationController,
           hint: context.tr('confirmPassword'),
           isObscureText: isObscureText,
+          isDark: true,
           suffixIcon: GestureDetector(
             onTap: () {
               setState(() {
@@ -349,6 +373,7 @@ class _AddUserScreenState extends State<AddUserScreen> {
           controller: passwordController,
           hint: context.tr('password'),
           isObscureText: isObscureText,
+          isDark: true,
           suffixIcon: GestureDetector(
             onTap: () {
               setState(() {
@@ -378,6 +403,7 @@ class _AddUserScreenState extends State<AddUserScreen> {
       children: [
         AppTextFormField(
           hint: context.tr('email'),
+          isDark: true,
           validator: (value) {
             if (value == null ||
                 value.isEmpty ||
@@ -386,6 +412,72 @@ class _AddUserScreenState extends State<AddUserScreen> {
             }
           },
           controller: emailController,
+        ),
+        Gap(18.h),
+      ],
+    );
+  }
+
+  Column telephoneField() {
+    return Column(
+      children: [
+        IntlMobileField(
+          controller: telephoneController,
+          decoration: InputDecoration(
+            hintText: context.tr('telephone'),
+            hintStyle: TextStyles.font18Grey400Weight,
+            contentPadding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 17.h),
+            border: OutlineInputBorder(
+              borderSide: const BorderSide(
+                color: Color(0x77000000),
+              ),
+              borderRadius: BorderRadius.circular(50),
+            ),
+            enabledBorder: OutlineInputBorder(
+              borderSide: const BorderSide(
+                color: Color(0x77000000),
+              ),
+              borderRadius: BorderRadius.circular(50),
+            ),
+            focusedBorder: OutlineInputBorder(
+              borderSide: const BorderSide(
+                color: Color(0xddffffff),
+              ),
+              borderRadius: BorderRadius.circular(50),
+            ),
+            errorBorder: OutlineInputBorder(
+              borderSide: BorderSide(
+                color: ColorsManager.coralRed,
+                width: 1.3.w,
+              ),
+              borderRadius: BorderRadius.circular(50),
+            ),
+            focusedErrorBorder: OutlineInputBorder(
+              borderSide: BorderSide(
+                color: ColorsManager.coralRed,
+                width: 1.3.w,
+              ),
+              borderRadius: BorderRadius.circular(50),
+            ),
+          ),
+          fillColor: Colors.transparent,
+          style: TextStyles.font18Black500Weight,
+          favorite: const ['IT'],
+          initialCountryCode: 'IT',
+          languageCode: 'it',
+          onCountryChanged: (country) {
+            dialCode = country.dialCode;
+          },
+          disableLengthCounter: true,
+          dropdownTextStyle: TextStyles.font18Black500Weight,
+          onChanged: (phone) {
+          },
+          validator: (value) {
+            if (value == null) {
+              return context.tr('pleaseEnterValid', args: ['Telefono']);
+            }
+          },
+          invalidNumberMessage: context.tr('pleaseEnterValid', args: ['Telefono']),
         ),
         Gap(18.h),
       ],

@@ -11,6 +11,7 @@ import 'package:searchable_listview/searchable_listview.dart';
 
 import '../../../firebase_options.dart';
 import '../../../services/database.dart';
+import '../../../themes/colors.dart';
 import '../../../themes/styles.dart';
 import '../../../router/routes.dart';
 
@@ -38,7 +39,20 @@ class _ManageUsersScreenState extends State<ManageUsersScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(context.tr('manageUsers')),
+        iconTheme: IconThemeData(
+          color: ColorsManager.redPrimary,
+        ),
+        title: Text(
+          context.tr('manageUsers'),
+          style: TextStyles.font18Black500Weight,
+        ),
+        forceMaterialTransparency: true,
+        shape: Border(
+          bottom: BorderSide(
+            color: Color(0xffc2c2c2),
+            width: 1.0,
+          )
+        ),
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
@@ -46,7 +60,7 @@ class _ManageUsersScreenState extends State<ManageUsersScreen> {
         },
         child: const Icon(
           Icons.add,
-          color: Colors.black,
+          color: Colors.white,
         ),
       ),
       body: Padding(
@@ -78,17 +92,17 @@ class _ManageUsersScreenState extends State<ManageUsersScreen> {
                 return SearchableList<DocumentSnapshot>(
                   inputDecoration: InputDecoration(
                     labelText: context.tr('search'),
-                    fillColor: Colors.white,
-                    labelStyle: TextStyle(color: Colors.white),
+                    fillColor: Colors.black,
+                    labelStyle: TextStyle(color: Colors.black),
                     focusedBorder: OutlineInputBorder(
                       borderSide: const BorderSide(
-                        color: Colors.blue,
+                        color: ColorsManager.coralRed,
                         width: 1.0,
                       ),
                       borderRadius: BorderRadius.circular(10.0),
                     ),
                   ),
-                  textStyle: TextStyles.font16White600Weight,
+                  textStyle: TextStyles.font16Black600Weight,
                   filter: (search) {
                     return users.where((user) => user['name'].toLowerCase().contains(search.toLowerCase()) || user['email'].toLowerCase().contains(search.toLowerCase())).toList();
                   },
@@ -99,6 +113,10 @@ class _ManageUsersScreenState extends State<ManageUsersScreen> {
 
                     if (_auth.currentUser!.email != data['email']) {
                       return ListTile(
+                        contentPadding: EdgeInsets.symmetric(
+                          horizontal: 0,
+                          vertical: 10,
+                        ),
                         leading: data['profilePic'] != null && data['profilePic'] != ''
                             ? Hero(
                                 tag: data['profilePic'],
@@ -109,35 +127,34 @@ class _ManageUsersScreenState extends State<ManageUsersScreen> {
                                         Image.asset('assets/images/loading.gif'),
                                     errorWidget: (context, url, error) =>
                                         const Icon(Icons.error_outline_rounded),
-                                    width: 50.w,
-                                    height: 50.h,
+                                    width: 80,
+                                    height: 80,
                                     fit: BoxFit.cover,
                                   ),
                                 ),
                               )
                             : Image.asset(
                                 'assets/images/user.png',
-                                height: 50.h,
-                                width: 50.w,
+                                height: 80,
+                                width: 80,
                                 fit: BoxFit.cover,
                               ),
-                        tileColor: const Color(0xff111B21),
                         title: Text(
                           (data['isApproved']) ? data['name'] : data['name'] + ' (non approvato)',
                           style: TextStyle(
-                            color: (data['isApproved']) ? Colors.white : Colors.red,
+                            color: (data['isApproved']) ? Colors.black : Colors.red,
                           ),
                           overflow: TextOverflow.ellipsis,
                         ),
                         subtitle: Text(
                           data['email'],
                           style: TextStyle(
-                            color: (data['isApproved']) ? Color.fromARGB(255, 179, 178, 178) : Colors.red,
+                            color: (data['isApproved']) ? Color(0xff828282) : Colors.red,
                           ),
                           overflow: TextOverflow.ellipsis,
                           maxLines: 1,
                         ),
-                        isThreeLine: true,
+                        isThreeLine: false,
                         titleAlignment: ListTileTitleAlignment.center,
                         enableFeedback: true,
                         dense: false,
@@ -147,9 +164,9 @@ class _ManageUsersScreenState extends State<ManageUsersScreen> {
                           height: 1.2.h,
                         ),
                         subtitleTextStyle: TextStyle(
-                          height: 2.h,
+                          height: 1.2.h,
                         ),
-                        horizontalTitleGap: 15.w,
+                        horizontalTitleGap: 2,
                         onTap: () {
                           showUserOptions(context, data);
                         },

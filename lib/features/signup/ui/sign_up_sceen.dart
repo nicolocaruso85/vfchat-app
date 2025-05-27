@@ -77,6 +77,7 @@ class BuildSignupScreen extends StatelessWidget {
                               ),
                             ),
                           ),
+                          Gap(10.h),
                           Expanded(
                             child: SingleChildScrollView(
                               child: Column(

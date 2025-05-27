@@ -78,8 +78,12 @@ class BuildLoginScreen extends StatelessWidget {
                               ),
                             ),
                           ),
-                          EmailAndPassword(),
                           Gap(10.h),
+                          Expanded(
+                            child: SingleChildScrollView(
+                              child: EmailAndPassword(),
+                            ),
+                          ),
                         ],
                       ),
                     ),

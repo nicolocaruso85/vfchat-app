@@ -14,7 +14,7 @@ import '../../../helpers/extensions.dart';
 import '../../../router/routes.dart';
 import '../../../services/database.dart';
 import '../../../themes/colors.dart';
-import '../../tabs/calls_tab.dart';
+//import '../../tabs/calls_tab.dart';
 import '../../tabs/chat_tab.dart';
 import '../../tabs/groups_tab.dart';
 import '../../search/ui/search_groups.dart';
@@ -65,7 +65,7 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
                 context.pushNamed(Routes.newGroupScreen);
               },
             ),
-            SpeedDialChild(
+            /*SpeedDialChild(
               child: const Icon(Icons.video_call_outlined),
               backgroundColor: Color(0xffd93d5c),
               foregroundColor: Colors.white,
@@ -73,7 +73,7 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
               onTap: () {
 
               },
-            ),
+            ),*/
           ],
         ),
         appBar: AppBar(
@@ -90,7 +90,7 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
             tabs: [
               Tab(text: context.tr('chats')),
               Tab(text: context.tr('groups')),
-              Tab(text: context.tr('calls')),
+              //Tab(text: context.tr('calls')),
             ],
           ),
           actions: [
@@ -126,7 +126,7 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
           children: [
             ChatsTab(),
             GroupsTab(),
-            CallsTab(),
+            //CallsTab(),
           ],
         ),
       ),

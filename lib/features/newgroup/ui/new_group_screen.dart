@@ -10,6 +10,7 @@ import 'package:selectable_search_list/selectable_search_list.dart';
 import 'package:king_cache/king_cache.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 
+import '../../../themes/colors.dart';
 import '../../../themes/styles.dart';
 import '../../../core/widgets/app_text_form_field.dart';
 import '../../../core/widgets/app_button.dart';
@@ -44,20 +45,44 @@ class _NewGroupScreenState extends State<NewGroupScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(context.tr('newGroup')),
+        iconTheme: IconThemeData(
+          color: ColorsManager.redPrimary,
+        ),
+        title: Text(
+          context.tr('newGroup'),
+          style: TextStyles.font18Black500Weight,
+        ),
+        forceMaterialTransparency: true,
+        shape: Border(
+          bottom: BorderSide(
+            color: Color(0xffc2c2c2),
+            width: 1.0,
+          )
+        ),
       ),
-      body: Padding(
-        padding: const EdgeInsets.all(10),
-        child: Form(
-          key: formKey,
-          child: Column(
-            children: [
-              nameField(),
-              descriptionField(),
-              selectUsersList(),
-              createButton(context),
-              Gap(18.h),
-            ],
+      body: Container(
+        decoration: BoxDecoration(
+          gradient: LinearGradient(
+            colors: [Color(0xffdbdbdb), Colors.white],
+            stops: [0.25, 1],
+            begin: Alignment.bottomCenter,
+            end: Alignment.topCenter,
+          ),
+        ),
+        child: Padding(
+          padding: const EdgeInsets.all(10),
+          child: Form(
+            key: formKey,
+            child: Column(
+              children: [
+                Gap(8.h),
+                nameField(),
+                descriptionField(),
+                selectUsersList(),
+                createButton(context),
+                Gap(18.h),
+              ],
+            ),
           ),
         ),
       ),
@@ -117,12 +142,12 @@ class _NewGroupScreenState extends State<NewGroupScreen> {
                 selectAllTextStyle: const TextStyle(
                   fontSize: 18,
                   fontWeight: FontWeight.w600,
-                  color: Colors.white,
+                  color: Colors.black,
                 ),
                 itemTitleStyle:  const TextStyle(
                   fontSize: 18,
                   fontWeight: FontWeight.w500,
-                  color: Colors.white,
+                  color: Colors.black,
                 ),
                 items: items,
                 onItemsSelect: (selectedItems) {
@@ -143,6 +168,7 @@ class _NewGroupScreenState extends State<NewGroupScreen> {
           hint: context.tr('name'),
           textInputAction: TextInputAction.next,
           maxLines: 1,
+          isDark: true,
           validator: (value) {
             if (value == null || value.isEmpty || value.startsWith(' ')) {
               return context.tr('pleaseEnterValid', args: ['Nome']);
@@ -162,6 +188,7 @@ class _NewGroupScreenState extends State<NewGroupScreen> {
           hint: context.tr('description'),
           keyboardType: TextInputType.multiline,
           maxLines: null,
+          isDark: true,
           validator: (value) {
           },
           controller: descriptionController,
@@ -174,7 +201,8 @@ class _NewGroupScreenState extends State<NewGroupScreen> {
   createButton(BuildContext context) {
     return AppButton(
       buttonText: context.tr('create'),
-      textStyle: TextStyles.font15DarkBlue500Weight,
+      textStyle: TextStyles.font20White600Weight,
+      verticalPadding: 0,
       onPressed: () async {
         if (formKey.currentState!.validate()) {
           var users = [];

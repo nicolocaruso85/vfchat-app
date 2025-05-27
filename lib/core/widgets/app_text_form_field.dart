@@ -10,6 +10,7 @@ class AppTextFormField extends StatelessWidget {
   final FocusNode? focusNode;
   final Function(String)? onChanged;
   final bool? isObscureText;
+  final bool? isDark;
   final bool? isDense;
   final TextInputType? keyboardType;
   final int? maxLines;
@@ -21,6 +22,7 @@ class AppTextFormField extends StatelessWidget {
     required this.hint,
     this.suffixIcon,
     this.isObscureText,
+    this.isDark,
     this.isDense,
     this.controller,
     this.onChanged,
@@ -51,14 +53,14 @@ class AppTextFormField extends StatelessWidget {
         fillColor: Colors.transparent,
         contentPadding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 17.h),
         enabledBorder: OutlineInputBorder(
-          borderSide: const BorderSide(
-            color: Color(0x77ffffff),
+          borderSide: BorderSide(
+            color: (isDark == true) ? Color(0x77000000) : Color(0x77ffffff),
           ),
           borderRadius: BorderRadius.circular(50),
         ),
         focusedBorder: OutlineInputBorder(
-          borderSide: const BorderSide(
-            color: Color(0xddffffff),
+          borderSide: BorderSide(
+            color: (isDark == true) ? Color(0xdd000000) : Color(0xddffffff),
           ),
           borderRadius: BorderRadius.circular(50),
         ),
@@ -80,7 +82,7 @@ class AppTextFormField extends StatelessWidget {
         errorStyle: TextStyle(color: Colors.white),
       ),
       obscureText: isObscureText ?? false,
-      style: TextStyles.font18White500Weight,
+      style: (isDark == true) ? TextStyles.font18Black500Weight : TextStyles.font18White500Weight,
     );
   }
 }

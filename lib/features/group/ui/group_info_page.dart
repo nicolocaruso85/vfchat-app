@@ -66,8 +66,19 @@ class _GroupInfoScreenState extends State<GroupInfoScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        iconTheme: IconThemeData(
+          color: ColorsManager.redPrimary,
+        ),
+        forceMaterialTransparency: true,
+        shape: Border(
+          bottom: BorderSide(
+            color: Color(0xffc2c2c2),
+            width: 1.0,
+          )
+        ),
         title: Text(
-          (groupDetails != null) ? groupDetails!['name'] : ''
+          (groupDetails != null) ? groupDetails!['name'] : '',
+          style: TextStyles.font18Black500Weight,
         ),
         actions: [
           IconButton(
@@ -78,7 +89,13 @@ class _GroupInfoScreenState extends State<GroupInfoScreen> {
                 builder: (context) => Material(
                   child: Scaffold(
                     appBar: AppBar(
-                      title: Text(context.tr('editGroup')),
+                      iconTheme: IconThemeData(
+                        color: ColorsManager.redPrimary,
+                      ),
+                      title: Text(
+                        context.tr('editGroup'),
+                        style: TextStyles.font18Black500Weight,
+                      ),
                       automaticallyImplyLeading: false,
                     ),
                     backgroundColor: ColorsManager.backgroundDefaultColor,
@@ -210,7 +227,7 @@ class _GroupInfoScreenState extends State<GroupInfoScreen> {
           ),
           Text(
             (groupDetails != null) ? (groupDetails?['name']) : '',
-            style: TextStyles.font16White600Weight,
+            style: TextStyles.font16Black600Weight,
           ),
           Gap(8.h),
         ],
@@ -230,7 +247,7 @@ class _GroupInfoScreenState extends State<GroupInfoScreen> {
           ),
           Text(
             (groupDetails != null) ? (groupDetails?['description']) : '',
-            style: TextStyles.font16White600Weight,
+            style: TextStyles.font16Black600Weight,
           ),
           Gap(8.h),
         ],
@@ -250,7 +267,7 @@ class _GroupInfoScreenState extends State<GroupInfoScreen> {
           ),
           Text(
             (creatorName != null) ? creatorName! : '',
-            style: TextStyles.font16White600Weight,
+            style: TextStyles.font16Black600Weight,
           ),
           Gap(8.h),
         ],
@@ -270,7 +287,7 @@ class _GroupInfoScreenState extends State<GroupInfoScreen> {
           ),
           Text(
             (groupDetails != null) ? (formatDate(groupDetails?['createdDate'].toDate())) : '',
-            style: TextStyles.font16White600Weight,
+            style: TextStyles.font16Black600Weight,
           ),
           Gap(8.h),
         ],
@@ -326,7 +343,7 @@ class _GroupInfoScreenState extends State<GroupInfoScreen> {
                 title: Text(
                   data['name'],
                   style: const TextStyle(
-                    color: Colors.white,
+                    color: Colors.black,
                   ),
                   overflow: TextOverflow.ellipsis,
                 ),
@@ -377,6 +394,7 @@ class _GroupInfoScreenState extends State<GroupInfoScreen> {
         AppTextFormField(
           hint: context.tr('name'),
           textInputAction: TextInputAction.next,
+          isDark: true,
           validator: (value) {
             if (value == null || value.isEmpty || value.startsWith(' ')) {
               return context.tr('pleaseEnterValid', args: ['Nome']);
@@ -396,6 +414,7 @@ class _GroupInfoScreenState extends State<GroupInfoScreen> {
           hint: context.tr('description'),
           keyboardType: TextInputType.multiline,
           maxLines: null,
+          isDark: true,
           validator: (value) {
           },
           controller: descriptionController,
@@ -410,7 +429,8 @@ class _GroupInfoScreenState extends State<GroupInfoScreen> {
       children: [
         AppButton(
           buttonText: context.tr('edit'),
-          textStyle: TextStyles.font15DarkBlue500Weight,
+          textStyle: TextStyles.font20White600Weight,
+          verticalPadding: 0,
           onPressed: () async {
             if (formKey.currentState!.validate()) {
               await DatabaseMethods.updateGroupDetails(
@@ -446,7 +466,8 @@ class _GroupInfoScreenState extends State<GroupInfoScreen> {
   cancelButton() {
     return AppButton(
       buttonText: context.tr('cancel'),
-      textStyle: TextStyles.font15DarkBlue500Weight,
+      textStyle: TextStyles.font20White600Weight,
+      verticalPadding: 0,
       backgroundColor: Colors.red.shade700,
       onPressed: () async {
         Navigator.of(context).pop();
@@ -460,7 +481,8 @@ class _GroupInfoScreenState extends State<GroupInfoScreen> {
         AppButton(
           buttonText: context.tr('leaveGroup'),
           backgroundColor: Colors.red.shade700,
-          textStyle: TextStyles.font15DarkBlue500Weight,
+          textStyle: TextStyles.font20White600Weight,
+          verticalPadding: 0,
           onPressed: () async {
             AwesomeDialog(
               context: context,
@@ -499,14 +521,21 @@ class _GroupInfoScreenState extends State<GroupInfoScreen> {
       children: [
         AppButton(
           buttonText: context.tr('addGroupUsers'),
-          textStyle: TextStyles.font15DarkBlue500Weight,
+          textStyle: TextStyles.font20White600Weight,
+          verticalPadding: 0,
           onPressed: () async {
             showCupertinoModalBottomSheet(
               context: context,
               builder: (context) => Material(
                 child: Scaffold(
                   appBar: AppBar(
-                    title: Text(context.tr('addGroupUsers')),
+                    iconTheme: IconThemeData(
+                      color: ColorsManager.redPrimary,
+                    ),
+                    title: Text(
+                      context.tr('addGroupUsers'),
+                      style: TextStyles.font18Black500Weight,
+                    ),
                     leading: BackButton(
                       onPressed: () {
                         selectedUsers = [];
@@ -574,12 +603,12 @@ class _GroupInfoScreenState extends State<GroupInfoScreen> {
                     selectAllTextStyle: const TextStyle(
                       fontSize: 18,
                       fontWeight: FontWeight.w600,
-                      color: Colors.white,
+                      color: Colors.black,
                     ),
                     itemTitleStyle:  const TextStyle(
                       fontSize: 18,
                       fontWeight: FontWeight.w500,
-                      color: Colors.white,
+                      color: Colors.black,
                     ),
                     items: items,
                     onItemsSelect: (selectedItems) {
@@ -598,7 +627,8 @@ class _GroupInfoScreenState extends State<GroupInfoScreen> {
   confirmAddUsersButton(BuildContext context) {
     return AppButton(
       buttonText: context.tr('add'),
-      textStyle: TextStyles.font15DarkBlue500Weight,
+      textStyle: TextStyles.font20White600Weight,
+      verticalPadding: 0,
       onPressed: () async {
         var users = [];
         membersList.forEach((member) {

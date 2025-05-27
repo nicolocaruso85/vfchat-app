@@ -18,6 +18,7 @@ import 'package:auto_scroll_text/auto_scroll_text.dart';
 
 import '../../../core/networking/dio_factory.dart';
 import '../../../themes/colors.dart';
+import '../../../themes/styles.dart';
 import '../../../helpers/extensions.dart';
 import '../../../helpers/notifications.dart';
 import '../../../router/routes.dart';
@@ -137,7 +138,11 @@ class _GroupScreenState extends State<GroupScreen> {
         child: Row(
           children: [
             Gap(10.w),
-            Icon(Icons.arrow_back_ios, size: 25.sp),
+            Icon(
+              Icons.arrow_back_ios,
+              size: 25.sp,
+              color: ColorsManager.redPrimary,
+            ),
             groupDetails != null &&
                     groupDetails!['groupPic'] != ''
                 ? Hero(
@@ -175,7 +180,10 @@ class _GroupScreenState extends State<GroupScreen> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text((groupDetails != null) ? groupDetails!['name']! : ''),
+            Text(
+              (groupDetails != null) ? groupDetails!['name']! : '',
+              style: TextStyles.font18Black500Weight,
+            ),
             AutoScrollText(
               (usersList != null) ? usersList! : '',
               mode: AutoScrollTextMode.bouncing,
@@ -190,6 +198,13 @@ class _GroupScreenState extends State<GroupScreen> {
             ),
           ],
         ),
+      ),
+      forceMaterialTransparency: true,
+      shape: Border(
+        bottom: BorderSide(
+          color: Color(0xffc2c2c2),
+          width: 1.0,
+        )
       ),
     );
   }
