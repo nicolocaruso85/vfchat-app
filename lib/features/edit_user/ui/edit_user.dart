@@ -155,7 +155,7 @@ class _EditUserScreenState extends State<EditUserScreen> {
         color: Colors.white,
       ),
       decoration: BoxDecoration(
-        color: Colors.blue.withOpacity(0.1),
+        color: Colors.blue.withOpacity(0.9),
         borderRadius: BorderRadius.all(Radius.circular(40)),
         border: Border.all(
           color: Colors.white,
@@ -222,7 +222,7 @@ class _EditUserScreenState extends State<EditUserScreen> {
             color: Colors.white,
           ),
           decoration: BoxDecoration(
-            color: Colors.blue.withOpacity(0.1),
+            color: Colors.blue.withOpacity(0.9),
             borderRadius: BorderRadius.all(Radius.circular(40)),
             border: Border.all(
               color: Colors.white,

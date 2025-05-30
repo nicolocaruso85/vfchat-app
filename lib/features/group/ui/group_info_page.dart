@@ -168,20 +168,20 @@ class _GroupInfoScreenState extends State<GroupInfoScreen> {
           gradientBackgroundColor: const LinearGradient(colors: [const Color(0xff273443), const Color(0xff273443)]),
           imageNetwork: groupDetails?['groupPic'] != '' ? (groupDetails?['groupPic']) : null,
           bottomSheetStyles: BottomSheetStyles(
-            backgroundColor: const Color(0xff273443),
+            backgroundColor: Colors.white,
             elevation: 0,
             middleText: context.tr('or'),
             middleTextStyle: const TextStyle(color: Colors.white),
             galleryButton: GalleryBottom(
               text: context.tr('photoGallery'),
-              style: TextStyles.font15DarkBlue500Weight,
-              color: Colors.white,
+              style: TextStyles.font15White500Weight,
+              color: ColorsManager.redPrimary,
               icon: null,
             ),
             cameraButton: CameraButton(
               text: context.tr('camera'),
-              style: TextStyles.font15DarkBlue500Weight,
-              color: Colors.white,
+              style: TextStyles.font15White500Weight,
+              color: ColorsManager.redPrimary,
               icon: null,
             ),
           ),
@@ -317,6 +317,10 @@ class _GroupInfoScreenState extends State<GroupInfoScreen> {
               var data = membersList[index];
 
               return ListTile(
+                contentPadding: EdgeInsets.symmetric(
+                  horizontal: 0,
+                  vertical: 10,
+                ),
                 leading: data['profilePic'] != null && data['profilePic'] != ''
                     ? Hero(
                         tag: data['profilePic'],
@@ -327,19 +331,18 @@ class _GroupInfoScreenState extends State<GroupInfoScreen> {
                                 Image.asset('assets/images/loading.gif'),
                             errorWidget: (context, url, error) =>
                                 const Icon(Icons.error_outline_rounded),
-                            width: 50.w,
-                            height: 50.h,
+                            width: 80,
+                            height: 80,
                             fit: BoxFit.cover,
                           ),
                         ),
                       )
                     : Image.asset(
                         'assets/images/user.png',
-                        height: 50.h,
-                        width: 50.w,
+                        height: 80,
+                        width: 80,
                         fit: BoxFit.cover,
                       ),
-                tileColor: const Color(0xff111B21),
                 title: Text(
                   data['name'],
                   style: const TextStyle(
@@ -352,7 +355,7 @@ class _GroupInfoScreenState extends State<GroupInfoScreen> {
                       ? context.tr('online')
                       : context.tr('offline'),
                   style: const TextStyle(
-                    color: Color.fromARGB(255, 179, 178, 178),
+                    color: Color(0xff828282),
                   ),
                   overflow: TextOverflow.ellipsis,
                   maxLines: 1,
@@ -361,7 +364,7 @@ class _GroupInfoScreenState extends State<GroupInfoScreen> {
                   Text(
                     context.tr('admin'),
                     style: const TextStyle(
-                      color: Color.fromARGB(255, 179, 178, 178),
+                      color: Color(0xff828282),
                     ),
                   ) : Text(''),
                 isThreeLine: true,
@@ -374,9 +377,9 @@ class _GroupInfoScreenState extends State<GroupInfoScreen> {
                   height: 1.2.h,
                 ),
                 subtitleTextStyle: TextStyle(
-                  height: 2.h,
+                  height: 1.2.h,
                 ),
-                horizontalTitleGap: 15.w,
+                horizontalTitleGap: 2,
                 onTap: () {
                   showUserOptions(context, data);
                 },
