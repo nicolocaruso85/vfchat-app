@@ -701,14 +701,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "3.4.1"
-  flutter_callkit_incoming_yoer:
+  flutter_callkit_incoming:
     dependency: transitive
     description:
-      name: flutter_callkit_incoming_yoer
-      sha256: b7d818fefaf6cdb8475c6f0d1e3aea73dc76098cbd266c79628cf7c891f1c033
+      name: flutter_callkit_incoming
+      sha256: "21d645f0bc622c3ab9c113e289abbbd169a0f9143f3eb2a05ef1fb01b729c239"
       url: "https://pub.dev"
     source: hosted
-    version: "2.0.4+4"
+    version: "2.5.2"
   flutter_chat_types:
     dependency: "direct main"
     description:
@@ -1751,10 +1751,10 @@ packages:
     dependency: "direct main"
     description:
       name: searchable_listview
-      sha256: "4edfadacbdae274ff65c7bcdbbb1a4919296e4ec32ea4919d3eabf97aa4120de"
+      sha256: "3f09bcf83c143079ef1244efee01cd7af1525e78f7405b480bef86ecb3b8f129"
       url: "https://pub.dev"
     source: hosted
-    version: "2.17.3"
+    version: "2.18.0"
   selectable_search_list:
     dependency: "direct main"
     description:
@@ -2396,26 +2396,26 @@ packages:
     dependency: transitive
     description:
       name: zego_uikit
-      sha256: ccf9705a972ae43425cb4b3cbaffb93d17690baf24a9ff7ac968ba5cf08c3da8
+      sha256: d1ee1cc337a34c41dc7445c5c6032c804ff3ab4c29b8a2e6b4b61d97ec9ae9d1
       url: "https://pub.dev"
     source: hosted
-    version: "2.28.15"
+    version: "2.28.18"
   zego_uikit_prebuilt_call:
     dependency: "direct main"
     description:
       name: zego_uikit_prebuilt_call
-      sha256: "321a70cde4637e965f3a17271344386b184445ba7b8ac7b3b6c0f25640483d36"
+      sha256: cad521d74c1ff3c2a1cafbe84ae05206d0f27e6ca6d7ac58c6b957a2ae3d837c
       url: "https://pub.dev"
     source: hosted
-    version: "4.16.29"
+    version: "4.17.1"
   zego_uikit_signaling_plugin:
     dependency: "direct main"
     description:
       name: zego_uikit_signaling_plugin
-      sha256: "31a903d3bf1c22ea9281d6979c35446a3cc3ae54964855008b6395f0acc6c422"
+      sha256: "423f4f7eff773bcd830f121da838a86c1694abaf7f4ab810fa0a82289334c049"
       url: "https://pub.dev"
     source: hosted
-    version: "2.8.12"
+    version: "2.8.13"
   zego_zim:
     dependency: transitive
     description:

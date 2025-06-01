@@ -58,14 +58,14 @@ dependencies:
   pretty_dio_logger: ^1.4.0
   pub_semver: ^2.2.0
   restart_app: ^1.3.2
-  searchable_listview: ^2.17.0
+  searchable_listview: ^2.18.0
   selectable_search_list: ^0.0.2
   shared_preferences: ^2.5.3
   sign_in_with_apple: ^7.0.1
   typesense: ^0.5.2
   url_launcher: ^6.3.1
-  zego_uikit_prebuilt_call: ^4.16.29
-  zego_uikit_signaling_plugin: ^2.8.12
+  zego_uikit_prebuilt_call: ^4.17.1
+  zego_uikit_signaling_plugin: ^2.8.13
 
 dependency_overrides:
   intl: 0.20.2
