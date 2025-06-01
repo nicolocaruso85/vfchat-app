@@ -404,6 +404,7 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
                   controller: controller,
                   autoFocus: true,
                   hintText: context.tr('search'),
+                  textStyle: MaterialStateProperty.all(TextStyles.font20Black300Weight),
                   padding: const WidgetStatePropertyAll<EdgeInsets>(EdgeInsets.symmetric(horizontal: 16.0)),
                   onChanged: (value) {
                     userSearchEvent.broadcast(Value(value));

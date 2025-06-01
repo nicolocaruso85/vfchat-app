@@ -9,6 +9,8 @@ import 'package:firebase_auth/firebase_auth.dart';
 
 import '../../../services/database.dart';
 import '../../../router/routes.dart';
+import '../../../themes/colors.dart';
+import '../../../themes/styles.dart';
 
 class SearchGroups extends StatefulWidget {
   final groupSearchEvent;
@@ -65,67 +67,79 @@ class _SearchGroupsState extends State<SearchGroups> {
   getGroups(groups) {
     return Column(
       children: List.from(groups.map((group) =>
-        ListTile(
-          leading: group['document']['groupPic'] != null && group['document']['groupPic'] != ''
-              ? Hero(
-                  tag: group['document']['groupPic'],
-                  child: ClipOval(
-                    child: CachedNetworkImage(
-                      imageUrl: group['document']['groupPic'],
-                      placeholder: (context, url) =>
-                          Image.asset('assets/images/loading.gif'),
-                      errorWidget: (context, url, error) =>
-                          const Icon(Icons.error_outline_rounded),
-                      width: 50.w,
-                      height: 50.h,
-                      fit: BoxFit.cover,
+        Container(
+          decoration: BoxDecoration(
+            border: Border(
+              bottom: BorderSide(
+                color: Color(0xffdedede),
+                width: 1.0,
+              ),
+            ),
+          ),
+          child: ListTile(
+            contentPadding: EdgeInsets.symmetric(
+              horizontal: 0,
+              vertical: 20,
+            ),
+            leading: group['document']['groupPic'] != null && group['document']['groupPic'] != ''
+                ? Hero(
+                    tag: group['document']['groupPic'],
+                    child: ClipOval(
+                      child: CachedNetworkImage(
+                        imageUrl: group['document']['groupPic'],
+                        placeholder: (context, url) =>
+                            Image.asset('assets/images/loading.gif'),
+                        errorWidget: (context, url, error) =>
+                            const Icon(Icons.error_outline_rounded),
+                        width: 100,
+                        height: 100,
+                        fit: BoxFit.cover,
+                      ),
                     ),
+                  )
+                : Image.asset(
+                    'assets/images/user.png',
+                    height: 100,
+                    width: 100,
+                    fit: BoxFit.cover,
                   ),
-                )
-              : Image.asset(
-                  'assets/images/user.png',
-                  height: 50.h,
-                  width: 50.w,
-                  fit: BoxFit.cover,
-                ),
-          tileColor: const Color(0xff111B21),
-          title: Text(
-            group['document']['name'],
-            style: const TextStyle(
-              color: Colors.white,
+            title: Text(
+              group['document']['name'],
+              style: TextStyles.font18Black800Weight,
+              overflow: TextOverflow.ellipsis,
             ),
-            overflow: TextOverflow.ellipsis,
-          ),
-          subtitle: Text(
-            group['document']['users'].length.toString() + ' ' + context.tr('users'),
-            style: const TextStyle(
-              color: Color.fromARGB(255, 179, 178, 178),
+            subtitle: Text(
+              group['document']['users'].length.toString() + ' ' + context.tr('users'),
+              style: const TextStyle(
+                color: Color(0xff828282),
+              ),
+              overflow: TextOverflow.ellipsis,
+              maxLines: 1,
             ),
-            overflow: TextOverflow.ellipsis,
-            maxLines: 1,
-          ),
-          isThreeLine: true,
-          titleAlignment: ListTileTitleAlignment.center,
-          enableFeedback: true,
-          dense: false,
-          titleTextStyle: TextStyle(
-            fontWeight: FontWeight.bold,
-            fontSize: 20.sp,
-            height: 1.2.h,
-          ),
-          onTap: () async {
-            var data = await DatabaseMethods.getGroup(group['document']['id']);
+            isThreeLine: true,
+            titleAlignment: ListTileTitleAlignment.center,
+            enableFeedback: true,
+            dense: false,
+            visualDensity: VisualDensity(vertical: 4),
+            titleTextStyle: TextStyle(
+              fontWeight: FontWeight.bold,
+              fontSize: 20.sp,
+              height: 1.2.h,
+            ),
+            onTap: () async {
+              var data = await DatabaseMethods.getGroup(group['document']['id']);
 
-            widget.groupSearchEvent.unsubscribeAll();
+              widget.groupSearchEvent.unsubscribeAll();
 
-            Navigator.of(context).pop();
-            Navigator.pushNamed(context, Routes.groupScreen, arguments: {
-              'id': group['document']['id'],
-              'name': data['name'],
-              'groupPic': data['groupPic'],
-              'users': data['users'],
-            });
-          },
+              Navigator.of(context).pop();
+              Navigator.pushNamed(context, Routes.groupScreen, arguments: {
+                'id': group['document']['id'],
+                'name': data['name'],
+                'groupPic': data['groupPic'],
+                'users': data['users'],
+              });
+            },
+          ),
         ),
       )),
     );

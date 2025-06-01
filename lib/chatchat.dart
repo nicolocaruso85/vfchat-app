@@ -40,7 +40,6 @@ class _ChatChatState extends State<ChatChat> {
           supportedLocales: context.supportedLocales,
           locale: context.locale,
           theme: ThemeData(
-            useMaterial3: true,
             primaryColor: ColorsManager.redPrimary,
             textSelectionTheme: const TextSelectionThemeData(
               cursorColor: ColorsManager.redPrimary,
