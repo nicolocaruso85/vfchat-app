@@ -8,7 +8,7 @@
     "joinUs": "Unisciti a noi!",
     "loginWith": "oppure accedi con",
     "signUp": "registrati",
-    "signOut": "Disconnetti",
+    "signOut": "Logout",
     "language": "Lingua",
     "changeLanguage": "Cambia @:language",
     "enterEmailToResetPassword": "Inserisci la @:email per @:reset la @:password",
@@ -70,7 +70,7 @@
     "offline": "Offline",
     "online": "Online",
     "userProfile": "Profilo @:user",
-    "manageUsers": "Gestione Utenti",
+    "manageUsers": "Gestisci Utenti",
     "edit": "Modifica",
     "delete": "Elimina",
     "cancel": "Annulla",
@@ -125,5 +125,7 @@
     "previous": "Indietro",
     "next": "Avanti",
     "chooseNegozio": "Seleziona un negozio",
-    "connectionErrorMessage": "Si è verificato un errore, controlla la tua connessione ad internet"
+    "connectionErrorMessage": "Si è verificato un errore, controlla la tua connessione ad internet",
+    "privacyPolicy": "Privacy policy",
+    "home": "Home"
 }

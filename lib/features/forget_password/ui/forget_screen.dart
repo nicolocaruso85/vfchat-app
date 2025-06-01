@@ -7,6 +7,7 @@ import 'package:gap/gap.dart';
 import '../../../core/widgets/already_have_account_text.dart';
 import '../../../core/widgets/no_internet.dart';
 import '../../../core/widgets/terms_and_conditions_text.dart';
+import '../../../themes/colors.dart';
 import '../../../themes/styles.dart';
 import 'widgets/password_reset.dart';
 
@@ -43,7 +44,7 @@ class BuildForgetScreen extends StatelessWidget {
                   child: Container(
                     decoration: BoxDecoration(
                       gradient: LinearGradient(
-                        colors: [Color(0xff3d2985), Color(0xffd93d5c)],
+                        colors: [ColorsManager.purplePrimary, ColorsManager.redPrimary],
                         stops: [0.45, 1],
                         begin: Alignment.bottomCenter,
                         end: Alignment.topCenter,

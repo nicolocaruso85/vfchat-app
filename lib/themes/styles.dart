@@ -86,18 +86,18 @@ class TextStyles {
   static TextStyle font24Red800Weight = TextStyle(
     fontSize: 24.sp,
     fontWeight: FontWeight.w800,
-    color: Color(0xffd93d5c),
+    color: ColorsManager.redPrimary,
   );
 
   static TextStyle font36Red800Weight = TextStyle(
     fontSize: 36.sp,
     fontWeight: FontWeight.w800,
-    color: Color(0xffd93d5c),
+    color: ColorsManager.redPrimary,
   );
   static TextStyle font36Blue800Weight = TextStyle(
     fontSize: 36.sp,
     fontWeight: FontWeight.w800,
-    color: Color(0xff3d2985),
+    color: ColorsManager.purplePrimary,
   );
   static TextStyle font28White800Weight = TextStyle(
     fontSize: 28.sp,
@@ -128,6 +128,11 @@ class TextStyles {
   static TextStyle font16Black400Weight = TextStyle(
     fontSize: 16.sp,
     fontWeight: FontWeight.w400,
+    color: Colors.black,
+  );
+  static TextStyle font20Black300Weight = TextStyle(
+    fontSize: 20.sp,
+    fontWeight: FontWeight.w300,
     color: Colors.black,
   );
   static TextStyle font18Black500Weight = TextStyle(

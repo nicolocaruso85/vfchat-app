@@ -11,6 +11,7 @@ import '../../../core/widgets/modal_fit.dart';
 import '../../../core/widgets/no_internet.dart';
 import '../../../core/widgets/terms_and_conditions_text.dart';
 import '../../../services/google_sign_in.dart';
+import '../../../themes/colors.dart';
 import '../../../themes/styles.dart';
 
 class BuildLoginScreen extends StatelessWidget {
@@ -46,7 +47,7 @@ class BuildLoginScreen extends StatelessWidget {
                   child: Container(
                     decoration: BoxDecoration(
                       gradient: LinearGradient(
-                        colors: [Color(0xff3d2985), Color(0xffd93d5c)],
+                        colors: [ColorsManager.purplePrimary, ColorsManager.redPrimary],
                         stops: [0.45, 1],
                         begin: Alignment.bottomCenter,
                         end: Alignment.topCenter,
