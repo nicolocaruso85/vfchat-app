@@ -1,3 +1,7 @@
+import 'dart:convert';
+import 'dart:math';
+
+import 'package:crypto/crypto.dart';
 import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:easy_localization/easy_localization.dart';
@@ -640,17 +644,70 @@ class _EmailAndPasswordState extends State<EmailAndPassword> {
                 text: '',
                 style: SignInWithAppleButtonStyle.white,
                 onPressed: () async {
-                  final credential = await SignInWithApple.getAppleIDCredential(
+                  final rawNonce = generateNonce();
+                  final nonce = sha256ofString(rawNonce);
+
+                  final appleCredential = await SignInWithApple.getAppleIDCredential(
                     scopes: [
                       AppleIDAuthorizationScopes.email,
                       AppleIDAuthorizationScopes.fullName,
                     ],
+                    nonce: nonce,
                   );
 
-                  print(credential);
+                  String userName = '${appleCredential.givenName} ${appleCredential.familyName}';
 
-                  // Now send the credential (especially `credential.authorizationCode`) to your server to create a session
-                  // after they have been validated with Apple (see `Integration` section for more information on how to do this)
+                  final oauthCredential = OAuthProvider('apple.com').credential(
+                    idToken: appleCredential.identityToken,
+                    rawNonce: rawNonce,
+                    accessToken: appleCredential.authorizationCode,
+                  );
+
+                  final UserCredential authResult = await FirebaseAuth.instance.signInWithCredential(oauthCredential);
+
+                  await DatabaseMethods.addUserDetails(
+                    {
+                      'name': userName,
+                      'email': authResult.user!.email,
+                      'telephone': '',
+                      'profilePic': '',
+                      'uid': authResult.user!.uid,
+                      'mtoken': await getToken(),
+                      'isOnline': false,
+                      'isAdmin': false,
+                      'isApproved': false,
+                      'ruoli': [],
+                      'gruppi': [],
+                      'idSede': '',
+                      'codiceAzienda': '',
+                      'azienda': '',
+                    },
+                  );
+
+                  await DatabaseMethods.addUserUpdatesByUid(
+                    authResult.user!.uid,
+                    {
+                      'name': userName,
+                      'email': authResult.user!.email,
+                      'telephone': '',
+                      'profilePic': '',
+                      'uid': authResult.user!.uid,
+                      'mtoken': await getToken(),
+                      'isOnline': false,
+                      'isAdmin': false,
+                      'isApproved': false,
+                      'ruoli': [],
+                      'gruppi': [],
+                      'idSede': '',
+                      'codiceAzienda': '',
+                      'azienda': '',
+                    },
+                  );
+
+                  context.pushNamedAndRemoveUntil(
+                    Routes.homeScreen,
+                    predicate: (route) => false,
+                  );
                 },
               ),
             ),
@@ -845,5 +902,18 @@ class _EmailAndPasswordState extends State<EmailAndPassword> {
         }
       },
     );
+  }
+
+  // Utility per nonce:
+  String generateNonce([int length = 32]) {
+    const charset = '0123456789ABCDEFGHIJKLMNOPQRSTUVXYZabcdefghijklmnopqrstuvwxyz-._';
+    final random = Random.secure();
+    return List.generate(length, (_) => charset[random.nextInt(charset.length)]).join();
+  }
+
+  String sha256ofString(String input) {
+    final bytes = utf8.encode(input);
+    final digest = sha256.convert(bytes);
+    return digest.toString();
   }
 }

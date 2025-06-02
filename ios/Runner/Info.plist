@@ -27,6 +27,8 @@
 	<string>$(FLUTTER_BUILD_NAME)</string>
 	<key>CFBundleSignature</key>
 	<string>????</string>
+	<key>GIDServerClientID</key>
+	<string>294296268566-mfh1hr1d2aekevqoar0uk378u62e85i0.apps.googleusercontent.com</string>
 	<key>CFBundleURLTypes</key>
 	<array>
 		<dict>
@@ -36,7 +38,7 @@
 			<string>com.vfchat.vfchat</string>
 			<key>CFBundleURLSchemes</key>
 			<array>
-				<string>app</string>
+				<string>com.googleusercontent.apps.294296268566-mfh1hr1d2aekevqoar0uk378u62e85i0</string>
 			</array>
 		</dict>
 	</array>
