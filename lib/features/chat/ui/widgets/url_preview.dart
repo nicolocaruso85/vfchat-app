@@ -24,12 +24,12 @@ class _LinkPreviewWidgetState extends State<LinkPreviewWidget> {
     return LinkPreview(
       imageWidth: double.infinity,
       width: MediaQuery.of(context).size.width * 0.7,
-      padding: EdgeInsets.only(bottom: 16.h, left: 10.w, right: 10.w, top: 8.h),
+      padding: EdgeInsets.all(0),
       onLinkPressed: widget.onLinkPressed,
       enableAnimation: true,
       textStyle: TextStyle(
         color: Colors.white,
-        fontSize: 16.sp,
+        fontSize: 16,
       ),
       openOnPreviewImageTap: true,
       openOnPreviewTitleTap: true,
@@ -44,16 +44,18 @@ class _LinkPreviewWidgetState extends State<LinkPreviewWidget> {
       metadataTitleStyle: TextStyle(
         color: Colors.white,
         fontWeight: FontWeight.bold,
-        fontSize: 16.sp,
+        fontSize: 16,
       ),
       metadataTextStyle: TextStyle(
         color: Colors.white,
-        fontSize: 13.sp,
+        fontSize: 13,
       ),
       previewData: datas[widget.message],
       text: widget.message,
-      linkStyle: const TextStyle(
-        decoration: TextDecoration.none,
+      linkStyle: TextStyle(
+        decorationColor: Colors.white,
+        color: Colors.white,
+        fontSize: 16,
       ),
     );
   }

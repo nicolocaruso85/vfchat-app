@@ -57,11 +57,12 @@ class _GroupScreenState extends State<GroupScreen> {
     return Scaffold(
       appBar: _buildAppBar(context),
       body: Container(
-        decoration: const BoxDecoration(
-          image: DecorationImage(
-            image: AssetImage("assets/images/chat_backgrond.png"),
-            opacity: 0.1,
-            fit: BoxFit.cover,
+        decoration: BoxDecoration(
+          gradient: LinearGradient(
+            colors: [Color(0xffdbdbdb), Colors.white],
+            stops: [0.25, 1],
+            begin: Alignment.bottomCenter,
+            end: Alignment.topCenter,
           ),
         ),
         child: Padding(
@@ -131,7 +132,7 @@ class _GroupScreenState extends State<GroupScreen> {
 
   AppBar _buildAppBar(BuildContext context) {
     return AppBar(
-      leadingWidth: 85.w,
+      leadingWidth: 95.w,
       leading: InkWell(
         borderRadius: BorderRadius.circular(50),
         onTap: () => Navigator.pop(context),
@@ -152,15 +153,15 @@ class _GroupScreenState extends State<GroupScreen> {
                         placeholder: 'assets/images/loading.gif',
                         image: groupDetails!['groupPic']!,
                         fit: BoxFit.cover,
-                        width: 50.w,
-                        height: 50.h,
+                        width: 60.w,
+                        height: 60.h,
                       ),
                     ),
                   )
                 : Image.asset(
                     'assets/images/user.png',
-                    height: 50.h,
-                    width: 50.w,
+                    height: 60.h,
+                    width: 60.w,
                     fit: BoxFit.cover,
                   ),
           ],
@@ -193,7 +194,7 @@ class _GroupScreenState extends State<GroupScreen> {
               padding: EdgeInsets.only(right: 30),
               style: TextStyle(
                 fontSize: 13.sp,
-                color: const Color.fromARGB(255, 179, 178, 178),
+                color: Color(0xff828282),
               ),
             ),
           ],
@@ -317,48 +318,46 @@ class _GroupScreenState extends State<GroupScreen> {
       alignment: data['senderID'] == _auth.currentUser!.uid
           ? Alignment.centerRight
           : Alignment.centerLeft,
-      child: Container(
-        margin: isNewSender
-            ? const EdgeInsets.fromLTRB(7, 7, 17, 7)
-            : const EdgeInsets.fromLTRB(17, 7, 7, 7),
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.all(
-            Radius.circular(20.r),
-          ),
-          color: data['senderID'] == _auth.currentUser!.uid
-              ? const Color.fromARGB(255, 0, 107, 84)
-              : const Color(0xff273443),
-        ),
-        child: ClipRRect(
-          borderRadius: BorderRadius.all(
-            Radius.circular(20.r),
-          ),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.end,
-            children: [
-              LinkPreviewWidget(
+      child: Column(
+        crossAxisAlignment: isNewSender ? CrossAxisAlignment.end : CrossAxisAlignment.start,
+        children: [
+          Container(
+            margin: EdgeInsets.symmetric(horizontal: 8, vertical: 5),
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.only(
+                topRight: isNewSender ? Radius.circular(0) : Radius.circular(15),
+                bottomRight: Radius.circular(15),
+                topLeft: isNewSender ? Radius.circular(15) : Radius.circular(0),
+                bottomLeft: Radius.circular(15),
+              ),
+              color: data['senderID'] == _auth.currentUser!.uid
+                  ? ColorsManager.redPrimary
+                  : ColorsManager.purplePrimary,
+            ),
+            child: Padding(
+              padding: EdgeInsets.only(left: 22, right: 22, top: 12, bottom: 0),
+              child: LinkPreviewWidget(
                 message: message,
                 onLinkPressed: (link) async {
                   await _launchURL(link);
                 },
               ),
-              Gap(3.h),
-              Padding(
-                padding: EdgeInsets.symmetric(horizontal: 8.0.w, vertical: 5.h),
-                child: Text(
-                  DateFormat("H:mm").format(
-                    data['timestamp'].toDate(),
-                  ),
-                  textAlign: TextAlign.right,
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 10.sp,
-                  ),
-                ),
-              ),
-            ],
+            ),
           ),
-        ),
+          Padding(
+            padding: EdgeInsets.only(right: 8, left: 8),
+            child: Text(
+              DateFormat("H:mm").format(
+                data['timestamp'].toDate(),
+              ),
+              textAlign: TextAlign.right,
+              style: TextStyle(
+                color: Color(0xff828282),
+                fontSize: 13,
+              ),
+            ),
+          ),
+        ],
       ),
     );
   }
@@ -377,8 +376,8 @@ class _GroupScreenState extends State<GroupScreen> {
         if (isNewDay)
           DateChip(
             date: data['timestamp'].toDate(),
-            dateColor: ColorsManager.gray400,
-            color: const Color(0xff273443),
+            dateColor: Color(0xff828282),
+            color: Colors.transparent,
           ),
         if (message.contains(message.isContainsLink) &&
             message.contains('firebasestorage'))
@@ -443,8 +442,8 @@ class _GroupScreenState extends State<GroupScreen> {
     return BubbleSpecialThree(
       text: message,
       color: data['senderID'] == _auth.currentUser!.uid
-          ? const Color.fromARGB(255, 0, 107, 84)
-          : const Color(0xff273443),
+          ? ColorsManager.redPrimary
+          : ColorsManager.purplePrimary,
       textAlign: TextAlign.left,
       sendTime: DateFormat("H:mm").format(
         data['timestamp'].toDate(),

@@ -235,6 +235,7 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
                               ),
                             ),
                           ),
+                          Gap(15.h),
                           Text(
                             context.tr('home').toUpperCase(),
                             style: TextStyles.font24Red800Weight,

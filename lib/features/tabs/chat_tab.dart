@@ -135,7 +135,7 @@ class _ChatsTabState extends State<ChatsTab> {
                           child: ListTile(
                             contentPadding: EdgeInsets.symmetric(
                               horizontal: 0,
-                              vertical: 20,
+                              vertical: 18,
                             ),
                             leading: data['profilePic'] != null && data['profilePic'] != ''
                                 ? Hero(
@@ -147,16 +147,16 @@ class _ChatsTabState extends State<ChatsTab> {
                                             Image.asset('assets/images/loading.gif'),
                                         errorWidget: (context, url, error) =>
                                             const Icon(Icons.error_outline_rounded),
-                                        width: 100,
-                                        height: 100,
+                                        width: 70,
+                                        height: 70,
                                         fit: BoxFit.cover,
                                       ),
                                     ),
                                   )
                                 : Image.asset(
                                     'assets/images/user.png',
-                                    height: 100,
-                                    width: 100,
+                                    height: 70,
+                                    width: 70,
                                     fit: BoxFit.cover,
                                   ),
                             title: Text(
@@ -212,12 +212,12 @@ class _ChatsTabState extends State<ChatsTab> {
                             titleTextStyle: TextStyle(
                               fontWeight: FontWeight.bold,
                               fontSize: 20.sp,
-                              height: 1.2.h,
+                              height: 1.4,
                             ),
                             subtitleTextStyle: TextStyle(
-                              height: 1.2.h,
+                              height: 1.4,
                             ),
-                            horizontalTitleGap: 2,
+                            horizontalTitleGap: 8,
                             onTap: () {
                               context.pushNamed(Routes.chatScreen, arguments: data)
                                 .then((_) {

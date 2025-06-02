@@ -319,7 +319,7 @@ class _GroupInfoScreenState extends State<GroupInfoScreen> {
               return ListTile(
                 contentPadding: EdgeInsets.symmetric(
                   horizontal: 0,
-                  vertical: 10,
+                  vertical: 8,
                 ),
                 leading: data['profilePic'] != null && data['profilePic'] != ''
                     ? Hero(
@@ -331,16 +331,16 @@ class _GroupInfoScreenState extends State<GroupInfoScreen> {
                                 Image.asset('assets/images/loading.gif'),
                             errorWidget: (context, url, error) =>
                                 const Icon(Icons.error_outline_rounded),
-                            width: 80,
-                            height: 80,
+                            width: 50,
+                            height: 50,
                             fit: BoxFit.cover,
                           ),
                         ),
                       )
                     : Image.asset(
                         'assets/images/user.png',
-                        height: 80,
-                        width: 80,
+                        height: 50,
+                        width: 50,
                         fit: BoxFit.cover,
                       ),
                 title: Text(
@@ -374,12 +374,12 @@ class _GroupInfoScreenState extends State<GroupInfoScreen> {
                 titleTextStyle: TextStyle(
                   fontWeight: FontWeight.bold,
                   fontSize: 20.sp,
-                  height: 1.2.h,
+                  height: 1.2,
                 ),
                 subtitleTextStyle: TextStyle(
-                  height: 1.2.h,
+                  height: 1.2,
                 ),
-                horizontalTitleGap: 2,
+                horizontalTitleGap: 8,
                 onTap: () {
                   showUserOptions(context, data);
                 },

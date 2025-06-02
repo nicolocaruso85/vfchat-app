@@ -12,12 +12,14 @@ import 'package:intl_mobile_field/intl_mobile_field.dart';
 import 'package:intl_mobile_field/flags_drop_down.dart';
 import 'package:searchable_listview/searchable_listview.dart';
 import 'package:sign_in_with_apple/sign_in_with_apple.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 
 import '../../../helpers/app_regex.dart';
 import '../../../themes/styles.dart';
 import '../../helpers/extensions.dart';
 import '../../router/routes.dart';
 import '../../services/database.dart';
+import '../../services/google_sign_in.dart';
 import '../../themes/colors.dart';
 import 'app_button.dart';
 import 'app_text_form_field.dart';
@@ -660,11 +662,13 @@ class _EmailAndPasswordState extends State<EmailAndPassword> {
                 padding: EdgeInsets.all(8),
                 borderRadius: const BorderRadius.all(Radius.circular(8)),
                 color: Colors.white,
-                onPressed: () {
+                onPressed: () async {
+                  await GoogleSignin.signInWithGoogle(context);
                 },
-                child: Image.asset(
-                  'assets/images/google.png',
-                  fit: BoxFit.cover,
+                child: SvgPicture.asset(
+                  'assets/svgs/google.svg',
+                  width: 50,
+                  height: 50,
                 ),
               ),
             ),
@@ -680,7 +684,8 @@ class _EmailAndPasswordState extends State<EmailAndPassword> {
         AppButton(
           buttonText: context.tr('previous'),
           backgroundColor: Colors.red.shade700,
-          textStyle: TextStyles.font15DarkBlue500Weight,
+          textStyle: TextStyles.font20White600Weight,
+          verticalPadding: 0,
           onPressed: () async {
             setState(() {
               chooseNegozio = false;
@@ -696,7 +701,8 @@ class _EmailAndPasswordState extends State<EmailAndPassword> {
   AppButton nextButton(BuildContext context) {
     return AppButton(
       buttonText: context.tr('next'),
-      textStyle: TextStyles.font15DarkBlue500Weight,
+      textStyle: TextStyles.font20White600Weight,
+      verticalPadding: 0,
       onPressed: () async {
         String codiceAzienda = codiceAziendaController.text;
         if (codiceAzienda != '') {
