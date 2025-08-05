@@ -21,7 +21,7 @@ class GoogleSignin {
   static Future signInWithGoogle(BuildContext context) async {
     try {
       // Trigger the authentication flow
-      final GoogleSignInAccount? googleUser = await GoogleSignIn().signIn();
+      final GoogleSignInAccount? googleUser = await GoogleSignIn.instance.signIn();
       if (googleUser == null) {
         return;
       }
