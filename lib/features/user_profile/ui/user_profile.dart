@@ -11,9 +11,9 @@ import 'package:gap/gap.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:multi_select_flutter/multi_select_flutter.dart';
-import 'package:image_cropper/image_cropper.dart';
 import 'package:intl_mobile_field/intl_mobile_field.dart';
 import 'package:intl_mobile_field/flags_drop_down.dart';
+import 'package:picker_image_cropper/picker_image_cropper.dart';
 
 import '../../../themes/colors.dart';
 import '../../../themes/styles.dart';
@@ -129,7 +129,7 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
             );
           }
           if (email != userDetails?['email']) {
-            _auth.currentUser!.updateEmail(email);
+            _auth.currentUser!.verifyBeforeUpdateEmail(email);
           }
           if (password != null && password != '') {
             _auth.currentUser!.updatePassword(password);
@@ -448,12 +448,9 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
             ),
           ),
           optionsCrop: OptionsCrop(
-            aspectRatio: CropAspectRatio(ratioX: 1.0, ratioY: 1.0),
-            toolbarColorCrop: Colors.deepOrange,
-            toolbarWidgetColorCrop: Colors.white,
-            initAspectRatioCrop: CropAspectRatioPreset.square,
-            webPresentStyle: WebPresentStyle.dialog,
-            maxHeight: 600,
+            cropperTheme: CropperTheme.light,
+            aspectRatio: CropAspectRatio.square(),
+            outputType: OutputType.both,
           ),
           onPickerChange: (file) async {
             Reference storageRef =

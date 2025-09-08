@@ -320,7 +320,7 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
                             verticalPadding: 0,
                             onPressed: () async {
                               try {
-                                await GoogleSignIn().disconnect();
+                                await GoogleSignIn.instance.disconnect();
                               } finally {
                                 await DatabaseMethods.updateUserDetails({'isOnline': false});
 

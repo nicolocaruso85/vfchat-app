@@ -20,24 +20,22 @@ class GoogleSignin {
 
   static Future signInWithGoogle(BuildContext context) async {
     try {
-      // Trigger the authentication flow
-      final GoogleSignInAccount? googleUser = await GoogleSignIn.instance.signIn();
-      if (googleUser == null) {
-        return;
-      }
+      await GoogleSignIn.instance.initialize();
 
-      // Obtain the auth details from the request
-      final GoogleSignInAuthentication googleAuth =
-          await googleUser.authentication;
+      final GoogleSignInAccount googleUser = await GoogleSignIn.instance.authenticate(
+        scopeHint: ['email'],
+      );
 
-      // Create a new credential
+      final GoogleSignInAuthentication googleAuth = await googleUser.authentication;
+
+      final GoogleSignInClientAuthorization authorization = await googleUser.authorizationClient.authorizeScopes(['email', 'profile']);
+
       final credential = GoogleAuthProvider.credential(
-        accessToken: googleAuth.accessToken,
+        accessToken: authorization.accessToken,
         idToken: googleAuth.idToken,
       );
 
-      final UserCredential authResult =
-          await _auth.signInWithCredential(credential);
+      final UserCredential authResult = await FirebaseAuth.instance.signInWithCredential(credential);
 
       if (authResult.additionalUserInfo!.isNewUser) {
         await _auth.currentUser!.delete();

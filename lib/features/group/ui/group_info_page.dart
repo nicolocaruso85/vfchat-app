@@ -11,12 +11,12 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:gap/gap.dart';
 import 'package:intl/intl.dart';
 import 'package:firebase_storage/firebase_storage.dart';
-import 'package:image_cropper/image_cropper.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:king_cache/king_cache.dart';
 import 'package:selectable_search_list/selectable_search_list.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:picker_image_cropper/picker_image_cropper.dart';
 
 import '../../../themes/colors.dart';
 import '../../../themes/styles.dart';
@@ -186,12 +186,9 @@ class _GroupInfoScreenState extends State<GroupInfoScreen> {
             ),
           ),
           optionsCrop: OptionsCrop(
-            aspectRatio: CropAspectRatio(ratioX: 1.0, ratioY: 1.0),
-            toolbarColorCrop: Colors.deepOrange,
-            toolbarWidgetColorCrop: Colors.white,
-            initAspectRatioCrop: CropAspectRatioPreset.square,
-            webPresentStyle: WebPresentStyle.dialog,
-            maxHeight: 600,
+            cropperTheme: CropperTheme.light,
+            aspectRatio: CropAspectRatio.square(),
+            outputType: OutputType.both,
           ),
           onPickerChange: (file) async {
             Reference storageRef =
