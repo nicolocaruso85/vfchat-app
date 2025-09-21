@@ -401,6 +401,18 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
+                Container(
+                  width: 70.0,
+                  height: 6.0,
+                  child: Container(
+                    decoration: new BoxDecoration(
+                      color: Colors.grey.shade300,
+                      shape: BoxShape.rectangle,
+                      borderRadius: BorderRadius.all(Radius.circular(8.0)),
+                    ),
+                  ),
+                ),
+                Gap(10.h),
                 SearchBar(
                   controller: controller,
                   autoFocus: true,
@@ -423,8 +435,15 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
                   ],
                 ),
                 Gap(20),
-                SearchUsers(userSearchEvent: userSearchEvent),
-                SearchGroups(groupSearchEvent: groupSearchEvent),
+                Expanded(
+                  child: ListView(
+                    controller: ModalScrollController.of(context),
+                    children: [
+                      SearchUsers(userSearchEvent: userSearchEvent),
+                      SearchGroups(groupSearchEvent: groupSearchEvent),
+                    ],
+                  ),
+                ),
               ],
             ),
           ),

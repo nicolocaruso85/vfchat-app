@@ -76,7 +76,7 @@ class _SearchUsersState extends State<SearchUsers> {
           child: ListTile(
             contentPadding: EdgeInsets.symmetric(
               horizontal: 0,
-              vertical: 20,
+              vertical: 18,
             ),
             leading: user['document']['profilePic'] != null && user['document']['profilePic'] != ''
                 ? Hero(
@@ -88,16 +88,16 @@ class _SearchUsersState extends State<SearchUsers> {
                             Image.asset('assets/images/loading.gif'),
                         errorWidget: (context, url, error) =>
                             const Icon(Icons.error_outline_rounded),
-                        width: 100,
-                        height: 100,
+                        width: 70,
+                        height: 70,
                         fit: BoxFit.cover,
                       ),
                     ),
                   )
                 : Image.asset(
                     'assets/images/user.png',
-                    height: 100,
-                    width: 100,
+                    height: 70,
+                    width: 70,
                     fit: BoxFit.cover,
                   ),
             title: Text(
@@ -123,8 +123,12 @@ class _SearchUsersState extends State<SearchUsers> {
             titleTextStyle: TextStyle(
               fontWeight: FontWeight.bold,
               fontSize: 20.sp,
-              height: 1.2.h,
+              height: 1.4,
             ),
+            subtitleTextStyle: TextStyle(
+              height: 1.4,
+            ),
+            horizontalTitleGap: 8,
             onTap: () async {
               var data = await DatabaseMethods.getUserDetails(user['document']['uid']);
 
